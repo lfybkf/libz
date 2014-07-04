@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +11,9 @@ namespace BDB
 {
 	public static class ListExtension
 	{
+		public static String PrefixButton = "btn";
+		public static String PrefixMenu = "mi";
+
 		public static Kommand get(this IEnumerable<Kommand> lst, Keys scut) { return lst.get(k => k.Scut == scut); }//func
 		public static Kommand get(this IEnumerable<Kommand> lst, string Name) { return lst.get(k => k.Name == Name); }//func
 
@@ -17,5 +22,43 @@ namespace BDB
 			Kommand k = lst.FirstOrDefault(Match);
 			return k ?? Kommand.Default;
 		}//func
+
+
+		public static void LinkToComponent(this IEnumerable<Kommand> list, Component cmp)
+		{
+			list.LinkToComponent(cmp, Kommand.KommandEventHandler);
+		}//function
+
+		public static void LinkToComponent(this IEnumerable<Kommand> list, Component cmp, EventHandler click)
+		{
+			Kommand kmd = null;
+
+			if (cmp is ToolStripItem)
+			{
+				ToolStripItem ctl = (ToolStripItem)cmp;
+				kmd = list.get(ctl.Name.After(PrefixMenu));
+				if (kmd != Kommand.Default)
+				{
+					ctl.Text = kmd.Caption;
+					ctl.Tag = kmd;
+					ctl.Click += click;
+					if (ctl is ToolStripMenuItem)
+						(ctl as ToolStripMenuItem).ShortcutKeys = kmd.Scut;
+				}//if
+			}
+			else if (cmp is Button)
+			{
+				Button ctl = (Button)cmp;
+				kmd = list.get(ctl.Name.After(PrefixButton));
+				if (kmd != Kommand.Default)
+				{
+					ctl.Text = kmd.Caption;
+					ctl.Tag = kmd;
+					ctl.Click += click;
+				}//if
+			}
+		}//func		
+
+
 	}//class
 }//ns

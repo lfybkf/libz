@@ -18,8 +18,6 @@ namespace BDB
 		//static
 		public static Kommand Empty = new Kommand();
 		public static Kommand Default = Empty;
-		public static String PrefixButton = "btn";
-		public static String PrefixMenu = "mi";
 
 		//function
 		private Kommand() { }
@@ -59,38 +57,11 @@ namespace BDB
 		public static void Execute(Kommand kmd)		{if (kmd != null) { kmd.Execute(); }}//func
 		public override string ToString() { return Name; }//func
 
-		public static void Assign(IEnumerable<Kommand> lst, Component cmp, EventHandler click)
+		public static void KommandEventHandler(Object o, EventArgs ea)
 		{
-			string Name = string.Empty;
-			Kommand kmd = null;
-
-			if (cmp is ToolStripMenuItem)
-			{
-				ToolStripMenuItem ctl = (ToolStripMenuItem)cmp;
-				kmd = lst.get(ctl.Name.After(PrefixMenu));
-				if (kmd != null)
-				{
-					ctl.Text = kmd.Caption;
-					ctl.Tag = kmd;
-					ctl.Click += click;
-					ctl.ShortcutKeys = kmd.Scut;
-				}//if
-			}
-			else if (cmp is Button)
-			{
-				Button ctl = (Button)cmp;
-				Name = ctl.Name.After(PrefixButton);
-				kmd = lst.Where(k => k.Name == Name).ElementAtOrDefault(0);
-				if (kmd != null)
-				{
-					ctl.Text = kmd.Caption;
-					ctl.Tag = kmd;
-					ctl.Click += click;
-				}//if
-			}
-			else
-				return;
-		}//func		
+			Kommand k = GetFromTag(o);
+			Execute(k);
+		}//function
 
 		public static Kommand GetFromTag(object cmp)
 		{
@@ -102,9 +73,9 @@ namespace BDB
 				if (ctl.Tag is Kommand)
 					Ret = (Kommand)ctl.Tag;
 			}
-			else if (cmp is Button)
+			else if (cmp is Control)
 			{
-				Button ctl = (Button)cmp;
+				Control ctl = (Control)cmp;
 				if (ctl.Tag is Kommand)
 					Ret = (Kommand)ctl.Tag;
 			}
