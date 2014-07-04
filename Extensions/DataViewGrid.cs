@@ -9,7 +9,7 @@ namespace BDB
 {
 	public static class DataGridViewExtensions
 	{
-		public static object GetCurrent(this DataGridView grid, string Column)
+		public static object getCurrent(this DataGridView grid, string Column)
 		{
 			if (grid.CurrentRow == null)
 				return null;
@@ -17,7 +17,7 @@ namespace BDB
 			return grid.CurrentRow.Cells[Column].Value;
 		}//func
 
-		public static void SetCurrent(this DataGridView grid, string Column, object value)
+		public static void setCurrent(this DataGridView grid, string Column, object value)
 		{
 			if (grid.CurrentRow == null)
 				return;

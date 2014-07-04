@@ -36,7 +36,7 @@ namespace BDB
 			if (cmp is ToolStripItem)
 			{
 				ToolStripItem ctl = (ToolStripItem)cmp;
-				kmd = list.get(ctl.Name.After(PrefixMenu));
+				kmd = list.get(ctl.Name.after(PrefixMenu));
 				if (kmd != Kommand.Default)
 				{
 					ctl.Text = kmd.Caption;
@@ -49,7 +49,7 @@ namespace BDB
 			else if (cmp is Button)
 			{
 				Button ctl = (Button)cmp;
-				kmd = list.get(ctl.Name.After(PrefixButton));
+				kmd = list.get(ctl.Name.after(PrefixButton));
 				if (kmd != Kommand.Default)
 				{
 					ctl.Text = kmd.Caption;

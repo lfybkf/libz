@@ -7,27 +7,20 @@ namespace BDB
 {
 	public static class StringExtensions
 	{
-		public static string After(this string s, string Prefix) { return s.Substring(Prefix.Length); }//func
-		//public static string FormatA(this string s, params object[] oo)		{ return string.Format(s, oo); }//func
-		public static string Fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
-		public static bool In(this string s, params string[] ss)		{return ss.Contains(s);	}//func
+		public static string after(this string s, string Prefix) { return s.Substring(Prefix.Length); }//func
+		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
+		public static bool inThe(this string s, params string[] ss)		{return ss.Contains(s);	}//func
 
-		public static string Before(this string s, string Suffix)
+		public static string before(this string s, string Suffix)
 		{
 			int i = s.IndexOf(Suffix);
 			if (i > 0)
-			{
 				return s.Substring(0, i);
-			}//if
 			else
-			{
 				return string.Empty;
-			}//else
 		}//func
 
-		
-
-		public static string Path(this string s, params string[] args)
+		public static string addToPath(this string s, params string[] args)
 		{
 			foreach (string path in args)
 			{
