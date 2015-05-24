@@ -15,7 +15,15 @@ namespace BDB
 		private static string[] ssBigs;
 		private static StringBuilder SB3;
 		private static StringBuilder SB;
-		private static string sp;
+		private static readonly string sp = " ";
+		private static readonly string spp = "  ";
+		private const int BILLION = 1000000000;
+		private const int MILLION = 1000000;
+		private const int THOUSAND = 1000;
+		private const int HUNDRED = 100;
+		private const int TEN = 10;
+		private const int TWENTY = 20;
+
 
 		//constructor
 		static Propis()
@@ -37,14 +45,12 @@ namespace BDB
 			Pol = true;
 			SB3 = new StringBuilder(50);
 			SB = new StringBuilder(150);
-			sp = " ";
-		}
+		}//function
 
-		//func
 		public static string Go3(int aI, bool aPol)
 		{
 			//PREPARE
-			aI = aI % 1000;
+			aI = aI % THOUSAND;
 			Pol = aPol;
 			SB3.Remove(0, SB3.Length);
 
@@ -52,18 +58,18 @@ namespace BDB
 			int iD, iE;
 
 			//hundreds
-			if (aI >= 100)
+			if (aI >= HUNDRED)
 			{
-				SB3.Append(ssHundreds[aI / 100 - 1]);
+				SB3.Append(ssHundreds[aI / HUNDRED - 1]);
 				SB3.Append(sp);
 			} //if
 
 			//other
-			iE = aI % 100;
-			if (iE >= 20)
+			iE = aI % HUNDRED;
+			if (iE >= TWENTY)
 			{
-				iD = iE / 10;
-				iE = iE % 10;
+				iD = iE / TEN;
+				iE = iE % TEN;
 				SB3.Append(ssDecades[iD - 2]);
 				SB3.Append(sp);
 				SB3.Append(ssOnes[iE]);
@@ -78,46 +84,44 @@ namespace BDB
 		}
 		//============================================
 
+		public static string Go(long aL) { return Go(aL, true); }//funciton
+
 		public static string Go(long aL, bool aPol)
 		{
 			SB.Remove(0, SB.Length);
 			int i;
-			int i9 = 1000000000;
-			int i6 = 1000000;
-			int i3 = 1000;
-			if (aL >= i9)
+			if (aL >= BILLION)
 			{
-				i = (int)(aL / i9);
+				i = (int)(aL / BILLION);
 				SB.Append(Go3(i, true));
 				SB.Append(sp);
 				SB.Append(ssBigs[6 + (int)Padezh(i)]);
 				SB.Append(sp);
-				aL = aL % i9;
+				aL = aL % BILLION;
 			}
 
-			if (aL >= i6)
+			if (aL >= MILLION)
 			{
-				i = (int)(aL / i6);
+				i = (int)(aL / MILLION);
 				SB.Append(Go3(i, true));
 				SB.Append(sp);
 				SB.Append(ssBigs[3 + (int)Padezh(i)]);
 				SB.Append(sp);
-				aL = aL % i6;
+				aL = aL % MILLION;
 			}
 
-			if (aL >= i3)
+			if (aL >= THOUSAND)
 			{
-				i = (int)(aL / i3);
+				i = (int)(aL / THOUSAND);
 				SB.Append(Go3(i, false));
 				SB.Append(sp);
 				SB.Append(ssBigs[(int)Padezh(i)]);
 				SB.Append(sp);
-				aL = aL % i3;
+				aL = aL % THOUSAND;
 			}
 
 			SB.Append(Go3((int)aL, aPol));
 
-			string spp = "  ";
 			SB.Replace(spp, sp);
 			SB.Replace(spp, sp);
 			return SB.ToString();
@@ -125,11 +129,11 @@ namespace BDB
 		//============================================
 		public static PadezhN Padezh(long aL)
 		{
-			int i = (int)(aL % 100);
+			int i = (int)(aL % HUNDRED);
 			PadezhN Ret = PadezhN.Mnogo;
-			if (i < 5 || i > 20)
+			if (i < 5 || i > TWENTY)
 			{
-				switch (i % 10)
+				switch (i % TEN)
 				{
 					case 1: Ret = PadezhN.Odin; break;
 					case 2: goto case 4;

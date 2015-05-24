@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BDB
 {
-	public static class StringExtensions
+	public static class StringExtension
 	{
 		public static string after(this string s, string Prefix) { return s.Substring(Prefix.Length); }//func
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
@@ -28,5 +28,27 @@ namespace BDB
 			}//for
 			return s;
 		}//func
+
+		public static string add(this string s, params object[] args)
+		{
+			StringBuilder sb = new StringBuilder(s);
+			args.forEach(o => sb.Append(o));
+			return sb.ToString();
+		}//function
+
+		public static string addLine(this string s, params object[] args)
+		{
+			StringBuilder sb = new StringBuilder(s);
+			args.forEach(o => sb.AppendFormat("{0}{1}", Environment.NewLine, o));
+			return sb.ToString();
+		}//function
+
+		public static string addDelim(this string s, string Delim, params object[] args)
+		{
+			StringBuilder sb = new StringBuilder(s);
+			args.forEach(o => sb.AppendFormat("{0}{1}", Delim, o));
+			return sb.ToString();
+		}//function
+
 	}//class
 }//ns

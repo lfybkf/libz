@@ -10,12 +10,12 @@ namespace UnitTest
 		[TestMethod]
 		public void TestPropis()
 		{
-			Func<long, bool, string> Do = Propis.Go;
-			string s;
-			Assert.AreEqual("сто двадцать три", Do(123, false));
-			Assert.AreEqual("сто двадцать три", Do(123, true));
+			string s = "сто двадцать";
+			Assert.AreEqual(s.addDelim(" ", "одна"), Propis.Go(121, false));
+			Assert.AreEqual("сто двадцать один", Propis.Go(121, true));
+			Assert.AreEqual("сто двадцать один", Propis.Go(121));
 
-			s = Do(501890, true);
+			s = Propis.Go(501890);
 			Assert.AreEqual("пятьсот одна тысяча восемьсот девяносто ", s);
 		}//function
 	}//class
