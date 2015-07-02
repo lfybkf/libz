@@ -18,5 +18,7 @@ namespace UnitTest
 			s = Propis.Go(501890);
 			Assert.AreEqual("пятьсот одна тысяча восемьсот девяносто ", s);
 		}//function
+
+	
 	}//class
 }//ns
