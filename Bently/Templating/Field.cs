@@ -13,6 +13,8 @@ namespace BDB.Templating
 		public string Type;
 		public string Ref;
 		public bool Null;
+		public bool NotInsert;
+		public bool NotUpdate;
 
 		static string[] date_types = {"date", "time", "datetime"};
 		static string[] value_types = { "bool", "decimal", "int", "long"};
@@ -23,6 +25,8 @@ namespace BDB.Templating
 			Type = src.Attribute(R.TYPE) != null ? src.Attribute(R.TYPE).Value : null;
 			Ref = src.Attribute(R.REF) != null ? src.Attribute(R.REF).Value : null;
 			Null = src.Attribute(R.NULL) != null;
+			NotInsert = src.Attribute("NotInsert") != null;
+			NotUpdate = src.Attribute("NotInsert") != null;
 			return this;
 		}//function
 

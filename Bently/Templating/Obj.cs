@@ -39,9 +39,17 @@ namespace BDB.Templating
 			return this;
 		}//constructor
 
+		public string InsertFields { get { return fields.Where(f => !f.NotInsert).Select(f => f.Name).Aggregate((s1, s2) => "{0}, {1}".fmt(s1,s2)); } }
+		public string InsertParams { get { return fields.Where(f => !f.NotInsert).Select(f => "@" + f.Name).Aggregate((s1, s2) => "{0}, {1}".fmt(s1, s2)); } }
+		public string SetsUpdate { get { return fields.Where(f => !f.NotUpdate).Select(f => "{0}=@{0}".fmt(f.Name)).Aggregate((s1, s2) => "{0}, {1}".fmt(s1, s2)); } }
+		public string SelectFields { get { return IDfield + R.Z + fields.Select(f => f.Name).Aggregate((s1, s2) => "{0}, {1}".fmt(s1, s2)); } }
+		public string WhereID { get { return "{0} = @ID".fmt(IDfield); } }
+		
+
 		public static string XmlDTD()
 		{
-return @"	<!DOCTYPE ROOT [ 
+return @"	
+<!DOCTYPE ROOT [ 
 	<!ELEMENT ROOT (Object+)>
 	<!ELEMENT Object (Field+)>
 		<!ATTLIST Object Name ID #REQUIRED>
@@ -50,7 +58,7 @@ return @"	<!DOCTYPE ROOT [
     <!ATTLIST Object IDtype CDATA #IMPLIED>
 	<!ELEMENT Field (#PCDATA)>
 		<!ATTLIST Field Name CDATA #REQUIRED>
-		<!ATTLIST Field Type (bool|date|datetime|decimal|int|long|string|time|uint) #REQUIRED>
+		<!ATTLIST Field Type (bool|date|datetime|decimal|int|long|string|time) #REQUIRED>
 		<!ATTLIST Field Null (true) #IMPLIED>
 		<!ATTLIST Field Ref CDATA #IMPLIED>
 	<!ELEMENT Comment (#PCDATA)>

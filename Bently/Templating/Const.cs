@@ -8,6 +8,8 @@ namespace BDB.Templating
 {
 	public static class R
 	{
+		public static readonly string Z = ",";
+
 		public static readonly string OBJECT = "Object";
 		public static readonly string FIELD = "Field";
 		public static readonly string NAME = "Name";
