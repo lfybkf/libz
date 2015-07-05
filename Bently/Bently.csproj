@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="A.cs" />
     <Compile Include="AC.cs" />
+    <Compile Include="EC.cs" />
     <Compile Include="IStoreSQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLogger.cs" />
@@ -50,12 +51,6 @@
     <Compile Include="Templating\Field.cs" />
     <Compile Include="Templating\Map.cs" />
     <Compile Include="Templating\Obj.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Extensions\Extensions.csproj">
-      <Project>{902e99c0-1294-4f7f-8624-70cac2c84872}</Project>
-      <Name>Extensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

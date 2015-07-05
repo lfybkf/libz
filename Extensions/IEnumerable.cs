@@ -21,5 +21,10 @@ namespace BDB
 
 			return source;
 		}//function
+
+		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
+		{
+			return dict.ContainsKey(key) ? dict[key] : default(TValue);
+		}//function
 	}//class
 }//ns
