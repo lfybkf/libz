@@ -9,7 +9,7 @@ namespace BDB
 {
 	public class EC
 	{
-		public delegate DbCommand selectDelegate(IDictionary<string, object> paramS);
+		public delegate DbCommand selectDelegate(EC entityContext);
 
 		static IStoreSQL store { get { return AC.Instance.StoreSQL; } }
 		public A entity = null;
@@ -28,6 +28,7 @@ namespace BDB
 		#endregion
 
 		#region paramS
+		public long parentID;
 		IDictionary<string, object> paramS = null;
 		public void AddParam (string ParamName, object ParamValue)
 		{
@@ -113,7 +114,7 @@ namespace BDB
 			DbDataReader dbr = null;
 			try
 			{
-				dbr = store.Select(cmdSelect(paramS));
+				dbr = store.Select(cmdSelect(this));
 				if (dbr.HasRows == false)
 				{
 					result = false;
