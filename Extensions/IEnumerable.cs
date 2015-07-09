@@ -26,5 +26,37 @@ namespace BDB
 		{
 			return dict.ContainsKey(key) ? dict[key] : default(TValue);
 		}//function
+
+		public static IEnumerable<T> sequenceSwing<T>(this IEnumerable<T> source, int limit = UInt16.MaxValue)
+		{
+			if (source == null) { yield break; }
+
+			int index = 0;
+			int max = source.Count();
+			int direction = 1;
+
+			for (int i = 0; i < limit; i++)
+			{
+				yield return source.ElementAt(index);
+
+				if (index == max - 1)			{	direction = -1;}
+				else if (index == 0)				{ direction = 1; }
+			index += direction;
+			}//for
+		}//function
+
+		public static IEnumerable<T> sequenceCircle<T>(this IEnumerable<T> source, int limit = UInt16.MaxValue)
+		{
+			if (source == null) { yield break; }
+
+			int index = 0;
+			int max = source.Count();
+			for (int i = 0; i < limit; i++)
+			{
+				yield return source.ElementAt(index);
+				if (index == max - 1) { index = 0; }
+				else { index++; }
+			}//for
+		}//function
 	}//class
 }//ns

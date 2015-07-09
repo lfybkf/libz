@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BDB;
 using BDB.Templating;
@@ -40,6 +41,26 @@ namespace UnitTest
 			//foreach (var obj in map.objects)	{	write(obj.sqlInsert);	}//for
 			//foreach (var obj in map.objects) { write(obj.sqlUpdate); }//for
 			//foreach (var obj in map.objects) { write(obj.sqlDelete); }//for
+		}//function
+
+		[TestMethod]
+		public void TestEnumerator()
+		{
+			Action<string> write = AC.Instance.log.Info;
+
+			//string[] array = { "kaba", "muba", "taba", "zaba" };
+			int[] array = Enumerable.Range(-2, 8).ToArray();
+			foreach (var item in array.sequenceSwing(10))
+			{
+				write(item.ToString());	
+			}//for
+
+			write("======================");
+
+			foreach (var item in array.sequenceCircle(10))
+			{
+				write(item.ToString());
+			}//for
 		}//function
 	}//class
 }//ns
