@@ -27,14 +27,15 @@ namespace BDB
 			return dict.ContainsKey(key) ? dict[key] : default(TValue);
 		}//function
 
-		public static IEnumerable<T> sequenceSwing<T>(this IEnumerable<T> source, int limit = UInt16.MaxValue)
+		public static IEnumerable<T> sequenceSwing<T>(this IEnumerable<T> source, int limit = 0)
 		{
 			if (source == null) { yield break; }
-
-			int index = 0;
 			int max = source.Count();
-			int direction = 1;
+			if (max == 1) { yield break; }
+			int index = 0;
+			if (limit == 0) { limit = max; }
 
+			int direction = 1;
 			for (int i = 0; i < limit; i++)
 			{
 				yield return source.ElementAt(index);
@@ -45,17 +46,35 @@ namespace BDB
 			}//for
 		}//function
 
-		public static IEnumerable<T> sequenceCircle<T>(this IEnumerable<T> source, int limit = UInt16.MaxValue)
+		public static IEnumerable<T> sequenceCircle<T>(this IEnumerable<T> source, int limit = 0)
 		{
 			if (source == null) { yield break; }
-
-			int index = 0;
 			int max = source.Count();
+			if (max == 1) { yield break; }
+			int index = 0;
+			if (limit == 0) { limit = max; }
+
 			for (int i = 0; i < limit; i++)
 			{
 				yield return source.ElementAt(index);
 				if (index == max - 1) { index = 0; }
 				else { index++; }
+			}//for
+		}//function
+
+		public static IEnumerable<T> sequenceRandom<T>(this IEnumerable<T> source, int limit = 0)
+		{
+			if (source == null) { yield break; }
+			int max = source.Count();
+			if (max == 1) { yield break; }
+			int index = 0;
+			if (limit == 0) { limit = max; }
+
+			Random random = new Random();
+			for (int i = 0; i < limit; i++)
+			{
+				index = random.Next(0, max);
+				yield return source.ElementAt(index);
 			}//for
 		}//function
 	}//class

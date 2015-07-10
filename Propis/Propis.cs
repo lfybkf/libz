@@ -23,7 +23,17 @@ namespace BDB
 		private const int HUNDRED = 100;
 		private const int TEN = 10;
 		private const int TWENTY = 20;
+		private const string ONE_M = "один";
+		private const string TWO_M = "два";
+		private const string ONE_F = "одна";
+		private const string TWO_F = "две";
 
+		//properties
+		private static bool Gender
+		{	set	{
+				if (value) { ssOnes[1] = ONE_M; ssOnes[2] = TWO_M; }
+				else { ssOnes[1] = ONE_F; ssOnes[2] = TWO_F; }
+		}}
 
 		//constructor
 		static Propis()
@@ -42,41 +52,37 @@ namespace BDB
                    "миллион", "миллиона", "миллионов",
                    "миллиард", "миллиарда", "миллиардов"};
 
-			Pol = true;
+			Gender = true;
 			SB3 = new StringBuilder(50);
 			SB = new StringBuilder(150);
 		}//function
 
-		public static string Go3(int aI, bool aPol)
+		public static string Go3(int aInput, bool aGender)
 		{
 			//PREPARE
-			aI = aI % THOUSAND;
-			Pol = aPol;
+			aInput = aInput % THOUSAND;
+			Gender = aGender;
 			SB3.Remove(0, SB3.Length);
 
 			//VAR
-			int iD, iE;
+			int iDecade, iOne;
 
 			//hundreds
-			if (aI >= HUNDRED)
-			{
-				SB3.Append(ssHundreds[aI / HUNDRED - 1]);
-				SB3.Append(sp);
-			} //if
+			if (aInput >= HUNDRED)	{	SB3.Append(ssHundreds[(aInput / HUNDRED) - 1]);	SB3.Append(sp);	} //if
 
 			//other
-			iE = aI % HUNDRED;
-			if (iE >= TWENTY)
+			iOne = aInput % HUNDRED;   //number of ones 01 to 99
+			if (iOne >= TWENTY)
 			{
-				iD = iE / TEN;
-				iE = iE % TEN;
-				SB3.Append(ssDecades[iD - 2]);
+				iDecade = iOne / TEN; //number of decades
+				iOne = iOne % TEN;
+				SB3.Append(ssDecades[iDecade - 2]); //cause begining with 20, not 00
 				SB3.Append(sp);
-				SB3.Append(ssOnes[iE]);
+				SB3.Append(ssOnes[iOne]);
 			} //if
 			else
 			{
-				SB3.Append(ssOnes[iE]);
+				SB3.Append(ssOnes[iOne]);
 				SB3.Append(sp);
 			}
 
@@ -86,7 +92,7 @@ namespace BDB
 
 		public static string Go(long aL) { return Go(aL, true); }//funciton
 
-		public static string Go(long aL, bool aPol)
+		public static string Go(long aL, bool aGender)
 		{
 			SB.Remove(0, SB.Length);
 			int i;
@@ -120,7 +126,7 @@ namespace BDB
 				aL = aL % THOUSAND;
 			}
 
-			SB.Append(Go3((int)aL, aPol));
+			SB.Append(Go3((int)aL, aGender));
 
 			SB.Replace(spp, sp);
 			SB.Replace(spp, sp);
@@ -144,17 +150,7 @@ namespace BDB
 			return Ret;
 		}
 		//============================================
-
-
-		//properties
-		private static bool Pol
-		{
-			set
-			{
-				if (value)	{	ssOnes[1] = "один";	ssOnes[2] = "два";}
-				else	{ssOnes[1] = "одна"; ssOnes[2] = "две";}
-			}//set
-		}
+		
 	}//class
 	//==================
 }//namespace

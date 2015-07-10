@@ -18,9 +18,9 @@ namespace BDB.Templating
 		
 		private Dictionary<string, string> attrS = new Dictionary<string, string>();
 		public bool Has(string key) { return attrS.ContainsKey(key); }
-		public bool Has(string key, string value) { return attrS.get(key) == value; }
+		public bool Has(string key, string value) { return attrS.getT(key) == value; }
 		public bool HasNot(string key) { return !attrS.ContainsKey(key); }
-		public bool HasNot(string key, string value) { return attrS.get(key) != value; }
+		public bool HasNot(string key, string value) { return attrS.getT(key) != value; }
 
 		static string[] date_types = {"date", "time", "datetime"};
 		static string[] value_types = { "bool", "decimal", "int", "long"};
@@ -29,12 +29,12 @@ namespace BDB.Templating
 		{
 			foreach (XAttribute attr in src.Attributes()) { attrS.Add(attr.Name.LocalName, attr.Value); }//for
 
-			Name = attrS.get(R.NAME);
-			Type = attrS.get(R.TYPE);
-			Ref = attrS.get(R.REF);
-			Null = attrS.get(R.NULL) != null;
-			NotInsert = attrS.get("NotInsert") != null;
-			NotUpdate = attrS.get("NotInsert") != null;
+			Name = attrS.getT(R.NAME);
+			Type = attrS.getT(R.TYPE);
+			Ref = attrS.getT(R.REF);
+			Null = attrS.getT(R.NULL) != null;
+			NotInsert = attrS.getT("NotInsert") != null;
+			NotUpdate = attrS.getT("NotInsert") != null;
 			return this;
 		}//function
 

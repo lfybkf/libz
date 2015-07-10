@@ -47,20 +47,14 @@ namespace UnitTest
 		public void TestEnumerator()
 		{
 			Action<string> write = AC.Instance.log.Info;
-
-			//string[] array = { "kaba", "muba", "taba", "zaba" };
-			int[] array = Enumerable.Range(-2, 8).ToArray();
-			foreach (var item in array.sequenceSwing(10))
-			{
-				write(item.ToString());	
-			}//for
-
+			int n = 0;
+			string[] array = { "kaba", " muba", "  taba", "   ourt", "    ifqa", "      zaba" };
+			//int[] array = Enumerable.Range(-2, 6).ToArray();
+			array.sequenceSwing(n).forEach(o => write(o.ToString()));
 			write("======================");
-
-			foreach (var item in array.sequenceCircle(10))
-			{
-				write(item.ToString());
-			}//for
+			array.sequenceCircle(n).forEach(o => write(o.ToString()));
+			write("======================");
+			array.sequenceRandom(n*3).forEach(o => write(o.ToString()));
 		}//function
 	}//class
 }//ns

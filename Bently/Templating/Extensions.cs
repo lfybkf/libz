@@ -10,7 +10,7 @@ namespace BDB.Templating
 	{
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 
-		public static IEnumerable<T> forEach<T>(this IEnumerable<T> source, Action<T> action)
+		public static IEnumerable<T> forEachT<T>(this IEnumerable<T> source, Action<T> action)
 		{
 			if (source == null)
 				return null;
@@ -24,26 +24,26 @@ namespace BDB.Templating
 			return source;
 		}//function
 
-		public static TResult with<TSource, TResult>(this TSource source, Func<TSource, TResult> func)
+		public static TResult withT<TSource, TResult>(this TSource source, Func<TSource, TResult> func)
 		where TSource : class
 		{
 			if (source != default(TSource)) { return func(source); }//if
 			else { return default(TResult); }//else
 		}//function
 
-		public static TResult with<TSource, TResult>(this TSource source, Func<TSource, TResult> func, TResult defaultValue)
+		public static TResult withT<TSource, TResult>(this TSource source, Func<TSource, TResult> func, TResult defaultValue)
 		where TSource : class
 		{
 			if (source != default(TSource)) { return func(source); }//if
 			else { return defaultValue; }//else
 		}//function
 
-		public static TSource execute<TSource>(this TSource source, Action<TSource> action) where TSource : class
+		public static TSource executeT<TSource>(this TSource source, Action<TSource> action) where TSource : class
 		{
 			if (source != default(TSource)) { action(source); } return source;
 		}//function
 
-		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
+		public static TValue getT<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
 		{
 			return dict.ContainsKey(key) ? dict[key] : default(TValue);
 		}//function
