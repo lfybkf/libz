@@ -7,9 +7,24 @@ namespace BDB
 {
 	public static class StringExtension
 	{
-		public static string after(this string s, string Prefix) { return s.Substring(Prefix.Length); }//func
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 		public static bool inThe(this string s, params string[] ss)		{return ss.Contains(s);	}//func
+
+		/// <summary>
+		/// берет кусок строки после <paramref name="Prefix"/>
+		/// ѕример: "Omnibus".after("b") = "us"
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="Prefix">искома€ строка</param>
+		/// <returns></returns>
+		public static string after(this string s, string Prefix) 
+		{
+			int i = s.IndexOf(Prefix);
+			if (i >= 0)
+				return s.Substring(i + Prefix.Length);
+			else
+				return string.Empty;
+		}//func
 
 		public static string before(this string s, string Suffix)
 		{

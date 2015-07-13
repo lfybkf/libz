@@ -56,5 +56,18 @@ namespace UnitTest
 			write("======================");
 			array.sequenceRandom(n*3).forEach(o => write(o.ToString()));
 		}//function
+
+		[TestMethod]
+		public void TestString()
+		{
+			Action<string> write = AC.Instance.log.Info;
+			string s;
+			Assert.IsTrue((s = "Omnibus".after("ib")) == "us");
+			Assert.IsTrue((s = "Omnibus".after("Omni")) == "bus");
+			Assert.IsTrue("Omnibus".before("ib") == "Omn");
+			Assert.IsTrue("Omnibus".after("zz") == "");
+			write("======================");
+			write("======================");
+		}//function
 	}//class
 }//ns
