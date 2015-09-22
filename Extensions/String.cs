@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -71,10 +72,26 @@ namespace BDB
 			return DateTime.TryParse(s, out z) ? z : def;
 		}//function
 
-		public static Decimal parse(this string s, Decimal def)
+		static System.Globalization.NumberStyles numberStyle = System.Globalization.NumberStyles.Number;
+		const char cPoint = '.';
+		const char cComma = ',';
+		public static Decimal parse(this string s, Decimal def, IFormatProvider formatProvider = null)
 		{
 			Decimal z;
-			return Decimal.TryParse(s, out z) ? z : def;
+			if (formatProvider == null)
+			{
+				bool OK = Decimal.TryParse(s, out z);
+				if (OK) { return z; }//if
+				OK = Decimal.TryParse(s.Replace(cPoint, cComma), out z);
+				if (OK) { return z; }//if
+				OK = Decimal.TryParse(s.Replace(cComma, cPoint), out z);
+				if (OK) { return z; }//if
+				return def;
+			}//if
+			else
+			{
+				return Decimal.TryParse(s, numberStyle, formatProvider, out z) ? z : def;
+			}//else
 		}//function
 
 		public static int parse(this string s, int def)
