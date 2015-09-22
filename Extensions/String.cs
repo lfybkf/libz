@@ -65,5 +65,23 @@ namespace BDB
 			return sb.ToString();
 		}//function
 
+		public static DateTime parse(this string s, DateTime def)
+		{
+			DateTime z;
+			return DateTime.TryParse(s, out z) ? z : def;
+		}//function
+
+		public static Decimal parse(this string s, Decimal def)
+		{
+			Decimal z;
+			return Decimal.TryParse(s, out z) ? z : def;
+		}//function
+
+		public static int parse(this string s, int def)
+		{
+			int z;
+			return int.TryParse(s, out z) ? z : def;
+		}//function
+
 	}//class
 }//ns
