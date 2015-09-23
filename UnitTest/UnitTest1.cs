@@ -68,10 +68,14 @@ namespace UnitTest
 			Assert.IsTrue("Omnibus".after("zz") == "");
 
 			Assert.IsTrue("26.01.2015".parse(new DateTime(2001, 12,31)).Equals(new DateTime(2015,01,26)));
+			Assert.IsTrue("26,01,2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2015, 01, 26)));
+			Assert.IsTrue("26/01/2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2015, 01, 26)));
 			Assert.IsTrue("ttt26.01.2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2001, 12, 31)),  "wrong date");
 			Assert.IsTrue("1.00".parse(Decimal.MinusOne) == 1M, "wrong decimal");
 			Assert.IsTrue("4 145.40".parse(Decimal.MinusOne) == 4145.4M, "wrong decimal");
 			Assert.IsTrue("4".parse(0) == 4, "wrong int");
+
+			"qwe;abc;dfg".splitSemicolon().forEach(a => Console.WriteLine(a));
 			write("======================");
 			write("======================");
 		}//function

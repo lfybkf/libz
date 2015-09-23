@@ -8,6 +8,11 @@ namespace BDB
 {
 	public static class StringExtension
 	{
+		const char cPoint = '.';
+		const char cComma = ',';
+		const char cColon = ':';
+		const char cSemicolon = ';';
+
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 		public static bool inThe(this string s, params string[] ss)		{return ss.Contains(s);	}//func
 
@@ -66,15 +71,21 @@ namespace BDB
 			return sb.ToString();
 		}//function
 
-		public static DateTime parse(this string s, DateTime def)
+		public static DateTime parse(this string s, DateTime def, IFormatProvider formatProvider = null)
 		{
 			DateTime z;
-			return DateTime.TryParse(s, out z) ? z : def;
+			if (formatProvider == null)
+			{
+				return DateTime.TryParse(s, out z) ? z : def;	
+			}//if
+			else
+			{
+				return DateTime.TryParse(s, formatProvider, DateTimeStyles.None, out z) ? z : def;	
+			}//else
+			
 		}//function
 
-		static System.Globalization.NumberStyles numberStyle = System.Globalization.NumberStyles.Number;
-		const char cPoint = '.';
-		const char cComma = ',';
+
 		public static Decimal parse(this string s, Decimal def, IFormatProvider formatProvider = null)
 		{
 			Decimal z;
@@ -90,7 +101,7 @@ namespace BDB
 			}//if
 			else
 			{
-				return Decimal.TryParse(s, numberStyle, formatProvider, out z) ? z : def;
+				return Decimal.TryParse(s, NumberStyles.Number, formatProvider, out z) ? z : def;
 			}//else
 		}//function
 
@@ -100,5 +111,9 @@ namespace BDB
 			return int.TryParse(s, out z) ? z : def;
 		}//function
 
+		public static string[] splitColon(this string s)	{	return s.Split(cColon);	}//function
+		public static string[] splitComma(this string s) { return s.Split(cComma); }//function
+		public static string[] splitSemicolon(this string s) { return s.Split(cSemicolon); }//function
+		public static string[] splitPoint(this string s) { return s.Split(cPoint); }//function
 	}//class
 }//ns
