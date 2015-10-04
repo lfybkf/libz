@@ -111,9 +111,21 @@ namespace BDB
 			return int.TryParse(s, out z) ? z : def;
 		}//function
 
+		/// <summary>
+		/// split : двоеточие
+		/// </summary>
 		public static string[] splitColon(this string s)	{	return s.Split(cColon);	}//function
+		/// <summary>
+		/// split , запятая
+		/// </summary>
 		public static string[] splitComma(this string s) { return s.Split(cComma); }//function
+		/// <summary>
+		/// split ; точка с запятой
+		/// </summary>
 		public static string[] splitSemicolon(this string s) { return s.Split(cSemicolon); }//function
+		/// <summary>
+		/// split . точка
+		/// </summary>
 		public static string[] splitPoint(this string s) { return s.Split(cPoint); }//function
 	}//class
 }//ns

@@ -11,11 +11,17 @@ namespace BDB
 	{
 		public delegate DbCommand selectDelegate(EC entityContext);
 
-		static IStoreSQL store { get { return AC.Instance.StoreSQL; } }
-		public A entity = null;
-		public ISet<A> list;
+		public IEntity entity = null;
+		public ISet<IEntity> list;
 		public selectDelegate cmdSelect;
 		public string link;
+
+		private Type type;
+
+		public EC(Type type)
+		{
+			this.type = type;
+		}//constructor
 
 		#region errors
 		List<Exception> errS = null;
@@ -37,12 +43,13 @@ namespace BDB
 		}//function
 		#endregion
 
-		public bool Load<T>(int ID) where T: A
+		public bool Load<T>(int ID) where T: IEntity
 		{
-			entity = (A)Activator.CreateInstance(typeof(T));
+			IStoreSQL store = RegistrySQL.Store<T>();
+			entity = (T)Activator.CreateInstance<T>(); 
 			entity.ID = ID;
-			DbCommand cmd = entity.cmdLoad;
-			if (cmd == null) { AddError("cmdLoad is null"); return false; }
+			DbCommand cmd =  entity.cmdRead;
+			if (cmd == null) { AddError("cmdRead is null"); return false; }
 
 			bool result = true;
 			DbDataReader dbr = null;
@@ -70,9 +77,10 @@ namespace BDB
 		public bool Save()
 		{
 			if (entity == null) { AddError("entity is null"); return false; }
-			DbCommand cmd = entity.IsNew ? entity.cmdInsert : entity.cmdUpdate;
+			DbCommand cmd = entity.IsNew() ? entity.cmdInsert : entity.cmdUpdate;
 			if (cmd == null) { AddError("cmdSave is null"); return false; }
 
+			IStoreSQL store = RegistrySQL.Store(entity.GetType());
 			bool result = true;
 			try
 			{
@@ -92,6 +100,7 @@ namespace BDB
 			DbCommand cmd = entity.cmdDelete;
 			if (cmd == null) { AddError("cmdDelete is null"); return false; }
 
+			IStoreSQL store = RegistrySQL.Store(entity.GetType());
 			bool result = true;
 			try
 			{
@@ -105,11 +114,12 @@ namespace BDB
 			return result;
 		}//function
 
-		public bool Select<T>() where T:A
+		public bool Select<T>() where T:IEntity
 		{
 			list = null;
 			if (cmdSelect == null) { AddError("cmdSelect is null"); return false; }
 
+			IStoreSQL store = RegistrySQL.Store<T>();
 			bool result = true;
 			DbDataReader dbr = null;
 			try
