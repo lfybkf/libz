@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BDB
+namespace BDB.Doubt
 {
 	[AttributeUsage(AttributeTargets.Class)]
 	public class TableAttribute : Attribute

@@ -26,13 +26,12 @@ namespace UnitTest
 		{
 			Map map = new Map();
 			map.Load();
-			Action<string> write = AC.Instance.log.Info;
+			Action<string> write = SimpleLogger.Instance.Info;
 			foreach (var obj in map.objects) 
 			{ 
-				write(obj.ReadID());
 				foreach (var field in obj.fields)
 				{
-					write(field.ReadField());
+					write(field.TypeReader);
 				}//for
 				write("==============");
 			}//for

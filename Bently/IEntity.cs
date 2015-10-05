@@ -11,21 +11,13 @@ namespace BDB
 {
 	public interface IEntity
 	{
-		long ID { get; set; }
 		bool IsValid { get; }
+		bool IsNew { get; }
 
-		DbCommand cmdInsert { get; }
-		DbCommand cmdUpdate { get; }
-		DbCommand cmdRead { get; }
-		DbCommand cmdDelete { get; }
+		DbCommand cmdInsert(EC entityContext);
+		DbCommand cmdUpdate(EC entityContext);
+		DbCommand cmdLoad(EC entityContext);
+		DbCommand cmdDelete(EC entityContext);
 		bool Read(DbDataReader ddr);
-	}//class
-
-	public static class IEntityExtension
-	{
-		public static bool IsNew(this IEntity entity)
-		{
-			return (entity.ID > 0);
-		}//function
 	}//class
 }//ns

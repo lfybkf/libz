@@ -17,5 +17,8 @@ namespace BDB.Templating
 		public static readonly string NULL = "Null";
 		public static readonly string REF = "Ref";
 		public static readonly string TABLE = "Table";
+
+		public const string NotInsert = "NotInsert";
+		public const string NotUpdate = "NotUpdate";
 	}//class
 }

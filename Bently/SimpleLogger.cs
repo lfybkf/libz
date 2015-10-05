@@ -9,7 +9,11 @@ namespace BDB
 {
 	public class SimpleLogger
 	{
-		static string CR = "\r\n";
+		static string CR = Environment.NewLine;
+		
+		static SimpleLogger _instance;
+		public static SimpleLogger Instance { get { if (_instance == null) { _instance = new SimpleLogger("static"); } return _instance; } }
+
 		public SimpleLogger(string FormatName)
 		{
 			this.FormatName = FormatName;

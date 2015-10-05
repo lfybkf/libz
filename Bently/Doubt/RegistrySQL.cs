@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace BDB
+namespace BDB.Doubt
 {
 	public class RegistrySQL
 	{

@@ -10,6 +10,15 @@ namespace BDB.Templating
 	{
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 
+		public static string print<T>(this IEnumerable<T> source, Func<T, string> toString, string delimiter)
+		{
+			if (source == null)
+				return string.Empty;
+
+			return string.Join(delimiter, source.Select(z => toString(z)));
+		}//function
+
+
 		public static IEnumerable<T> forEachT<T>(this IEnumerable<T> source, Action<T> action)
 		{
 			if (source == null)

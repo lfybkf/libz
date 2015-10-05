@@ -9,11 +9,14 @@ namespace BDB
 {
 	public class EC
 	{
-		public delegate DbCommand selectDelegate(EC entityContext);
+		public static IStoreSQL defaultStore;
+		public IStoreSQL store = defaultStore;
 
+		public long ID;
+		public long parentID;
 		public IEntity entity = null;
 		public ISet<IEntity> list;
-		public selectDelegate cmdSelect;
+		public Func<EC, DbCommand> cmdSelect;
 		public string link;
 
 		private Type type;
@@ -34,21 +37,27 @@ namespace BDB
 		#endregion
 
 		#region paramS
-		public long parentID;
 		IDictionary<string, object> paramS = null;
-		public void AddParam (string ParamName, object ParamValue)
+		public void ParamSet (string ParamName, object ParamValue)
 		{
 			if (paramS == null) { paramS = new Dictionary<string, object>(); }
 			paramS[ParamName] = ParamValue;
 		}//function
+
+		public object ParamGet(string ParamName)
+		{
+			if (paramS == null) { return null; }
+			if (paramS.ContainsKey(ParamName) == false) { return null; }
+			return paramS[ParamName];
+		}//function
+
+		public IEnumerable<string> ParamNames { get { return paramS == null ? new string[0] : paramS.Keys;} }
 		#endregion
 
-		public bool Load<T>(int ID) where T: IEntity
+		public bool Load<T>() where T: IEntity
 		{
-			IStoreSQL store = RegistrySQL.Store<T>();
 			entity = (T)Activator.CreateInstance<T>(); 
-			entity.ID = ID;
-			DbCommand cmd =  entity.cmdRead;
+			DbCommand cmd =  entity.cmdLoad(this);
 			if (cmd == null) { AddError("cmdRead is null"); return false; }
 
 			bool result = true;
@@ -77,10 +86,9 @@ namespace BDB
 		public bool Save()
 		{
 			if (entity == null) { AddError("entity is null"); return false; }
-			DbCommand cmd = entity.IsNew() ? entity.cmdInsert : entity.cmdUpdate;
+			DbCommand cmd = entity.IsNew ? entity.cmdInsert(this) : entity.cmdUpdate(this);
 			if (cmd == null) { AddError("cmdSave is null"); return false; }
 
-			IStoreSQL store = RegistrySQL.Store(entity.GetType());
 			bool result = true;
 			try
 			{
@@ -94,13 +102,12 @@ namespace BDB
 			return result;
 		}//function
 
-		public bool Delete(int ID)
+		public bool Delete()
 		{
 			if (entity == null) { AddError("entity is null"); return false; }
-			DbCommand cmd = entity.cmdDelete;
+			DbCommand cmd = entity.cmdDelete(this);
 			if (cmd == null) { AddError("cmdDelete is null"); return false; }
 
-			IStoreSQL store = RegistrySQL.Store(entity.GetType());
 			bool result = true;
 			try
 			{
@@ -119,7 +126,6 @@ namespace BDB
 			list = null;
 			if (cmdSelect == null) { AddError("cmdSelect is null"); return false; }
 
-			IStoreSQL store = RegistrySQL.Store<T>();
 			bool result = true;
 			DbDataReader dbr = null;
 			try

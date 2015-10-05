@@ -12,7 +12,7 @@ namespace BDB.Templating
 		public string Name;
 		public string Type;
 		public string Ref;
-		public bool Null;
+		public bool IsNullable;
 		public bool NotInsert;
 		public bool NotUpdate;
 		
@@ -32,35 +32,13 @@ namespace BDB.Templating
 			Name = attrS.getT(R.NAME);
 			Type = attrS.getT(R.TYPE);
 			Ref = attrS.getT(R.REF);
-			Null = attrS.getT(R.NULL) != null;
+			IsNullable = attrS.getT(R.NULL) != null;
 			NotInsert = attrS.getT("NotInsert") != null;
-			NotUpdate = attrS.getT("NotInsert") != null;
+			NotUpdate = attrS.getT("NotUpdate") != null;
 			return this;
 		}//function
 
-		public string TypeCS { get {
-			string result = Type;
-			if (date_types.Contains(Type)) { result = "DateTime"; }
-			if (date_types.Contains(Type) && Null) { result += "?"; }
-			if (value_types.Contains(Type) && Null) { result += "?"; }
-			return result;
-		} }
-
-		public string ReadField(string varDataReader = "ddr")
-		{
-			string opRead = "{0} = {1}.Get{2}({1}Ordinal);"
-				.fmt(Name, varDataReader, getDbReaderType(Type));
-			string opReadWithNull = "if ({1}.IsDBNull({1}Ordinal)) {{ {0}=null; }} else {{ {0} = {1}.Get{2}({1}Ordinal); }}"
-				.fmt(Name, varDataReader, getDbReaderType(Type));
-			//if (ddr.IsDBNull(ddrOrdinal)) { Amount = null; } else { Amount = ddr.GetInt32(ddrOrdinal); }
-			StringBuilder sb = new StringBuilder();
-			sb.Append("{1}Ordinal = {1}.GetOrdinal(\"{0}\"); ".fmt(Name, varDataReader));
-			if (Null) {sb.Append(opReadWithNull);	}//if
-			else	{	sb.Append(opRead);	}//else
-			return sb.ToString();
-		}//function
-
-		public static string getDbType(string Type)
+		public static string getTypeDB(string Type)
 		{
 			string result = "DbType.";
 			if (Type == "bool") { result += "Boolean"; }
@@ -75,23 +53,48 @@ namespace BDB.Templating
 			return result;
 		}//function
 
-		public static string getDbReaderType(string Type)
+		public static string getTypeReader(string Type)
 		{
-			string result = "";
-			if (Type == "bool") { result += "Boolean"; }
-			else if (Type == "decimal") { result += "Decimal"; }
-			else if (Type == "int") { result += "Int32"; }
-			else if (Type == "long") { result += "Int64"; }
-			else if (Type == "date") { result += "DateTime"; }
-			else if (Type == "datetime") { result += "DateTime"; }
-			else if (Type == "time") { result += "DateTime"; }
-			else if (Type == "string") { result += "String"; }
-
+			string result;
+			if (Type == "bool") { result = "Boolean"; }
+			else if (Type == "decimal") { result = "Decimal"; }
+			else if (Type == "int") { result = "Int32"; }
+			else if (Type == "long") { result = "Int64"; }
+			else if (Type == "date") { result = "DateTime"; }
+			else if (Type == "datetime") { result = "DateTime"; }
+			else if (Type == "time") { result = "DateTime"; }
+			else if (Type == "string") { result = "String"; }
+			else { result = string.Empty; }
 			return result;
 		}//function
 
-		public string DbType { get {			return getDbType(Type);		}	}
+		public static string getTypeCS(string Type, bool IsNullable = false)
+		{
+			string result = Type;
+			if (date_types.Contains(Type)) { result = "DateTime"; }
+			if (date_types.Contains(Type) && IsNullable) { result += "?"; }
+			if (value_types.Contains(Type) && IsNullable) { result += "?"; }
+			return result;
+		}//function
 
+		public string TypeDB			{ get {	return getTypeDB(Type);		}	}
+		public string TypeReader	{ get { return getTypeReader(Type); } }
+		public string TypeCS			{ get {	return getTypeCS(Type, IsNullable); }	}
+
+
+		public string zReadField(string varDataReader = "ddr")
+		{
+			string opRead = "{0} = {1}.Get{2}({1}Ordinal);"
+				.fmt(Name, varDataReader, getTypeReader(Type));
+			string opReadWithNull = "if ({1}.IsDBNull({1}Ordinal)) {{ {0}=null; }} else {{ {0} = {1}.Get{2}({1}Ordinal); }}"
+				.fmt(Name, varDataReader, getTypeReader(Type));
+			//if (ddr.IsDBNull(ddrOrdinal)) { Amount = null; } else { Amount = ddr.GetInt32(ddrOrdinal); }
+			StringBuilder sb = new StringBuilder();
+			sb.Append("{1}Ordinal = {1}.GetOrdinal(\"{0}\"); ".fmt(Name, varDataReader));
+			if (IsNullable) { sb.Append(opReadWithNull); }//if
+			else { sb.Append(opRead); }//else
+			return sb.ToString();
+		}//function
 
 	}//class
 }//ns
