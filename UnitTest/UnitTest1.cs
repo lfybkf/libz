@@ -22,27 +22,6 @@ namespace UnitTest
 		}//function
 
 		[TestMethod]
-		public void TestSql()
-		{
-			Map map = new Map();
-			map.Load();
-			Action<string> write = SimpleLogger.Instance.Info;
-			foreach (var obj in map.objects) 
-			{ 
-				foreach (var field in obj.fields)
-				{
-					write(field.TypeReader);
-				}//for
-				write("==============");
-			}//for
-			
-			//foreach (var obj in map.objects) { write(obj.sqlLoad); }//for
-			//foreach (var obj in map.objects)	{	write(obj.sqlInsert);	}//for
-			//foreach (var obj in map.objects) { write(obj.sqlUpdate); }//for
-			//foreach (var obj in map.objects) { write(obj.sqlDelete); }//for
-		}//function
-
-		[TestMethod]
 		public void TestEnumerator()
 		{
 			Action<string> write = AC.Instance.log.Info;

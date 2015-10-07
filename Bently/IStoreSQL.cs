@@ -14,7 +14,7 @@ namespace BDB
 		bool Execute(DbCommand cmd);
 		DbCommand getCommand();
 		DbParameter getParameter();
-		DbDataReader Select(DbCommand cmd);
+		DbDataReader OpenReader(DbCommand cmd);
 		Exception LastError {get; }
 	}//interface
 }//ns

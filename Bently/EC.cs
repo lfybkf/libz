@@ -75,36 +75,44 @@ namespace BDB
 		public IEnumerable<string> ParamNames { get { return paramS == null ? new string[0] : paramS.Keys;} }
 		#endregion
 
-		
-		public bool Load<T>() where T: IEntity
+		bool ReadRecord(DbDataReader reader)
 		{
-			entity = (T)Activator.CreateInstance<T>();
+			bool IsReaded = reader.Read();
+			if (IsReaded)
+			{
+					RunAction(getRegistry(type).with(z => z.BeforeRead));
+					entity.Read(reader);
+					RunAction(getRegistry(type).with(z => z.AfterRead));
+			}//if
+			return IsReaded;
+		}//function
+
+		IEntity CreateEntity()
+		{
+			return (IEntity)Activator.CreateInstance(type);
+		}//function
+
+		public bool Load()
+		{
+			entity = CreateEntity();
 			DbCommand cmd =  entity.cmdLoad(this);
 			if (cmd == null) { AddError("cmdRead is null"); return false; }
 
-			RunAction(getRegistry<T>().with(z => z.BeforeLoad));
 			bool result = true;
-			DbDataReader dbr = null;
+			DbDataReader reader = null;
 			try
 			{
-				dbr = store.Select(cmd);
-				if (dbr.HasRows == false)
-				{
-					result = false;
-				}//if
-				else
-				{
-					RunAction(getRegistry<T>().with(z => z.BeforeRead));
-					result = entity.Read(dbr);
-					RunAction(getRegistry<T>().with(z => z.AfterRead));
-				}//else
-				RunAction(getRegistry<T>().with(z => z.AfterLoad));
+				RunAction(getRegistry(type).with(z => z.BeforeLoad));
+				reader = store.OpenReader(cmd);
+				while (ReadRecord(reader)) { break; } //read one record
+				RunAction(getRegistry(type).with(z => z.AfterLoad));
 			}//try
-			catch
+			catch (Exception exception)
 			{
+				LastError = exception;
 				result = false;
 			}//catch
-			finally { dbr.Close(); dbr.Dispose(); }
+			finally { reader.Close(); reader.Dispose(); }
 			return result;
 
 		}//function
@@ -153,43 +161,35 @@ namespace BDB
 			return result;
 		}//function
 
-		public bool Select<T>() where T:IEntity
+		public bool Select()
 		{
 			list = null;
 			if (cmdSelect == null) { AddError("cmdSelect is null"); return false; }
 
 			bool result = true;
-			DbDataReader dbr = null;
+			DbDataReader reader = null;
 			try
 			{
-				dbr = store.Select(cmdSelect(this));
-				if (dbr.HasRows == false)
+				reader = store.OpenReader(cmdSelect(this));
+				list = new HashSet<IEntity>();
+				entity = CreateEntity();
+				while (ReadRecord(reader)) 
 				{
-					result = false;
-				}//if
-				else
-				{
-					T item;
-					while (dbr.Read())
-					{
-						item = (T)Activator.CreateInstance<T>();
-						RunAction(getRegistry<T>().with(z => z.BeforeRead));
-						item.Read(dbr);
-						RunAction(getRegistry<T>().with(z => z.AfterRead));
-						list.Add(item);
-					}//while
-				}//else
+					list.Add(entity);
+					entity = CreateEntity();
+				}//while
 			}//try
-			catch
+			catch (Exception exception)
 			{
+				LastError = exception;
 				result = false;
 			}//catch
-			finally { dbr.Close(); dbr.Dispose(); }
+			finally { reader.Close(); reader.Dispose(); }
 			return result;
 
 		}//function
 
-		private void RunAction(Action<IEntity, EC> action)
+		void RunAction(Action<IEntity, EC> action)
 		{
 			if (action == null) { return; }
 			action(entity, this);
