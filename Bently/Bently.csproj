@@ -40,15 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Doubt\Attributes.cs" />
-    <Compile Include="Doubt\Const.cs" />
-    <Compile Include="Doubt\Enums.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="AC.cs" />
     <Compile Include="EC.cs" />
     <Compile Include="IStoreSQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Doubt\RegistrySQL.cs" />
     <Compile Include="SimpleLogger.cs" />
     <Compile Include="Templating\Const.cs" />
     <Compile Include="Templating\Extensions.cs" />

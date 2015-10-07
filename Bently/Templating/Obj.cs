@@ -61,7 +61,7 @@ namespace BDB.Templating
     <!ATTLIST Object IDtype (int|long) #IMPLIED>
 	<!ELEMENT Field (#PCDATA)>
 		<!ATTLIST Field Name CDATA #REQUIRED>
-		<!ATTLIST Field Type (bool|date|datetime|decimal|int|long|string|time) #REQUIRED>
+		<!ATTLIST Field Type (bool|datetime|decimal|int|long|string) #REQUIRED>
 		<!ATTLIST Field Null (true) #IMPLIED>
 		<!ATTLIST Field Ref CDATA #IMPLIED>
 	<!ELEMENT Comment (#PCDATA)>

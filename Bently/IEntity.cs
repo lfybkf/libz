@@ -11,7 +11,6 @@ namespace BDB
 {
 	public interface IEntity
 	{
-		bool IsValid { get; }
 		bool IsNew { get; }
 
 		DbCommand cmdInsert(EC entityContext);
