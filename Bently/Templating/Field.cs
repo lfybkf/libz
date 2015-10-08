@@ -21,8 +21,9 @@ namespace BDB.Templating
 		public bool Has(string key, string value) { return attrS.getT(key) == value; }
 		public bool HasNot(string key) { return !attrS.ContainsKey(key); }
 		public bool HasNot(string key, string value) { return attrS.getT(key) != value; }
+		public string Get(string key) { return attrS.getT(key); }
 
-		static string[] value_types = { "bool", "datetime", "decimal", "int", "long" };
+		static string[] value_types = { "bool", "datetime", "decimal", "int", "long", "float", "double" };
 
 		public Field Read(XElement src)
 		{
@@ -46,6 +47,8 @@ namespace BDB.Templating
 			else if (Type == "long") { result += "Int64"; }
 			else if (Type == "datetime") { result += "DateTime"; }
 			else if (Type == "string") { result += "String"; }
+			else if (Type == "float") { result += "Double"; }
+			else if (Type == "double") { result += "Double"; }
 
 			return result;
 		}//function
@@ -59,6 +62,8 @@ namespace BDB.Templating
 			else if (Type == "long") { result = "Int64"; }
 			else if (Type == "datetime") { result = "DateTime"; }
 			else if (Type == "string") { result = "String"; }
+			else if (Type == "float") { result = "Float"; }
+			else if (Type == "double") { result = "Double"; }
 			else { result = string.Empty; }
 			return result;
 		}//function

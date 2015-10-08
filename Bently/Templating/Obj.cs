@@ -22,6 +22,7 @@ namespace BDB.Templating
 		public bool Has(string key, string value) { return attrS.getT(key) == value; }
 		public bool HasNot(string key) { return !attrS.ContainsKey(key); }
 		public bool HasNot(string key, string value) { return attrS.getT(key) != value; }
+		public string Get(string key) { return attrS.getT(key); }
 
 		internal string _Table = null;
 		public string Table { get { return TablePrefix + (_Table ?? Name); } }
@@ -61,7 +62,7 @@ namespace BDB.Templating
     <!ATTLIST Object IDtype (int|long) #IMPLIED>
 	<!ELEMENT Field (#PCDATA)>
 		<!ATTLIST Field Name CDATA #REQUIRED>
-		<!ATTLIST Field Type (bool|datetime|decimal|int|long|string) #REQUIRED>
+		<!ATTLIST Field Type (bool|datetime|decimal|int|long|string|float|double) #REQUIRED>
 		<!ATTLIST Field Null (true) #IMPLIED>
 		<!ATTLIST Field Ref CDATA #IMPLIED>
 	<!ELEMENT Comment (#PCDATA)>

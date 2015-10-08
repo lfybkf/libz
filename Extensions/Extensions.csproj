@@ -46,14 +46,27 @@
   <ItemGroup>
     <Compile Include="DataTable.cs" />
     <Compile Include="DataViewGrid.cs" />
+    <Compile Include="DbDataReader.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbDataReader.tt</DependentUpon>
+    </Compile>
     <Compile Include="Exception.cs" />
     <Compile Include="IEnumerable.cs" />
     <Compile Include="MaybeExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlDataReader.cs" />
     <Compile Include="String.cs" />
     <Compile Include="TypeExtension.cs" />
     <Compile Include="XmlElement.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DbDataReader.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DbDataReader.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
