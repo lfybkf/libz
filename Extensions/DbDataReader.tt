@@ -8,15 +8,16 @@
 <#
 Dictionary<string, string> cs2reader = new Dictionary<string, string>()
 {
-	{"int", "Int32"}, {"int?", "Int32"}, {"long", "Int64"}, {"long?", "Int64"},
-	{"decimal", "Decimal"}, {"decimal?", "Decimal"}, {"DateTime", "DateTime"}, {"DateTime?", "DateTime"},
-	{"float", "Float"}, {"float?", "Float"}, {"double", "Double"}, {"double?", "Double"},
-	{"bool", "Boolean"}, {"bool?", "Boolean"}, {"string", "String"}, 
+	{"int", "Int32"}, {"long", "Int64"}, 
+//	{"uint", "Int32"}, {"ulong", "Int64"}, 
+	{"decimal", "Decimal"}, {"float", "Float"}, {"double", "Double"}, 
+	{"bool", "Boolean"}, {"DateTime", "DateTime"}
 };
 
-string[] value_types= {"int", "long", "float", "double", "decimal", "DateTime", "bool"};
+//string[] value_types= {"int", "long", "float", "double", "decimal", "DateTime", "bool"};
  #>
 
+//Generated <#=DateTime.Now.ToString() #>
 
 using System;
 using System.Data.Common;
@@ -31,40 +32,72 @@ namespace BDB
 			return reader.GetString(i);
 		}//func
 
-<#		foreach (string type in cs2reader.Keys.Where(s => !s.Contains("?") && s != "string")) { #>
-		public static <#= type #> Get(this DbDataReader reader, string Col, <#= type #> Def)
-		{
-			int i = reader.GetOrdinal(Col);
-			return reader.Get<#=cs2reader[type] #>(i);
-		}//func
-
-		public static <#= type #> Get<#=cs2reader[type] #>(this DbDataReader reader, string Col)
-		{
-			int i = reader.GetOrdinal(Col);
-			return reader.Get<#=cs2reader[type] #>(i);
-		}//func
-
-<#		}//for #>
-
-
-<#		foreach (string type in cs2reader.Keys.Where(s => s.Contains("?") || s == "string")) { #>
-		public static <#= type #> Get(this DbDataReader reader, string Col, <#= type #> Def)
-		{
-			int i = reader.GetOrdinal(Col);
-			if (reader.IsDBNull(i))
-				return Def;
-			else
-				return reader.Get<#=cs2reader[type] #>(i);
-		}//func
-
-		public static <#= type #> Get<#=cs2reader[type] #>Nullable(this DbDataReader reader, string Col)
+		public static string GetStringNullable(this DbDataReader reader, string Col)
 		{
 			int i = reader.GetOrdinal(Col);
 			if (reader.IsDBNull(i))
 				return null;
 			else
-				return reader.Get<#=cs2reader[type] #>(i);
+				return reader.GetString(i);
 		}//func
+
+		public static string Get(this DbDataReader reader, string Col, string Def)
+		{
+			int i = reader.GetOrdinal(Col);
+			if (reader.IsDBNull(i))
+				return Def;
+			else
+				return reader.GetString(i);
+		}//func
+
+<#		foreach (string type in cs2reader.Keys) { #>
+/// <summary>
+/// Считать значение из колонки. Если IsDBNull, то возвращается Def
+/// </summary>
+/// <param name="Col">Имя колонки</param>
+/// <param name="Def">Значение по умолчанию</param>
+public static <#= type #>? Get(this DbDataReader reader, string Col, <#= type #>? Def)
+{
+	int i = reader.GetOrdinal(Col);
+	if (reader.IsDBNull(i))
+		return Def;
+	else
+		return reader.Get<#=cs2reader[type] #>(i);
+}//func
+
+/// <summary>
+/// Считать значение из колонки без проверки на IsDBNull
+/// </summary>
+/// <param name="Col">Имя колонки</param>
+/// <param name="Def">Значение по умолчанию (используется для overload)</param>
+public static <#= type #> Get(this DbDataReader reader, string Col, <#= type #> Def)
+{
+	int i = reader.GetOrdinal(Col);
+	return reader.Get<#=cs2reader[type] #>(i);
+}//func
+
+/// <summary>
+/// Считать значение из колонки. Если IsDBNull, то возвращается null
+/// </summary>
+/// <param name="Col">Имя колонки</param>
+public static <#= type #>? Get<#=cs2reader[type] #>Nullable(this DbDataReader reader, string Col)
+{
+	int i = reader.GetOrdinal(Col);
+	if (reader.IsDBNull(i))
+		return null;
+	else
+		return reader.Get<#=cs2reader[type] #>(i);
+}//func
+
+/// <summary>
+/// Считать значение из колонки. Без проверки IsDBNull
+/// </summary>
+/// <param name="Col">Имя колонки</param>
+public static <#= type #> Get<#=cs2reader[type] #>(this DbDataReader reader, string Col)
+{
+	int i = reader.GetOrdinal(Col);
+	return reader.Get<#=cs2reader[type] #>(i);
+}//func
 
 <#		}//for #>
 	}//class

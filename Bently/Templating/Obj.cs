@@ -9,7 +9,6 @@ namespace BDB.Templating
 {
 	public class Obj
 	{
-//		public static string defaultNamespace = "BDB";
 		public static string defaultIDname = "ID";
 		public static string defaultIDtype = "long";
 		public static string TablePrefix = string.Empty;
