@@ -10,7 +10,8 @@ namespace BDB
 {
 	public interface IStoreSQL
 	{
-		bool Connect(string ConnectionString);
+		string ConnectionString { set; }
+		bool TestConnection(string ConnectionString);
 		bool Execute(DbCommand cmd);
 		DbCommand getCommand();
 		DbParameter getParameter();

@@ -22,6 +22,11 @@ namespace BDB
 			return source;
 		}//function
 
+		/// <summary>
+		/// вертает Value или default(TValue)
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
 		{
 			return dict.ContainsKey(key) ? dict[key] : default(TValue);
