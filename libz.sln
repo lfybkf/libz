@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kommand", "Kommand\Kommand.csproj", "{3891C999-1688-4A5B-989A-F5E7E79CE115}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Kommand", "Kommand\BDB.Kommand.csproj", "{3891C999-1688-4A5B-989A-F5E7E79CE115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{902E99C0-1294-4F7F-8624-70CAC2C84872}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Extensions", "Extensions\BDB.Extensions.csproj", "{902E99C0-1294-4F7F-8624-70CAC2C84872}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Propis", "Propis\Propis.csproj", "{0113A03D-DBA1-4418-A749-F4A9B274A023}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Propis", "Propis\BDB.Propis.csproj", "{0113A03D-DBA1-4418-A749-F4A9B274A023}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{94E24404-AFD4-4446-ABD9-C107785A3D1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bently", "Bently\Bently.csproj", "{98D120A6-86BF-4C93-A1DE-9C8332767892}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Bently", "Bently\BDB.Bently.csproj", "{98D120A6-86BF-4C93-A1DE-9C8332767892}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreSQL", "StoreSQL\StoreSQL.csproj", "{97962542-2B83-4B34-A2F2-DB4BFF941045}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.StoreSQL", "StoreSQL\BDB.StoreSQL.csproj", "{97962542-2B83-4B34-A2F2-DB4BFF941045}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

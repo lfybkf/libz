@@ -55,21 +55,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bently\Bently.csproj">
+    <ProjectReference Include="..\Bently\BDB.Bently.csproj">
       <Project>{98d120a6-86bf-4c93-a1de-9c8332767892}</Project>
-      <Name>Bently</Name>
+      <Name>BDB.Bently</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Extensions\Extensions.csproj">
+    <ProjectReference Include="..\Extensions\BDB.Extensions.csproj">
       <Project>{902e99c0-1294-4f7f-8624-70cac2c84872}</Project>
-      <Name>Extensions</Name>
+      <Name>BDB.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Kommand\Kommand.csproj">
+    <ProjectReference Include="..\Kommand\BDB.Kommand.csproj">
       <Project>{3891c999-1688-4a5b-989a-f5e7e79ce115}</Project>
-      <Name>Kommand</Name>
+      <Name>BDB.Kommand</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Propis\Propis.csproj">
+    <ProjectReference Include="..\Propis\BDB.Propis.csproj">
       <Project>{0113a03d-dba1-4418-a749-f4a9b274a023}</Project>
-      <Name>Propis</Name>
+      <Name>BDB.Propis</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
