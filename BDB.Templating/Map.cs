@@ -29,6 +29,7 @@ namespace BDB.Templating
 				foreach (var xObj in xdoc.Root.Elements(R.OBJECT))
 				{
 					item = new Obj();
+					item.FileSource = Path.GetFileNameWithoutExtension(file);
 					item.Read(xObj);
 					_objects.Add(item);
 				}//for

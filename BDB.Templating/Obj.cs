@@ -15,6 +15,7 @@ namespace BDB.Templating
 		public static string TablePrefix = string.Empty;
 
 		public string Name;
+		public string FileSource {get; internal set;}
 		public List<Field> fields = new List<Field>();
 
 		internal string _Table = null;
