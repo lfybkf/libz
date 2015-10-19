@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{98D120A6-86BF-4C93-A1DE-9C8332767892}</ProjectGuid>
+    <ProjectGuid>{45D2BD49-8914-4A4A-B470-C65DEA7E0952}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BDB</RootNamespace>
-    <AssemblyName>BDB.Bently</AssemblyName>
+    <RootNamespace>BDB.Templating</RootNamespace>
+    <AssemblyName>BDB.Templating</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,12 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\libs\System.Data.SqlServerCe.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,19 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IEntity.cs" />
-    <Compile Include="EC.cs" />
-    <Compile Include="IStoreSQL.cs" />
+    <Compile Include="Attrz.cs" />
+    <Compile Include="Const.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Field.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="Obj.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleLogger.cs" />
-    <Compile Include="SqlCE.cs" />
-    <Compile Include="SqlExpress.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Extensions\BDB.Extensions.csproj">
-      <Project>{902e99c0-1294-4f7f-8624-70cac2c84872}</Project>
-      <Name>BDB.Extensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

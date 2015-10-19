@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BDB
 {
-	public class AC
+	public class AC2
 	{
-		public static AC Instance = new AC();
+		public static AC2 Instance = new AC2();
 		public IStoreSQL StoreSQL { get; set; }
 		public SimpleLogger log = new SimpleLogger("base{0}");
 	}

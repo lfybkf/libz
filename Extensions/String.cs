@@ -8,12 +8,21 @@ namespace BDB
 {
 	public static class StringExtension
 	{
-		const char cPoint = '.';
-		const char cComma = ',';
-		const char cColon = ':';
-		const char cSemicolon = ';';
-
+		/// <summary>
+		/// формат строки
+		/// usage: "Value1={0}, Value2={1}".fmt(Value1, Value2)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="oo"></param>
+		/// <returns></returns>
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
+
+		/// <summary>
+		/// есть ли строка в массиве
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="ss">массив, в котором искать</param>
+		/// <returns></returns>
 		public static bool inThe(this string s, params string[] ss)		{return ss.Contains(s);	}//func
 
 		/// <summary>
@@ -41,6 +50,13 @@ namespace BDB
 				return string.Empty;
 		}//func
 
+		#region add
+		/// <summary>
+		/// формирует Path из массива строк
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public static string addToPath(this string s, params string[] args)
 		{
 			foreach (string path in args)
@@ -50,6 +66,12 @@ namespace BDB
 			return s;
 		}//func
 
+		/// <summary>
+		/// конкатенация массива к строке
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public static string add(this string s, params object[] args)
 		{
 			StringBuilder sb = new StringBuilder(s);
@@ -57,6 +79,12 @@ namespace BDB
 			return sb.ToString();
 		}//function
 
+		/// <summary>
+		/// конкатенация к строке текста с переносом строки из массива
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public static string addLine(this string s, params object[] args)
 		{
 			StringBuilder sb = new StringBuilder(s);
@@ -64,13 +92,22 @@ namespace BDB
 			return sb.ToString();
 		}//function
 
+		/// <summary>
+		/// конкатенация к строке массива с разделителем
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="Delim"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public static string addDelim(this string s, string Delim, params object[] args)
 		{
 			StringBuilder sb = new StringBuilder(s);
 			args.forEach(o => sb.AppendFormat("{0}{1}", Delim, o));
 			return sb.ToString();
 		}//function
+		#endregion
 
+		#region parse
 		public static DateTime parse(this string s, DateTime def, IFormatProvider formatProvider = null)
 		{
 			DateTime z;
@@ -110,6 +147,15 @@ namespace BDB
 			int z;
 			return int.TryParse(s, out z) ? z : def;
 		}//function
+		#endregion
+
+		#region split
+		const char cTab = '\t';
+		const char cSpace = ' ';
+		const char cPoint = '.';
+		const char cComma = ',';
+		const char cColon = ':';
+		const char cSemicolon = ';';
 
 		/// <summary>
 		/// split : двоеточие
@@ -127,5 +173,14 @@ namespace BDB
 		/// split . точка
 		/// </summary>
 		public static string[] splitPoint(this string s) { return s.Split(cPoint); }//function
+		/// <summary>
+		/// split ПРОБЕЛ
+		/// </summary>
+		public static string[] splitSpace(this string s) { return s.Split(cSpace); }//function
+		/// <summary>
+		/// split TAB
+		/// </summary>
+		public static string[] splitTab(this string s) { return s.Split(cTab); }//function
+		#endregion
 	}//class
 }//ns

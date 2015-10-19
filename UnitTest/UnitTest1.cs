@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BDB;
-using BDB.Templating;
 
 namespace UnitTest
 {
@@ -24,7 +23,7 @@ namespace UnitTest
 		[TestMethod]
 		public void TestEnumerator()
 		{
-			Action<string> write = AC.Instance.log.Info;
+			Action<string> write = SimpleLogger.Instance.Info;
 			int n = 0;
 			string[] array = { "kaba", " muba", "  taba", "   ourt", "    ifqa", "      zaba" };
 			//int[] array = Enumerable.Range(-2, 6).ToArray();
@@ -38,7 +37,7 @@ namespace UnitTest
 		[TestMethod]
 		public void TestString()
 		{
-			Action<string> write = AC.Instance.log.Info;
+			Action<string> write = SimpleLogger.Instance.Info;
 			string s;
 			Assert.IsTrue((s = "Omnibus".after("ib")) == "us");
 			Assert.IsTrue((s = "Omnibus".after("Omni")) == "bus");

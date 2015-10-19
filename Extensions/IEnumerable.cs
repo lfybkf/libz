@@ -32,6 +32,23 @@ namespace BDB
 			return dict.ContainsKey(key) ? dict[key] : default(TValue);
 		}//function
 
+		/// <summary>
+		/// вертает Value или defaultValue
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultValue)
+		{
+			return dict.ContainsKey(key) ? dict[key] : defaultValue;
+		}//function
+
+		/// <summary>
+		/// качельное перебирание последовательности
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="limit">количество переборов. Если 0, то =Count</param>
+		/// <returns></returns>
 		public static IEnumerable<T> sequenceSwing<T>(this IEnumerable<T> source, int limit = 0)
 		{
 			if (source == null) { yield break; }
@@ -51,6 +68,13 @@ namespace BDB
 			}//for
 		}//function
 
+		/// <summary>
+		/// цикличное перебирание последовательности
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="limit">количество переборов. Если 0, то =Count</param>
+		/// <returns></returns>
 		public static IEnumerable<T> sequenceCircle<T>(this IEnumerable<T> source, int limit = 0)
 		{
 			if (source == null) { yield break; }
@@ -67,6 +91,13 @@ namespace BDB
 			}//for
 		}//function
 
+		/// <summary>
+		/// произвольное перебирание последовательности
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="limit">количество переборов. Если 0, то =Count</param>
+		/// <returns></returns>
 		public static IEnumerable<T> sequenceRandom<T>(this IEnumerable<T> source, int limit = 0)
 		{
 			if (source == null) { yield break; }
@@ -81,6 +112,22 @@ namespace BDB
 				index = random.Next(0, max);
 				yield return source.ElementAt(index);
 			}//for
+		}//function
+
+		/// <summary>
+		/// массив Т в строку с разделителем
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="toString">функция, превращающая Т в строку</param>
+		/// <param name="delimiter">разделитель</param>
+		/// <returns></returns>
+		public static string print<T>(this IEnumerable<T> source, Func<T, string> toString, string delimiter)
+		{
+			if (source == null)
+				return string.Empty;
+
+			return string.Join(delimiter, source.Select(z => toString(z)));
 		}//function
 	}//class
 }//ns

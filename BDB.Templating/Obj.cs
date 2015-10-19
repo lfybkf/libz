@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using BDB;
 
 namespace BDB.Templating
 {
-	public class Obj
+	public class Obj: Attrz
 	{
 		public static string defaultIDname = "ID";
 		public static string defaultIDtype = "long";
@@ -15,13 +16,6 @@ namespace BDB.Templating
 
 		public string Name;
 		public List<Field> fields = new List<Field>();
-
-		private Dictionary<string, string> attrS = new Dictionary<string, string>();
-		public bool Has(string key) { return attrS.ContainsKey(key); }
-		public bool Has(string key, string value) { return attrS.getT(key) == value; }
-		public bool HasNot(string key) { return !attrS.ContainsKey(key); }
-		public bool HasNot(string key, string value) { return attrS.getT(key) != value; }
-		public string Get(string key) { return attrS.getT(key); }
 
 		internal string _Table = null;
 		public string Table { get { return TablePrefix + (_Table ?? Name); } }
@@ -33,11 +27,11 @@ namespace BDB.Templating
 
 		public Obj Read(XElement src)
 		{
-			foreach (XAttribute attr in src.Attributes()) { attrS.Add(attr.Name.LocalName, attr.Value); }//for
-			Name = attrS.getT(R.NAME);
-			_Table = attrS.getT(R.TABLE);
-			_IDname = attrS.getT("IDname");
-			_IDtype = attrS.getT("IDtype");
+			Fill(src.Attributes());
+			Name = Get(R.NAME);
+			_Table = Get(R.TABLE);
+			_IDname = Get("IDname");
+			_IDtype = Get("IDtype");
 			
 			Field item = null;
 			foreach (var xField in src.Elements(R.FIELD))
