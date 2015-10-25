@@ -26,23 +26,15 @@ namespace BDB.Templating
 		private string _IDtype = null;
 		public string IDtype { get { return _IDtype ?? defaultIDtype; } }
 
-		public Obj Read(XElement src)
+		public override void Read(XElement src)
 		{
-			Fill(src.Attributes());
 			Name = Get(R.NAME);
 			_Table = Get(R.TABLE);
 			_IDname = Get("IDname");
 			_IDtype = Get("IDtype");
-			
-			Field item = null;
-			foreach (var xField in src.Elements(R.FIELD))
-			{
-				item = new Field();
-				item.Read(xField);
-				fields.Add(item);
-			}//for
-			return this;
-		}//constructor
+
+			FillListFromXlist<Field>(fields, src.Elements(R.FIELD));
+		}//function
 
 		public static string XmlDTD()
 		{

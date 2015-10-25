@@ -13,27 +13,38 @@ namespace BDB.Templating
 	{
 		List<Obj> _objects = new List<Obj>();
 		public IEnumerable<Obj> objects { get { return _objects; } }
+		List<Machine> _machines = new List<Machine>();
+		public IEnumerable<Machine> machines { get { return _machines; } }
 
 		public string ModelDirectory = Environment.CurrentDirectory;
 		public string ModelPattern = "Model*.xml";
+		public string MachineDirectory = Environment.CurrentDirectory;
+		public string MachinePattern = "Machine*.xml";
 
 		public void Load()
 		{
-			var ModelFiles = Directory.EnumerateFiles(ModelDirectory, ModelPattern);
+			var files = Directory.EnumerateFiles(ModelDirectory, ModelPattern);
 			XDocument xdoc = null;
-			Obj item = null;
 
-			foreach (var file in ModelFiles)
+			foreach (var file in files)
 			{
 				xdoc = XDocument.Load(file);
-				foreach (var xObj in xdoc.Root.Elements(R.OBJECT))
-				{
-					item = new Obj();
-					item.FileSource = Path.GetFileNameWithoutExtension(file);
-					item.Read(xObj);
-					_objects.Add(item);
-				}//for
+				Attrz.FillListFromXlist<Obj>(_objects, xdoc.Root.Elements(R.OBJECT));
+				_objects.forEach(o => o.FileSource = Path.GetFileNameWithoutExtension(file));
 			}//for
 		}//function
+
+		public void LoadMachines()
+		{
+			var files = Directory.EnumerateFiles(MachineDirectory, MachinePattern);
+			XDocument xdoc = null;
+
+			foreach (var file in files)
+			{
+				xdoc = XDocument.Load(file);
+				Attrz.FillListFromXlist<Machine>(_machines, xdoc.Root.Elements(R.MACHINE));
+			}//for
+		}//function
+
 	}//class
 }//ns

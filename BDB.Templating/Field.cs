@@ -18,17 +18,14 @@ namespace BDB.Templating
 		
 		static string[] value_types = { "bool", "datetime", "decimal", "int", "long", "float", "double" };
 
-		public Field Read(XElement src)
+		public override void Read(XElement src)
 		{
-			Fill(src.Attributes());
-
 			Name = Get(R.NAME);
 			Type = Get(R.TYPE);
 			Ref = Get(R.REF);
 			IsNullable = Get(R.NULL) != null;
 			NotInsert = Get(R.NotInsert) != null;
 			NotUpdate = Get(R.NotUpdate) != null;
-			return this;
 		}//function
 
 		public static string getTypeDB(string Type)

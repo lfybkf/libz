@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE ROOT [ 
+	<!ELEMENT ROOT (Machine+)>
+	<!ELEMENT Machine (State+, Transition+, Check*, Act*, Device*, Comment*)>
+		<!ATTLIST Machine Name ID #REQUIRED>
+		<!ATTLIST Machine Info CDATA #IMPLIED>
+	<!ELEMENT State (Comment*)>
+		<!ATTLIST State Name CDATA #REQUIRED>
+		<!ATTLIST State Enter CDATA #IMPLIED>
+		<!ATTLIST State Exit CDATA #IMPLIED>
+		<!ATTLIST State Info CDATA #IMPLIED>
+	<!ELEMENT Transition (Check*, Act*, Comment*)>
+		<!ATTLIST Transition Name CDATA #REQUIRED>
+		<!ATTLIST Transition From CDATA #REQUIRED>
+		<!ATTLIST Transition To CDATA #REQUIRED>
+		<!ATTLIST Transition Info CDATA #IMPLIED>
+	<!ELEMENT Check (Comment*)>
+		<!ATTLIST Check Name CDATA #REQUIRED>
+		<!ATTLIST Check Info CDATA #IMPLIED>
+	<!ELEMENT Act (Comment*)>
+		<!ATTLIST Act Name CDATA #REQUIRED>
+		<!ATTLIST Act Info CDATA #IMPLIED>
+	<!ELEMENT Device (Comment*)>
+		<!ATTLIST Device Name CDATA #REQUIRED>
+		<!ATTLIST Device Type CDATA #REQUIRED>
+		<!ATTLIST Device Info CDATA #IMPLIED>
+	<!ELEMENT Comment (#PCDATA)>
+		<!ATTLIST Comment Author CDATA #REQUIRED>
+]>
+
+<ROOT>
+	<Machine Name="Dialog" Info="Show dialog">
+		<State Name="First" Info="first status" />
+		<State Name="Last" Info="las status" />
+		<Transition Name="Do" From="First" To="LAst" Info="one trans">
+			<Check Name="IsUserHasRights" Info="test user rights"/>
+			<Check Name="IsAllGood" />
+			<Act Name="Make" />
+		</Transition>
+		<Device Name="Connection" Type="SqlConnection" Info="conn to DB" />
+	</Machine>
+</ROOT>
+

@@ -9,6 +9,7 @@ namespace BDB.Templating
 {
 	public abstract class Attrz
 	{
+		//private string InnerContent;
 		private Dictionary<string, string> attrS = new Dictionary<string, string>();
 		public bool Has(string key) { return attrS.ContainsKey(key); }
 		public bool Has(string key, string value) { return attrS.get(key) == value; }
@@ -17,6 +18,30 @@ namespace BDB.Templating
 		public string Get(string key) { return attrS.get(key); }
 		public string Get(string key, string defaultValue) { return attrS.get(key, defaultValue); }
 
-		public void Fill(IEnumerable<XAttribute> source) { foreach (XAttribute attr in source) { attrS.Add(attr.Name.LocalName, attr.Value); }}
-	}
-}
+		public abstract void Read(XElement src);
+
+		protected void fillContentFromAttrs(XElement src)
+		{
+			if (src.IsEmpty) { attrS.Add(string.Empty, src.Value); }//if
+			foreach (XAttribute attr in src.Attributes())
+			{
+				attrS.Add(attr.Name.LocalName, attr.Value); 
+			}//for
+		}//function
+
+		public static void FillListFromXlist<T>
+			(IList<T> items, IEnumerable<XElement> xtags)
+			where T : Attrz, new()
+		{
+			T item = null;
+			foreach (var tag in xtags)
+			{
+				item = new T();
+				item.fillContentFromAttrs(tag);
+				item.Read(tag);
+				items.Add(item);
+			}//for
+		}//function
+
+	}//class
+}//ns
