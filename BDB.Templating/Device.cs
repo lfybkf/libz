@@ -9,7 +9,7 @@ namespace BDB.Templating
 	{
 		public string Name;
 		public string Info;
-		public override void Read(System.Xml.Linq.XElement src)
+		internal override void Read(System.Xml.Linq.XElement src)
 		{
 			Name = Get(R.NAME);
 			Info = Get(R.INFO, string.Empty);

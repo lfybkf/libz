@@ -26,7 +26,7 @@ namespace BDB.Templating
 		private string _IDtype = null;
 		public string IDtype { get { return _IDtype ?? defaultIDtype; } }
 
-		public override void Read(XElement src)
+		internal override void Read(XElement src)
 		{
 			Name = Get(R.NAME);
 			_Table = Get(R.TABLE);
@@ -49,6 +49,7 @@ namespace BDB.Templating
 	<!ELEMENT Field (#PCDATA)>
 		<!ATTLIST Field Name CDATA #REQUIRED>
 		<!ATTLIST Field Type (bool|datetime|decimal|int|long|string|float|double) #REQUIRED>
+		<!ATTLIST Field Default CDATA #IMPLIED>
 		<!ATTLIST Field Null (true) #IMPLIED>
 		<!ATTLIST Field Ref CDATA #IMPLIED>
 	<!ELEMENT Comment (#PCDATA)>

@@ -26,11 +26,16 @@ namespace BDB.Templating
 		public const string TRANSITION = "Transition";
 		public const string FROM = "From";
 		public const string TO = "To";
+		public const string DEFAULT = "Default";
+		public const string ENTER = "Enter";
+		public const string EXIT = "Exit";
 
 		public const string NotInsert = "NotInsert";
 		public const string NotUpdate = "NotUpdate";
 		public const string Checks = "Checks";
 		public const string Acts = "Acts";
-		
+
+
+
 	}//class
 }

@@ -12,17 +12,19 @@ namespace BDB.Templating
 		public string Name;
 		public string Type;
 		public string Ref;
+		public string Default;
 		public bool IsNullable;
 		public bool NotInsert;
 		public bool NotUpdate;
 		
 		static string[] value_types = { "bool", "datetime", "decimal", "int", "long", "float", "double" };
 
-		public override void Read(XElement src)
+		internal override void Read(XElement src)
 		{
 			Name = Get(R.NAME);
 			Type = Get(R.TYPE);
 			Ref = Get(R.REF);
+			Default = Get(R.DEFAULT);
 			IsNullable = Get(R.NULL) != null;
 			NotInsert = Get(R.NotInsert) != null;
 			NotUpdate = Get(R.NotUpdate) != null;

@@ -18,9 +18,12 @@ namespace BDB.Templating
 		public string Get(string key) { return attrS.get(key); }
 		public string Get(string key, string defaultValue) { return attrS.get(key, defaultValue); }
 
-		public abstract void Read(XElement src);
+		internal abstract void Read(XElement src);
 
-		protected void fillContentFromAttrs(XElement src)
+		public static string[] EmptyStrings = {};
+		internal virtual IEnumerable<String> ValidateInner() { return EmptyStrings;}
+		
+		internal void FillContentFromAttrs(XElement src)
 		{
 			if (src.IsEmpty) { attrS.Add(string.Empty, src.Value); }//if
 			foreach (XAttribute attr in src.Attributes())
@@ -29,7 +32,7 @@ namespace BDB.Templating
 			}//for
 		}//function
 
-		public static void FillListFromXlist<T>
+		internal static void FillListFromXlist<T>
 			(IList<T> items, IEnumerable<XElement> xtags)
 			where T : Attrz, new()
 		{
@@ -37,7 +40,7 @@ namespace BDB.Templating
 			foreach (var tag in xtags)
 			{
 				item = new T();
-				item.fillContentFromAttrs(tag);
+				item.FillContentFromAttrs(tag);
 				item.Read(tag);
 				items.Add(item);
 			}//for

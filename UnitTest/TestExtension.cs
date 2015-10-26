@@ -6,7 +6,7 @@ using BDB;
 namespace UnitTest
 {
 	[TestClass]
-	public class UnitTest1
+	public class TestExtension
 	{
 		[TestMethod]
 		public void TestPropis()
@@ -56,7 +56,5 @@ namespace UnitTest
 			write("======================");
 			write("======================");
 		}//function
-
-		
 	}//class
 }//ns
