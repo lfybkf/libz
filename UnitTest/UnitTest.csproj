@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BDB.Templating">
-      <HintPath>..\..\..\libs\BDB.Templating.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
   </ItemGroup>
@@ -59,6 +56,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BDB.Templating\BDB.Templating.csproj">
+      <Project>{45d2bd49-8914-4a4a-b470-c65dea7e0952}</Project>
+      <Name>BDB.Templating</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bently\BDB.Bently.csproj">
       <Project>{98d120a6-86bf-4c93-a1de-9c8332767892}</Project>
       <Name>BDB.Bently</Name>
@@ -82,6 +83,7 @@
   <ItemGroup>
     <Content Include="Machine.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Choose>

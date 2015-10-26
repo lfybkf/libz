@@ -7,23 +7,35 @@ using System.Xml.Linq;
 
 namespace BDB.Templating
 {
-	public class State: Attrz
+	public class State: AttrzME
 	{
-		internal Machine machine;
-		public string Name;
 		public string Enter;
 		public string Exit;
-		public string Info;
 		internal override void Read(XElement src)
 		{
-			Name = Get(R.NAME);
+			base.Read(src);
 			Enter = Get(R.ENTER);
 			Exit = Get(R.EXIT);
-			Info = Get(R.INFO, string.Empty);
 		}//function
 
+		public override bool Validate()
+		{
+			if (Enter != null && machine.HasAct(Enter) == false)
+			{
+				addError("State={0} has wrong Enter".fmt(Name));
+			}//if
+
+			if (Exit != null && machine.HasAct(Exit) == false)
+			{
+				addError("State={0} has wrong Exit".fmt(Name));
+			}//if
+
+			if (machine.transitions.Any(z => z.IsStateUsed(Name)) == false)
+			{
+				addWarning("State={0} is not used".fmt(Name));
+			}//if
+			return hasErrors;
+		}
 		public bool IsActUsed(string name) { return Enter == name || Exit == name; }
-		public bool IsEnterGood() { return Enter == null || machine.HasAct(Enter); }
-		public bool IsExitGood() { return Exit == null || machine.HasAct(Exit); }
 	}//class
 }//ns

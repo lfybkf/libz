@@ -5,14 +5,18 @@ using System.Text;
 
 namespace BDB.Templating
 {
-	public class Act:Attrz
+	public class Act:AttrzME
 	{
-		public string Name;
-		public string Info;
-		internal override void Read(System.Xml.Linq.XElement src)
+		public override bool Validate()
 		{
-			Name = Get(R.NAME);
-			Info = Get(R.INFO, string.Empty);
-		}
-	}
-}
+			bool UsedInStates = machine.states.Any(z => z.IsActUsed(Name));
+			bool UsedInTransitions = machine.transitions.Any(z => z.IsActUsed(Name));
+			if (!UsedInStates && !UsedInTransitions )
+			{
+				addWarning("Act={0} is never used".fmt(Name));
+			}//if
+			
+			return hasErrors;
+		}//function
+	}//class
+}//ns

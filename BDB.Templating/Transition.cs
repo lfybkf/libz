@@ -5,32 +5,32 @@ using System.Text;
 
 namespace BDB.Templating
 {
-	public class Transition : Attrz
+	public class Transition : AttrzME
 	{
-		public string Name;
 		public string From;
 		public string To;
-		public string Info;
+
 		private IEnumerable<string> _checks, _acts;
 		public IEnumerable<string> checks { get { return _checks; } }
 		public IEnumerable<string> acts { get { return _acts; } }
 		internal override void Read(System.Xml.Linq.XElement src)
 		{
-			Name = Get(R.NAME);
-			Info = Get(R.INFO, string.Empty);
+			base.Read(src);
 			From = Get(R.FROM);
 			To = Get(R.TO);
 			_checks = Get(R.Checks, string.Empty).Split(' ').ToArray();
 			_acts = Get(R.Acts, string.Empty).Split(' ').ToArray();
 		}//function
 
-		private static string fmtValidate = "Transition {0} has error - {1}";
-		internal override IEnumerable<string> ValidateInner()
+		public override bool Validate()
 		{
-			Lazy<List<string>> result = new Lazy<List<string>>();
-			if (From == null) { result.Value.Add(fmtValidate.fmt(Name, "no state From")); }
-			if (To == null) { result.Value.Add(fmtValidate.fmt(Name, "no state To")); }
-			if (result.IsValueCreated) { return result.Value; } else { return EmptyStrings; }
+			if (From == null) { addError("Transition={0} has no From".fmt(Name)); }
+			if (To == null) { addError("Transition={0} has no To".fmt(Name)); }
+			if (machine.HasState(From) == false)
+			{
+				addError("Transition={0} has wrong From".fmt(Name));
+			}//if
+			return hasErrors;
 		}//function
 
 		public bool IsStateUsed(string name)	{return From == name || To == name;} 

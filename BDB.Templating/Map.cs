@@ -11,6 +11,7 @@ namespace BDB.Templating
 {
 	public class Map
 	{
+		public static Map Current = null;
 		List<Obj> _objects = new List<Obj>();
 		public IEnumerable<Obj> objects { get { return _objects; } }
 		List<Machine> _machines = new List<Machine>();
@@ -20,6 +21,11 @@ namespace BDB.Templating
 		public string ModelPattern = "Model*.xml";
 		public string MachineDirectory = Environment.CurrentDirectory;
 		public string MachinePattern = "Machine*.xml";
+
+		public Map()
+		{
+			Current = this;
+		}//constructor
 
 		public void Load()
 		{

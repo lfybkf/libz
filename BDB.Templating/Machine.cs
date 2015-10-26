@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+[assembly: InternalsVisibleTo("UnitTest")]
 namespace BDB.Templating
 {
-	public class Machine: Attrz
+	public class Machine: AttrzME
 	{
-		public string Name;
-		public string Info;
 		private List<State> _states = new List<State>();
 		private List<Transition> _transitions = new List<Transition>();
 		private List<Act> _acts = new List<Act>();
@@ -25,72 +25,41 @@ namespace BDB.Templating
 
 		internal override void Read(XElement src)
 		{
-			Name = Get(R.NAME);
-			Info = Get(R.INFO, string.Empty);
+			base.Read(src);
 
 			FillListFromXlist<State>(_states, src.Elements(R.STATE));
 			FillListFromXlist<Transition>(_transitions, src.Elements(R.TRANSITION));
 			FillListFromXlist<Act>(_acts, src.Elements(R.ACT));
 			FillListFromXlist<Check>(_checks, src.Elements(R.CHECK));
 			FillListFromXlist<Device>(_devices, src.Elements(R.DEVICE));
+
+			_states.forEach(z => z.MachineName = Name);
+			_transitions.forEach(z => z.MachineName = Name);
+			_acts.forEach(z => z.MachineName = Name);
+			_checks.forEach(z => z.MachineName = Name);
+			devices.forEach(z => z.MachineName = Name);
 		}//function
 
-		internal bool HasState(string name) { return name != null && states.Any(z => z.Name == name); }
-		internal bool HasCheck(string name) { return name != null && checks.Any(z => z.Name == name); }
-		internal bool HasAct(string name) { return name != null && acts.Any(z => z.Name == name); }
+		internal bool HasState(string name) { return states.Any(z => z.Name == name); }
+		internal bool HasCheck(string name) { return checks.Any(z => z.Name == name); }
+		internal bool HasAct(string name) { return acts.Any(z => z.Name == name); }
 
-		internal IEnumerable<string> Validate()
+		public override bool Validate()
 		{
-			IEnumerable<string> errors = null;
-			string fmtError;
+			Action<AttrzME> validate = (z) =>
+				{
+					z.Validate();
+					addErrors(z.errors);
+					addWarnings(z.warnings);
+				};
 
-			#region inner errors
-			errors = transitions.SelectMany(tr => tr.ValidateInner()).ToArray();
-			if (errors.Any()) { return errors; }
-			#endregion
+			states.forEach(validate);
+			transitions.forEach(validate);
+			acts.forEach(validate);
+			checks.forEach(validate);
+			devices.forEach(validate);
 
-			#region complex errors
-			Lazy<List<string>> result = new Lazy<List<string>>();
-			Action fix_errors = () => { result.Value.AddRange(errors.ToArray()); };
-
-			fmtError = "State={0} is never used";
-			errors = states.Where(st => transitions.All(tr => tr.IsStateUsed(st.Name) == false)).Select(st => fmtError.fmt(st.Name)) ;
-			fix_errors();
-
-			fmtError = "State {0} contains wrong Enter Act {1}";
-			errors = states.Where(st => st.IsEnterGood()).Select(st => fmtError.fmt(st.Name, st.Enter));
-			fix_errors();
-
-			fmtError = "State {0} contains wrong Exit Act {1}";
-			errors = states.Where(st => st.IsExitGood()).Select(st => fmtError.fmt(st.Name, st.Exit));
-			fix_errors();
-
-			fmtError = "Transition={0} contains wrong state From={1}";
-			errors = transitions.Where(tr => HasState(tr.From) == false).Select(tr => fmtError.fmt(tr.Name, tr.From));
-			fix_errors();
-
-			fmtError = "Transition={0} contains wrong state To={1}";
-			errors = transitions.Where(tr => HasState(tr.To) == false).Select(tr => fmtError.fmt(tr.Name, tr.To));
-			fix_errors();
-
-			fmtError = "Transition {0} contains wrong Check {1}";
-			IEnumerable<string> transition_check_errors = transitions
-				.SelectMany(t => t.checks.Select(s => new { tr = t.Name, ch = s }))
-				.Where(a => HasCheck(a.ch) == false)
-				.Select(a => fmtError.fmt(a.tr, a.ch));
-			fix_errors();
-
-			fmtError = "Transition {0} contains wrong Act {1}";
-			IEnumerable<string> transition_act_errors = transitions
-				.SelectMany(t => t.acts.Select(s => new { tr = t.Name, act = s }))
-				.Where(a => HasAct(a.act) == false)
-				.Select(a => fmtError.fmt(a.tr, a.act));
-			fix_errors();
-
-
-			#endregion
-
-			if (result.IsValueCreated) { return result.Value; } else { return EmptyStrings; }
+			return hasErrors;
 		}//function
 
 		public static string XmlDTD()

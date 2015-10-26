@@ -5,14 +5,16 @@ using System.Text;
 
 namespace BDB.Templating
 {
-	public class Check:Attrz
+	public class Check:AttrzME
 	{
-		public string Name;
-		public string Info;
-		internal override void Read(System.Xml.Linq.XElement src)
+		public override bool Validate()
 		{
-			Name = Get(R.NAME);
-			Info = Get(R.INFO, string.Empty);
+			bool UsedInTransitions = machine.transitions.Any(z => z.IsCheckUsed(Name));
+			if (UsedInTransitions == false)
+			{
+				addWarning("Check={0} is not used".fmt(Name));	
+			}//if
+			return hasErrors;
 		}
-	}
-}
+	}//class
+}//ns

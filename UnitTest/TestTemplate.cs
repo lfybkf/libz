@@ -18,8 +18,12 @@ namespace UnitTest
 			Map map = new Map();
 			map.LoadMachines();
 			Machine machine = map.machines.First();
-			var errors = machine.Validate();
-			errors.forEach(z => write(z));
+			machine.Validate();
+
+			write("==errors=======");
+			machine.errors.forEach(z => write(z));
+			write("==warning=======");
+			machine.warnings.forEach(z => write(z));
 		}//function
 
 	}//class

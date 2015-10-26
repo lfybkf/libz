@@ -32,15 +32,20 @@
 
 <ROOT>
 	<Machine Name="Dialog" Info="Show dialog">
-		<State Name="First" Info="first status" />
+		<State Name="First" Info="first status"><Comment Author="me">bugaga</Comment></State>
 		<State Name="Last" Info="las status" />
-		<Transition Name="Do" From="First" To="LAst" Info="one trans" 
+		<State Name="Some" Enter="DoOne" Info="las status" />
+		<Transition Name="Do" From="First" To="Last" Info="one trans" 
 								Checks="IsAllGood IsUserHasRights IsNot"
 								Acts="Make"
 								/>
 		<Check Name="IsUserHasRights" Info="test user rights" />
 		<Check Name="IsAllGood" />
-		<Act Name="Make" />
+		<Act Name="Make">
+			<Comment Author="me">Big brown fox</Comment>
+		</Act>
+		<Act Name="DoOne" />
+		<Act Name="DoTwo" />
 		<Device Name="Connection" Type="SqlConnection" Info="conn to DB" />
 	</Machine>
 </ROOT>

@@ -20,12 +20,9 @@ namespace BDB.Templating
 
 		internal abstract void Read(XElement src);
 
-		public static string[] EmptyStrings = {};
-		internal virtual IEnumerable<String> ValidateInner() { return EmptyStrings;}
-		
 		internal void FillContentFromAttrs(XElement src)
 		{
-			if (src.IsEmpty) { attrS.Add(string.Empty, src.Value); }//if
+			if (!src.IsEmpty) { attrS.Add(string.Empty, src.Value); }//if
 			foreach (XAttribute attr in src.Attributes())
 			{
 				attrS.Add(attr.Name.LocalName, attr.Value); 
@@ -36,6 +33,7 @@ namespace BDB.Templating
 			(IList<T> items, IEnumerable<XElement> xtags)
 			where T : Attrz, new()
 		{
+			if (items == null) { items = new List<T>(); }
 			T item = null;
 			foreach (var tag in xtags)
 			{

@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BDB.Templating
 {
-	public class Device:AttrzME
+	public class Comment: Attrz
 	{
-		public string Type;
+		public string Author;
+		public string Content;
+
 		internal override void Read(System.Xml.Linq.XElement src)
 		{
-			base.Read(src);
-			Type = Get(R.TYPE);
-		}
+			Author = Get(R.AUTHOR);
+			Content = Get(string.Empty);
+		}//function
 	}//class
 }//ns
