@@ -9,14 +9,40 @@
 <#@ output extension=".cs" #>
 
 
-
 <# 
 Action<string> write = WriteLine;
 var map = new Map();
 map.MachineDirectory = System.IO.Path.GetDirectoryName(Host.TemplateFile);
 map.LoadMachines();
+
+string pushEnum, stateEnum, className, fileName;
+string CR = "\r\n";
+
+foreach (Machine machine in map.machines) 
+{
+pushEnum = "sm{0}Push".fmt(machine.Name);
+stateEnum = "sm{0}State".fmt(machine.Name);
+className = "sm{0}".fmt(machine.Name);
+fileName = "sm{0}_generated.cs".fmt(machine.Name);
+
+write("// Generated " + DateTime.Now.ToString());
+machine.Validate();
+if (machine.hasErrors)
+{
+	write("//errors");
+	machine.errors.forEach(z => write("//" + z));
+	SaveOutput(fileName);
+	continue;
+} else {write("//NO errors");}
+
+if (machine.hasWarnings)
+{
+	write("//warnings");
+	machine.warnings.forEach(z => write("//" + z));
+} else {write("//NO warnings");}
+
 #>
-// Generated <#=DateTime.Now.ToString() #>
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -27,13 +53,63 @@ using BDB;
 namespace Onto
 {
 
-<#		foreach (Machine machine in map.machines) {#>
-	public sealed partial class <#=						machine.Name #>
+public enum <#=stateEnum#> { <#=machine.states.print(st => st.Name, ", ")#> }
+public enum <#=pushEnum#> { <#=machine.pushes.print(st => st.Name, ", ")#> }
+
+public sealed partial class <#=className#>
+{
+	public <#=className#>()
 	{
-	}//class
+		CurrentState = <#=stateEnum#>.<#=machine.states.First().Name#>;
+	}//constructor
+
+	public bool IsCheckOK {get; private set;}
+	public bool IsActOK {get; private set;}
+	public bool IsPushOK {get; private set;}
+	public <#=stateEnum#> CurrentState { get; private set; }
+
+	//checks
+	<#=machine.checks.print(f => "partial void check{0}();".fmt(f.Name), CR)#>
+
+	//acts
+	<#=machine.acts.print(f => "partial void act{0}();".fmt(f.Name), CR)#>
+
+public bool Push(<#=pushEnum#> push)
+{
+	switch (push)
+	{
+<#
+foreach (Push push in machine.pushes)
+{
+	write("case {0}.{1}:".fmt(pushEnum, push.Name));
+	foreach (Transition transition in push.transitions)
+	{
+#>		
+if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
+{
+	IsCheckOK = IsActOK = IsPushOK = false;
+	<#=transition.checks.print(s => "check{0}(); if (!IsCheckOK) {{ break; }}".fmt(s), CR) #>
+	<#=transition.acts.print(s => "act{0}(); if (!IsActOK) {{ break; }}".fmt(s), CR) #>
+	CurrentState = <#=stateEnum#>.<#=transition.To#>;
+	IsPushOK = true;
+}//if
+<#
+	}//for
+	write("break;");
+}//for
+
+#>
+	}
+	return true;
+}//function
+
+
+}//class
+
+
 }//namespace
 <#
-SaveOutput("sm{0}_generated.cs".fmt(machine.Name));
+SaveOutput(fileName);
 }//for objects
 #>
 

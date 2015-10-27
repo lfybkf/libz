@@ -40,10 +40,10 @@
 		<State Name="Some" Enter="DoOne" Info="las status" />
 		<Transition From="First" To="Last" Info="one trans" 
 								Pushes="Start"
-								Checks="IsAllGood IsUserHasRights IsNot"
+								Checks="IsAllGood IsUserHasRights"
 								Acts="Make"
 								/>
-		<Transition From="Some" To="NoStat" Pushes="pushBad pushBad2" />
+		<Transition From="Some" To="Last" Pushes="Finish" Acts="DoOne" />
 		<Push Name="Start" />
 		<Push Name="Finish" />
 		<Check Name="IsUserHasRights" Info="test user rights" />
@@ -52,7 +52,7 @@
 			<Comment Author="me">Big brown fox</Comment>
 		</Act>
 		<Act Name="DoOne" />
-		<Act Name="DoTwo" />
+		<Act Name="DoOne2" />
 		<Device Name="Connection" Type="SqlConnection" Info="conn to DB" />
 	</Machine>
 </ROOT>

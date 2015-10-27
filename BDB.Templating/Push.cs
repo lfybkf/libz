@@ -15,6 +15,12 @@ namespace BDB.Templating
 				addWarning("Push={0} is never used".fmt(Name));
 			}//if 
 			return hasErrors;
-		}
+		}//function
+
+		public IEnumerable<Transition> transitions
+		{
+			get { return machine.transitions.Where(z => z.IsPushUsed(Name)); }
+		}//property
+		
 	}//class
 }//ns

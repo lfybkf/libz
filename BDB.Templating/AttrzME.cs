@@ -27,8 +27,8 @@ namespace BDB.Templating
 		protected void addWarning(string s) { _warnings.Value.Add(s); }
 		protected void addErrors(IEnumerable<string> ss) { if (ss != null) { _errors.Value.AddRange(ss); } }
 		protected void addWarnings(IEnumerable<string> ss) { if (ss != null) { _warnings.Value.AddRange(ss); } }
-		protected bool hasErrors { get { return _errors.IsValueCreated; } }
-		protected bool hasWarnings { get { return _warnings.IsValueCreated; } }
+		public bool hasErrors { get { return _errors.IsValueCreated; } }
+		public bool hasWarnings { get { return _warnings.IsValueCreated; } }
 		public virtual bool Validate() { return true; }
 
 		internal override void Read(System.Xml.Linq.XElement src)

@@ -51,6 +51,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MachineGenerator.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MachineGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="smDialog_generated.cs" />
     <Compile Include="TestTemplate.cs" />
     <Compile Include="TestExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,6 +91,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MachineGenerator.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MachineGenerator.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

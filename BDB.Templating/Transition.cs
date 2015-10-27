@@ -21,6 +21,7 @@ namespace BDB.Templating
 		public IEnumerable<string> acts { get { return _acts; } }
 		public IEnumerable<string> pushes { get { return _pushes; } }
 		public IEnumerable<string> states { get { yield return From; yield return To; } }
+
 		internal override void Read(System.Xml.Linq.XElement src)
 		{
 			base.Read(src);
