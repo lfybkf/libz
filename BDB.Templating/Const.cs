@@ -29,11 +29,13 @@ namespace BDB.Templating
 		public const string DEFAULT = "Default";
 		public const string ENTER = "Enter";
 		public const string EXIT = "Exit";
+		public const string PUSH = "Push";
 
 		public const string NotInsert = "NotInsert";
 		public const string NotUpdate = "NotUpdate";
 		public const string Checks = "Checks";
 		public const string Acts = "Acts";
+		public const string Pushes = "Pushes";
 
 
 

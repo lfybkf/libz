@@ -8,7 +8,7 @@ namespace BDB.Templating
 {
 	public abstract class AttrzME: Attrz //MachineElement
 	{
-		public string Name;
+		public virtual string Name {get; set;}
 		public string Info;
 		public override string ToString() { return "{0} ({1})".fmt(Name, Info); }
 

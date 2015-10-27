@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE ROOT [ 
 	<!ELEMENT ROOT (Machine+)>
-	<!ELEMENT Machine (State+, Transition+, Check*, Act*, Device*, Comment*)>
+	<!ELEMENT Machine (State+, Transition+, Push+, Check*, Act*, Device*, Comment*)>
 		<!ATTLIST Machine Name ID #REQUIRED>
 		<!ATTLIST Machine Info CDATA #IMPLIED>
 	<!ELEMENT State (Comment*)>
@@ -10,9 +10,9 @@
 		<!ATTLIST State Exit CDATA #IMPLIED>
 		<!ATTLIST State Info CDATA #IMPLIED>
 	<!ELEMENT Transition (Comment*)>
-		<!ATTLIST Transition Name ID #REQUIRED>
 		<!ATTLIST Transition From CDATA #REQUIRED>
 		<!ATTLIST Transition To CDATA #REQUIRED>
+		<!ATTLIST Transition Pushes CDATA #REQUIRED>
 		<!ATTLIST Transition Checks CDATA #IMPLIED>
 		<!ATTLIST Transition Acts CDATA #IMPLIED>
 		<!ATTLIST Transition Info CDATA #IMPLIED>
@@ -22,6 +22,9 @@
 	<!ELEMENT Act (Comment*)>
 		<!ATTLIST Act Name ID #REQUIRED>
 		<!ATTLIST Act Info CDATA #IMPLIED>
+	<!ELEMENT Push (Comment*)>
+		<!ATTLIST Push Name ID #REQUIRED>
+		<!ATTLIST Push Info CDATA #IMPLIED>
 	<!ELEMENT Device (Comment*)>
 		<!ATTLIST Device Name ID #REQUIRED>
 		<!ATTLIST Device Type CDATA #REQUIRED>
@@ -35,10 +38,14 @@
 		<State Name="First" Info="first status"><Comment Author="me">bugaga</Comment></State>
 		<State Name="Last" Info="las status" />
 		<State Name="Some" Enter="DoOne" Info="las status" />
-		<Transition Name="Do" From="First" To="Last" Info="one trans" 
+		<Transition From="First" To="Last" Info="one trans" 
+								Pushes="Start"
 								Checks="IsAllGood IsUserHasRights IsNot"
 								Acts="Make"
 								/>
+		<Transition From="Some" To="NoStat" Pushes="pushBad pushBad2" />
+		<Push Name="Start" />
+		<Push Name="Finish" />
 		<Check Name="IsUserHasRights" Info="test user rights" />
 		<Check Name="IsAllGood" />
 		<Act Name="Make">
