@@ -37,6 +37,9 @@ namespace BDB.Templating
 		public const string Acts = "Acts";
 		public const string Pushes = "Pushes";
 
+		public const string ZPT = ", ";
+		public const string CR = "\r\n";
+
 
 
 	}//class

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE ROOT [ 
 	<!ELEMENT ROOT (Machine+)>
-	<!ELEMENT Machine (State+, Transition+, Push+, Check*, Act*, Device*, Comment*)>
+	<!ELEMENT Machine (Comment*, State+, Transition+, Push+, Check*, Act*, Device*)>
 		<!ATTLIST Machine Name ID #REQUIRED>
 		<!ATTLIST Machine Info CDATA #IMPLIED>
 	<!ELEMENT State (Comment*)>
@@ -35,15 +35,16 @@
 
 <ROOT>
 	<Machine Name="Dialog" Info="Show dialog">
+		<Comment Author="me">Диалог с пользователем</Comment>
 		<State Name="First" Info="first status"><Comment Author="me">bugaga</Comment></State>
 		<State Name="Last" Info="las status" />
-		<State Name="Some" Enter="DoOne" Info="las status" />
+		<State Name="Midst" Enter="DoOne" Info="las status" />
 		<Transition From="First" To="Last" Info="one trans" 
 								Pushes="Start"
 								Checks="IsAllGood IsUserHasRights"
 								Acts="Make"
 								/>
-		<Transition From="Some" To="Last" Pushes="Finish" Acts="DoOne" />
+		<Transition From="Midst" To="Last" Pushes="Finish" Acts="DoOne" />
 		<Push Name="Start" />
 		<Push Name="Finish" />
 		<Check Name="IsUserHasRights" Info="test user rights" />

@@ -24,6 +24,7 @@ namespace UnitTest
 			machine.errors.forEach(z => write(z));
 			write("==warning=======");
 			machine.warnings.forEach(z => write(z));
+
 		}//function
 
 	}//class

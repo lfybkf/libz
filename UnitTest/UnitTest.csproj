@@ -51,12 +51,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestMachine.cs" />
     <Compile Include="MachineGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MachineGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="smDialog_generated.cs" />
+    <Compile Include="smDialog.cs" />
     <Compile Include="TestTemplate.cs" />
     <Compile Include="TestExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

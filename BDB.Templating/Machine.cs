@@ -25,6 +25,12 @@ namespace BDB.Templating
 		public IEnumerable<Device> devices { get { return _devices; } }
 		public IEnumerable<Push> pushes { get { return _pushes; } }
 
+		public State getState(string name) {return states.FirstOrDefault(z => z.Name == name);}
+		public Act getAct(string name) { return acts.FirstOrDefault(z => z.Name == name); }
+		public Check getCheck(string name) { return checks.FirstOrDefault(z => z.Name == name); }
+		public Device getDevice(string name) { return devices.FirstOrDefault(z => z.Name == name); }
+		public Push getPush(string name) { return pushes.FirstOrDefault(z => z.Name == name); }
+
 		internal override void Read(XElement src)
 		{
 			base.Read(src);

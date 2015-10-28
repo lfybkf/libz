@@ -16,22 +16,23 @@ map.MachineDirectory = System.IO.Path.GetDirectoryName(Host.TemplateFile);
 map.LoadMachines();
 
 string pushEnum, stateEnum, className, fileName;
-string CR = "\r\n";
 
+// START MACHINES ================================================
 foreach (Machine machine in map.machines) 
 {
-pushEnum = "sm{0}Push".fmt(machine.Name);
-stateEnum = "sm{0}State".fmt(machine.Name);
+pushEnum = "sm{0}PUSH".fmt(machine.Name);
+stateEnum = "sm{0}STATE".fmt(machine.Name);
 className = "sm{0}".fmt(machine.Name);
 fileName = "sm{0}_generated.cs".fmt(machine.Name);
 
 write("// Generated " + DateTime.Now.ToString());
+write("// Machine " + machine.Name);
 machine.Validate();
 if (machine.hasErrors)
 {
 	write("//errors");
 	machine.errors.forEach(z => write("//" + z));
-	SaveOutput(fileName);
+	//SaveOutput(fileName);
 	continue;
 } else {write("//NO errors");}
 
@@ -50,12 +51,16 @@ using System.Linq;
 using System.Text;
 using BDB;
 
-namespace Onto
+namespace UnitTest
 {
 
 public enum <#=stateEnum#> { <#=machine.states.print(st => st.Name, ", ")#> }
 public enum <#=pushEnum#> { <#=machine.pushes.print(st => st.Name, ", ")#> }
 
+///<summary>
+///<#=machine.Info #>
+///</summary>
+/*<#=						machine.comments.print(c => "{0}:{1}".fmt(c.Author, c.Content), R.CR) #>*/
 public sealed partial class <#=className#>
 {
 	public <#=className#>()
@@ -69,13 +74,14 @@ public sealed partial class <#=className#>
 	public <#=stateEnum#> CurrentState { get; private set; }
 
 	//checks
-	<#=machine.checks.print(f => "partial void check{0}();".fmt(f.Name), CR)#>
+	<#=machine.checks.print(f => "///<summary>{1}</summary>\r\n partial void check{0}();".fmt(f.Name, f.Info), R.CR)#>
 
 	//acts
-	<#=machine.acts.print(f => "partial void act{0}();".fmt(f.Name), CR)#>
+	<#=machine.acts.print(f => "///<summary>{1}</summary>\r\n partial void act{0}();".fmt(f.Name, f.Info), R.CR)#>
 
 public bool Push(<#=pushEnum#> push)
 {
+	IsPushOK = false;
 	switch (push)
 	{
 <#
@@ -87,9 +93,8 @@ foreach (Push push in machine.pushes)
 #>		
 if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 {
-	IsCheckOK = IsActOK = IsPushOK = false;
-	<#=transition.checks.print(s => "check{0}(); if (!IsCheckOK) {{ break; }}".fmt(s), CR) #>
-	<#=transition.acts.print(s => "act{0}(); if (!IsActOK) {{ break; }}".fmt(s), CR) #>
+	<#=transition.checks.print(s => "IsCheckOK = false; check{0}(); if (!IsCheckOK) {{ break; }}".fmt(s), R.CR) #>
+	<#=transition.acts.print(s => "IsActOK = false; act{0}(); if (!IsActOK) {{ break; }}".fmt(s), R.CR) #>
 	CurrentState = <#=stateEnum#>.<#=transition.To#>;
 	IsPushOK = true;
 }//if
@@ -100,7 +105,7 @@ if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 
 #>
 	}
-	return true;
+	return IsPushOK;
 }//function
 
 
@@ -109,8 +114,9 @@ if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 
 }//namespace
 <#
-SaveOutput(fileName);
+//SaveOutput(fileName);
 }//for objects
+// END MACHINES ================================================
 #>
 
 
