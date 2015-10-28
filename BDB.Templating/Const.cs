@@ -8,6 +8,15 @@ namespace BDB.Templating
 {
 	public static class R
 	{
+		public const string ZPT = ", ";
+		public const string CR = "\r\n";
+
+		public const string NotInsert = "NotInsert";
+		public const string NotUpdate = "NotUpdate";
+		public const string Checks = "Checks";
+		public const string Acts = "Acts";
+		public const string Pushes = "Pushes";
+
 		public const string OBJECT = "Object";
 		public const string FIELD = "Field";
 		public const string NAME = "Name";
@@ -30,17 +39,8 @@ namespace BDB.Templating
 		public const string ENTER = "Enter";
 		public const string EXIT = "Exit";
 		public const string PUSH = "Push";
-
-		public const string NotInsert = "NotInsert";
-		public const string NotUpdate = "NotUpdate";
-		public const string Checks = "Checks";
-		public const string Acts = "Acts";
-		public const string Pushes = "Pushes";
-
-		public const string ZPT = ", ";
-		public const string CR = "\r\n";
-
-
+		public const string TEST = "Test";
+		public const string SET = "Set";
 
 	}//class
 }

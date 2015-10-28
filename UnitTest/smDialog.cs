@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 
 namespace UnitTest
 {
+	public class Dev1 { public bool IsOK { get; set; } }
+	public class Dev2 { public bool IsCorrect { get; set; } }
+
+
 	public partial class smDialog
 	{
-		partial void checkIsUserHasRights()
+		partial void checkIsFunc()
 		{
 			IsCheckOK = true;
 		}
-
-		partial void checkIsAllGood()
-		{
-			IsCheckOK = true;
-		}
-
 		partial void actDoOne()
 		{
 			IsActOK = true;

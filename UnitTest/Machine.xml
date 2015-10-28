@@ -19,15 +19,20 @@
 	<!ELEMENT Check (Comment*)>
 		<!ATTLIST Check Name ID #REQUIRED>
 		<!ATTLIST Check Info CDATA #IMPLIED>
+		<!ATTLIST Check Device CDATA #IMPLIED>
+		<!ATTLIST Check Test CDATA #IMPLIED>
 	<!ELEMENT Act (Comment*)>
 		<!ATTLIST Act Name ID #REQUIRED>
 		<!ATTLIST Act Info CDATA #IMPLIED>
+		<!ATTLIST Act Device CDATA #IMPLIED>
+		<!ATTLIST Act Set CDATA #IMPLIED>
 	<!ELEMENT Push (Comment*)>
 		<!ATTLIST Push Name ID #REQUIRED>
 		<!ATTLIST Push Info CDATA #IMPLIED>
 	<!ELEMENT Device (Comment*)>
 		<!ATTLIST Device Name ID #REQUIRED>
 		<!ATTLIST Device Type CDATA #REQUIRED>
+		<!ATTLIST Device Get CDATA #IMPLIED>
 		<!ATTLIST Device Info CDATA #IMPLIED>
 	<!ELEMENT Comment (#PCDATA)>
 		<!ATTLIST Comment Author CDATA #REQUIRED>
@@ -47,14 +52,17 @@
 		<Transition From="Midst" To="Last" Pushes="Finish" Acts="DoOne" />
 		<Push Name="Start" />
 		<Push Name="Finish" />
-		<Check Name="IsUserHasRights" Info="test user rights" />
-		<Check Name="IsAllGood" />
-		<Act Name="Make">
+		<Check Name="IsUserHasRights" Device="dev1" Test="IsOK" Info="test user rights" />
+		<Check Name="IsAllGood" Device="dev2" Test="IsCorrect" />
+		<Check Name="IsDev2" Device="dev2" />
+		<Check Name="IsFunc" />
+		<Act Name="Make" Device="dev2" Set="Offline()">
 			<Comment Author="me">Big brown fox</Comment>
 		</Act>
-		<Act Name="DoOne" />
+		<Act Name="DoOne"  />
 		<Act Name="DoOne2" />
-		<Device Name="Connection" Type="SqlConnection" Info="conn to DB" />
+		<Device Name="dev1" Type="Dev1" Get="new Type()" Info="some dev1" />
+		<Device Name="dev2" Type="Dev2" Get="new Type()" Info="some dev2" />
 	</Machine>
 </ROOT>
 

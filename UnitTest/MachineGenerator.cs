@@ -1,10 +1,12 @@
 ﻿
 
-// Generated 28.10.2015 14:26:08
+// Generated 29.10.2015 0:25:10
 // Machine Dialog
 //NO errors
 //warnings
 //Act=DoOne2 is never used
+//Check=IsDev2 is not used
+//Check=IsFunc is not used
 
 using System;
 using System.Collections.Generic;
@@ -35,11 +37,33 @@ public sealed partial class smDialog
 	public bool IsPushOK {get; private set;}
 	public smDialogSTATE CurrentState { get; private set; }
 
+	//devices
+	public Dev1 dev1;
+public Dev2 dev2;
+
+
 	//checks
 	///<summary>test user rights</summary>
- partial void checkIsUserHasRights();
+void checkIsUserHasRights()
+{
+IsCheckOK = dev1.IsOK;
+}
+
 ///<summary></summary>
- partial void checkIsAllGood();
+void checkIsAllGood()
+{
+IsCheckOK = dev2.IsCorrect;
+}
+
+///<summary></summary>
+void checkIsDev2()
+{
+IsCheckOK = dev2 != null;
+}
+
+///<summary></summary>
+partial void checkIsFunc();
+
 
 	//acts
 	///<summary></summary>

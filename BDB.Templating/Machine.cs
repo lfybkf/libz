@@ -54,6 +54,7 @@ namespace BDB.Templating
 		internal bool HasCheck(string name) { return checks.Any(z => z.Name == name); }
 		internal bool HasAct(string name) { return acts.Any(z => z.Name == name); }
 		internal bool HasPush(string name) { return pushes.Any(z => z.Name == name); }
+		internal bool HasDevice(string name) { return devices.Any(z => z.Name == name); }
 
 		public override bool Validate()
 		{
@@ -112,5 +113,6 @@ namespace BDB.Templating
 ]>
 ";
 		}//function
+
 	}//class
 }//ns
