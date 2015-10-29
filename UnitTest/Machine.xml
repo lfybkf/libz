@@ -25,14 +25,14 @@
 		<!ATTLIST Act Name ID #REQUIRED>
 		<!ATTLIST Act Info CDATA #IMPLIED>
 		<!ATTLIST Act Device CDATA #IMPLIED>
-		<!ATTLIST Act Set CDATA #IMPLIED>
+		<!ATTLIST Act Change CDATA #IMPLIED>
 	<!ELEMENT Push (Comment*)>
 		<!ATTLIST Push Name ID #REQUIRED>
 		<!ATTLIST Push Info CDATA #IMPLIED>
 	<!ELEMENT Device (Comment*)>
 		<!ATTLIST Device Name ID #REQUIRED>
 		<!ATTLIST Device Type CDATA #REQUIRED>
-		<!ATTLIST Device Get CDATA #IMPLIED>
+		<!ATTLIST Device Getter CDATA #IMPLIED>
 		<!ATTLIST Device Info CDATA #IMPLIED>
 	<!ELEMENT Comment (#PCDATA)>
 		<!ATTLIST Comment Author CDATA #REQUIRED>
@@ -56,13 +56,14 @@
 		<Check Name="IsAllGood" Device="dev2" Test="IsCorrect" />
 		<Check Name="IsDev2" Device="dev2" />
 		<Check Name="IsFunc" />
-		<Act Name="Make" Device="dev2" Set="Offline()">
+		<Act Name="Make" Device="dev2" Change="Offline()">
 			<Comment Author="me">Big brown fox</Comment>
 		</Act>
 		<Act Name="DoOne"  />
 		<Act Name="DoOne2" />
-		<Device Name="dev1" Type="Dev1" Get="new Type()" Info="some dev1" />
-		<Device Name="dev2" Type="Dev2" Get="new Type()" Info="some dev2" />
+		<Device Name="dev1" Type="Dev1" Getter="new Type()" Info="some dev1" />
+		<Device Name="dev2" Type="Dev2" Getter="new Type()" Info="some dev2" />
+		<Device Name="dev3" Type="Dev2" Getter="Type.Instance" Info="another dev2" />
 	</Machine>
 </ROOT>
 

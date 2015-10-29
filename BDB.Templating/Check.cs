@@ -29,5 +29,10 @@ namespace BDB.Templating
 			}//if
 			return hasErrors;
 		}
+
+		internal bool IsDeviceUsed(string Name)
+		{
+			return Name == Device;
+		}
 	}//class
 }//ns

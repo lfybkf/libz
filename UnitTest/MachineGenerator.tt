@@ -75,30 +75,64 @@ public sealed partial class <#=className#>
 	public bool IsPushOK {get; private set;}
 	public <#=stateEnum#> CurrentState { get; private set; }
 
-	//devices
-	<#=machine.devices.print(z => "public {0} {1};".fmt(z.Type, z.Name), R.CR)#>
-
+	#region devices
 <#
-Func<Check, string> printCheck = (z) => { 
+Func<Device, string> printDevice = (z) => 
+{
+StringBuilder result = new StringBuilder();
+Func<string, StringBuilder> line = result.AppendLine;
+line("///<summary>{0}</summary>".fmt(z.Info));
+line("public {0} {1};".fmt(z.Type, z.Name));
+line("private {0} get_{1}()".fmt(z.Type, z.Name));
+line("{");
+if (z.Getter != null) {line("if ({0} == null) {{ {0}={1}; }}".fmt(z.Name, z.Getter.Replace("Type", z.Type)));}
+line("return {0};".fmt(z.Name));
+line("}");
+return result.ToString();
+};
+				write(machine.devices.print(printDevice, R.CR));
+#>
+	#endregion
+
+	#region checks
+<#
+Func<Check, string> printCheck = (z) => 
+{ 
 		StringBuilder result = new StringBuilder();
 		Func<string, StringBuilder> line = result.AppendLine;
 		line("///<summary>{0}</summary>".fmt(z.Info));
 		if (z.Device != null) {
 			line("void check{0}()".fmt(z.Name));
 			line("{");
-			if (z.Test != null)	{line("IsCheckOK = {0}.{1};".fmt(z.Device, z.Test));}
-			else {line("IsCheckOK = {0} != null;".fmt(z.Device));}
+			if (z.Test != null)	{line("IsCheckOK = get_{0}().{1};".fmt(z.Device, z.Test));}
+			if (z.Test == null) {line("IsCheckOK = {0} != null;".fmt(z.Device));}
 			line("}");
 		}	else {line("partial void check{0}();".fmt(z.Name));}
 		return result.ToString();
 };
- #>
-
-	//checks
-	<#=machine.checks.print(printCheck, R.CR)#>
-
-	//acts
-	<#=machine.acts.print(f => "///<summary>{1}</summary>\r\n partial void act{0}();".fmt(f.Name, f.Info), R.CR)#>
+				write(machine.checks.print(printCheck, R.CR));
+#>
+	#endregion
+	
+#region acts
+<#
+Func<Act, string> printAct = (z) => 
+{ 
+		StringBuilder result = new StringBuilder();
+		Func<string, StringBuilder> line = result.AppendLine;
+		line("///<summary>{0}</summary>".fmt(z.Info));
+		if (z.Device != null) {
+			line("void act{0}()".fmt(z.Name));
+			line("{");
+			line("get_{0}().{1};".fmt(z.Device, z.Change));
+			line("IsActOK = true;");
+			line("}");
+		}	else {line("partial void act{0}();".fmt(z.Name));}
+		return result.ToString();
+};
+				write(machine.acts.print(printAct, R.CR));
+#>
+#endregion
 
 public bool Push(<#=pushEnum#> push)
 {

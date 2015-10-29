@@ -41,6 +41,8 @@ namespace BDB.Templating
 		public const string PUSH = "Push";
 		public const string TEST = "Test";
 		public const string SET = "Set";
+		public const string GETTER = "Getter";
+		public const string CHANGE = "Change";
 
 	}//class
 }

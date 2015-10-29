@@ -1,12 +1,13 @@
 ﻿
 
-// Generated 29.10.2015 0:25:10
+// Generated 29.10.2015 14:57:25
 // Machine Dialog
 //NO errors
 //warnings
 //Act=DoOne2 is never used
 //Check=IsDev2 is not used
 //Check=IsFunc is not used
+//Device=dev3 is never used
 
 using System;
 using System.Collections.Generic;
@@ -37,22 +38,44 @@ public sealed partial class smDialog
 	public bool IsPushOK {get; private set;}
 	public smDialogSTATE CurrentState { get; private set; }
 
-	//devices
-	public Dev1 dev1;
+	#region devices
+///<summary>some dev1</summary>
+public Dev1 dev1;
+private Dev1 get_dev1()
+{
+if (dev1 == null) { dev1=new Dev1(); }
+return dev1;
+}
+
+///<summary>some dev2</summary>
 public Dev2 dev2;
+private Dev2 get_dev2()
+{
+if (dev2 == null) { dev2=new Dev2(); }
+return dev2;
+}
 
+///<summary>another dev2</summary>
+public Dev2 dev3;
+private Dev2 get_dev3()
+{
+if (dev3 == null) { dev3=Dev2.Instance; }
+return dev3;
+}
 
-	//checks
-	///<summary>test user rights</summary>
+	#endregion
+
+	#region checks
+///<summary>test user rights</summary>
 void checkIsUserHasRights()
 {
-IsCheckOK = dev1.IsOK;
+IsCheckOK = get_dev1().IsOK;
 }
 
 ///<summary></summary>
 void checkIsAllGood()
 {
-IsCheckOK = dev2.IsCorrect;
+IsCheckOK = get_dev2().IsCorrect;
 }
 
 ///<summary></summary>
@@ -64,14 +87,23 @@ IsCheckOK = dev2 != null;
 ///<summary></summary>
 partial void checkIsFunc();
 
+	#endregion
+	
+#region acts
+///<summary></summary>
+void actMake()
+{
+get_dev2().Offline();
+IsActOK = true;
+}
 
-	//acts
-	///<summary></summary>
- partial void actMake();
 ///<summary></summary>
- partial void actDoOne();
+partial void actDoOne();
+
 ///<summary></summary>
- partial void actDoOne2();
+partial void actDoOne2();
+
+#endregion
 
 public bool Push(smDialogPUSH push)
 {

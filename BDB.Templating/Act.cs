@@ -8,13 +8,13 @@ namespace BDB.Templating
 	public class Act:AttrzME
 	{
 		public string Device;
-		public string Set;
+		public string Change;
 
 		internal override void Read(System.Xml.Linq.XElement src)
 		{
 			base.Read(src);
 			Device = Get(R.DEVICE);
-			Set = Get(R.SET);
+			Change = Get(R.CHANGE);
 		}
 
 		public override bool Validate()
@@ -31,5 +31,10 @@ namespace BDB.Templating
 			}//if
 			return hasErrors;
 		}//function
+
+		internal bool IsDeviceUsed(string Name)
+		{
+			return Name == Device;
+		}
 	}//class
 }//ns
