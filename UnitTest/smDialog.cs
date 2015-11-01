@@ -6,12 +6,27 @@ using System.Threading.Tasks;
 
 namespace UnitTest
 {
-	public class Dev1 { public bool IsOK { get; set; } }
-	public class Dev2 { public bool IsCorrect { get; set; } public static Dev2 Instance;
-	internal void Offline()
+	public class Dev1 
 	{
-		throw new NotImplementedException();
+		public bool IsOK { get; set; }
+		public Dev1()
+		{
+			IsOK = true;
+		}//constructor
 	}
+	public class Dev2 { 
+		public bool IsOnline { get; set; } 
+		public static Dev2 Instance;
+
+		public Dev2()
+		{
+			IsOnline = true;
+		}//constructor
+
+		internal void Offline()
+		{
+			IsOnline = false;
+		}
 	}
 
 

@@ -1,6 +1,6 @@
 ﻿
 
-// Generated 29.10.2015 14:57:25
+// Generated 01.11.2015 13:33:27
 // Machine Dialog
 //NO errors
 //warnings
@@ -75,7 +75,7 @@ IsCheckOK = get_dev1().IsOK;
 ///<summary></summary>
 void checkIsAllGood()
 {
-IsCheckOK = get_dev2().IsCorrect;
+IsCheckOK = get_dev2().IsOnline;
 }
 
 ///<summary></summary>

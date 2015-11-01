@@ -9,6 +9,7 @@
 		<!ATTLIST State Enter CDATA #IMPLIED>
 		<!ATTLIST State Exit CDATA #IMPLIED>
 		<!ATTLIST State Info CDATA #IMPLIED>
+		<!ATTLIST State Visio CDATA #IMPLIED>
 	<!ELEMENT Transition (Comment*)>
 		<!ATTLIST Transition From CDATA #REQUIRED>
 		<!ATTLIST Transition To CDATA #REQUIRED>
@@ -16,6 +17,7 @@
 		<!ATTLIST Transition Checks CDATA #IMPLIED>
 		<!ATTLIST Transition Acts CDATA #IMPLIED>
 		<!ATTLIST Transition Info CDATA #IMPLIED>
+		<!ATTLIST Transition Visio CDATA #IMPLIED>
 	<!ELEMENT Check (Comment*)>
 		<!ATTLIST Check Name ID #REQUIRED>
 		<!ATTLIST Check Info CDATA #IMPLIED>
@@ -53,7 +55,7 @@
 		<Push Name="Start" />
 		<Push Name="Finish" />
 		<Check Name="IsUserHasRights" Device="dev1" Test="IsOK" Info="test user rights" />
-		<Check Name="IsAllGood" Device="dev2" Test="IsCorrect" />
+		<Check Name="IsAllGood" Device="dev2" Test="IsOnline" />
 		<Check Name="IsDev2" Device="dev2" />
 		<Check Name="IsFunc" />
 		<Act Name="Make" Device="dev2" Change="Offline()">

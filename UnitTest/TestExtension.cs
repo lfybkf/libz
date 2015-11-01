@@ -43,6 +43,10 @@ namespace UnitTest
 			Assert.IsTrue((s = "Omnibus".after("Omni")) == "bus");
 			Assert.IsTrue("Omnibus".before("ib") == "Omn");
 			Assert.IsTrue("Omnibus".after("zz") == "");
+			Assert.IsTrue("Omnibus".midst("Om", "us") == "nib");
+			Assert.IsTrue("Omnibus".midst("zz", "us") == "Omnib");
+			Assert.IsTrue("Omnibus".midst("Om", "zz") == "nibus");
+			Assert.IsTrue("func(FIND ME, !isHere)".midst("(", ", ") == "FIND ME");
 
 			Assert.IsTrue("26.01.2015".parse(new DateTime(2001, 12,31)).Equals(new DateTime(2015,01,26)));
 			Assert.IsTrue("26,01,2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2015, 01, 26)));
@@ -52,9 +56,7 @@ namespace UnitTest
 			Assert.IsTrue("4 145.40".parse(Decimal.MinusOne) == 4145.4M, "wrong decimal");
 			Assert.IsTrue("4".parse(0) == 4, "wrong int");
 
-			"qwe;abc;dfg".splitSemicolon().forEach(a => Console.WriteLine(a));
-			write("======================");
-			write("======================");
+
 		}//function
 	}//class
 }//ns

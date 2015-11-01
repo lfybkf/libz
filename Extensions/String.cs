@@ -17,13 +17,15 @@ namespace BDB
 		/// <returns></returns>
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 
+		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
+
 		/// <summary>
 		/// есть ли строка в массиве
 		/// </summary>
 		/// <param name="s"></param>
 		/// <param name="ss">массив, в котором искать</param>
 		/// <returns></returns>
-		public static bool inThe(this string s, params string[] ss)		{return ss.Contains(s);	}//func
+		public static bool inList(this string s, params string[] ss)		{return ss.Contains(s);	}//func
 
 		/// <summary>
 		/// берет кусок строки после <paramref name="Prefix"/>
@@ -46,6 +48,20 @@ namespace BDB
 			int i = s.IndexOf(Suffix);
 			if (i > 0)
 				return s.Substring(0, i);
+			else
+				return string.Empty;
+		}//func
+
+		public static string midst(this string s, string Prefix, string Suffix)
+		{
+			int iPrefix = s.IndexOf(Prefix);
+			int iSuffix = s.IndexOf(Suffix);
+			if (iPrefix >= 0 && iSuffix > 0)
+				return s.Substring(iPrefix + Prefix.Length, iSuffix - iPrefix - Prefix.Length);
+			else if (iPrefix >= 0)
+				return s.Substring(iPrefix + Prefix.Length);
+			else if (iSuffix >= 0)
+				return s.Substring(0, iSuffix);
 			else
 				return string.Empty;
 		}//func

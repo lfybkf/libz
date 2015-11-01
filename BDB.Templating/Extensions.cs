@@ -72,5 +72,37 @@ namespace BDB.Templating
 			return dict.ContainsKey(key) ? dict[key] : defaultValue;
 		}//function
 
+		public static string after(this string s, string Prefix)
+		{
+			int i = s.IndexOf(Prefix);
+			if (i >= 0)
+				return s.Substring(i + Prefix.Length);
+			else
+				return string.Empty;
+		}//func
+
+		public static string before(this string s, string Suffix)
+		{
+			int i = s.IndexOf(Suffix);
+			if (i > 0)
+				return s.Substring(0, i);
+			else
+				return string.Empty;
+		}//func
+
+		public static string midst(this string s, string Prefix, string Suffix)
+		{
+			int iPrefix = s.IndexOf(Prefix);
+			int iSuffix = s.IndexOf(Suffix);
+			if (iPrefix >= 0 && iSuffix > 0)
+				return s.Substring(iPrefix + Prefix.Length, iSuffix - iPrefix - Prefix.Length);
+			else if (iPrefix >= 0)
+				return s.Substring(iPrefix + Prefix.Length);
+			else if (iSuffix >= 0)
+				return s.Substring(0, iSuffix);
+			else
+				return string.Empty;
+		}//func
+
 	}//class
 }//ns
