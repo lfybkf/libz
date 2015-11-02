@@ -17,7 +17,9 @@ namespace BDB
 		/// <returns></returns>
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 
+		/// <summary>string not IsNullOrWhiteSpace</summary>
 		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
+		public static bool isEmpty(this string s) { return string.IsNullOrWhiteSpace(s); }
 
 		/// <summary>
 		/// есть ли строка в массиве
@@ -27,6 +29,7 @@ namespace BDB
 		/// <returns></returns>
 		public static bool inList(this string s, params string[] ss)		{return ss.Contains(s);	}//func
 
+		#region substring
 		/// <summary>
 		/// берет кусок строки после <paramref name="Prefix"/>
 		/// Пример: "Omnibus".after("b") = "us"
@@ -65,6 +68,7 @@ namespace BDB
 			else
 				return string.Empty;
 		}//func
+		#endregion
 
 		#region add
 		/// <summary>
@@ -197,6 +201,11 @@ namespace BDB
 		/// split TAB
 		/// </summary>
 		public static string[] splitTab(this string s) { return s.Split(cTab); }//function
+		/// <summary>
+		/// split line
+		/// </summary>
+		public static string[] splitLine(this string s) { return s.Split(Environment.NewLine.ToCharArray()); }//function
+
 		#endregion
 	}//class
 }//ns
