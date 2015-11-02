@@ -8,6 +8,8 @@ namespace UnitTest
 {
 	public class Dev1 
 	{
+		public bool IsOnline;
+		public bool Online;
 		public bool IsOK { get; set; }
 		public Dev1()
 		{
@@ -17,6 +19,7 @@ namespace UnitTest
 	public class Dev2 { 
 		public bool IsOnline { get; set; } 
 		public static Dev2 Instance;
+		public bool IsOK;
 
 		public Dev2()
 		{
@@ -27,18 +30,16 @@ namespace UnitTest
 		{
 			IsOnline = false;
 		}
+
+		internal void Do(int p)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 
 	public partial class smDialog
 	{
-		partial void checkIsFunc()
-		{
-			IsCheckOK = true;
-		}
-		partial void actDoOne()
-		{
-			IsActOK = true;
-		}
+	
 	}//class
 }//ns

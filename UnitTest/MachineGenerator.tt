@@ -12,10 +12,12 @@
 <# 
 Action<string> write = WriteLine;
 Action<bool, string> writeIf = (b,s) => {if (b) {WriteLine(s);}};
-//Action<string, string> writeIf = (b,s) => {if (!string.IsNullOrWhiteSpace(b)) {WriteLine(s);}};
 var map = new Map();
 map.MachineDirectory = System.IO.Path.GetDirectoryName(Host.TemplateFile);
 map.LoadMachines();
+
+		write("// Directory = {0}".fmt(map.MachineDirectory));
+		write("// Machines.Count = {0}".fmt(map.machines.Count()));
 
 string pushEnum, stateEnum, className, fileName;
 

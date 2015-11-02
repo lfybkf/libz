@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE ROOT [ 
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE ROOT [
 	<!ELEMENT ROOT (Machine+)>
 	<!ELEMENT Machine (Comment*, State+, Transition+, Push+, Check*, Act*, Device*)>
 		<!ATTLIST Machine Name ID #REQUIRED>
@@ -9,7 +9,7 @@
 		<!ATTLIST State Enter CDATA #IMPLIED>
 		<!ATTLIST State Exit CDATA #IMPLIED>
 		<!ATTLIST State Info CDATA #IMPLIED>
-		<!ATTLIST State Visio CDATA #IMPLIED>
+		<!ATTLIST State ID CDATA #IMPLIED>
 	<!ELEMENT Transition (Comment*)>
 		<!ATTLIST Transition From CDATA #REQUIRED>
 		<!ATTLIST Transition To CDATA #REQUIRED>
@@ -17,17 +17,19 @@
 		<!ATTLIST Transition Checks CDATA #IMPLIED>
 		<!ATTLIST Transition Acts CDATA #IMPLIED>
 		<!ATTLIST Transition Info CDATA #IMPLIED>
-		<!ATTLIST Transition Visio CDATA #IMPLIED>
+		<!ATTLIST Transition ID CDATA #IMPLIED>
 	<!ELEMENT Check (Comment*)>
 		<!ATTLIST Check Name ID #REQUIRED>
 		<!ATTLIST Check Info CDATA #IMPLIED>
 		<!ATTLIST Check Device CDATA #IMPLIED>
 		<!ATTLIST Check Test CDATA #IMPLIED>
+		<!ATTLIST Check ID CDATA #IMPLIED>
 	<!ELEMENT Act (Comment*)>
 		<!ATTLIST Act Name ID #REQUIRED>
 		<!ATTLIST Act Info CDATA #IMPLIED>
 		<!ATTLIST Act Device CDATA #IMPLIED>
 		<!ATTLIST Act Change CDATA #IMPLIED>
+		<!ATTLIST Act ID CDATA #IMPLIED>
 	<!ELEMENT Push (Comment*)>
 		<!ATTLIST Push Name ID #REQUIRED>
 		<!ATTLIST Push Info CDATA #IMPLIED>
@@ -36,36 +38,25 @@
 		<!ATTLIST Device Type CDATA #REQUIRED>
 		<!ATTLIST Device Getter CDATA #IMPLIED>
 		<!ATTLIST Device Info CDATA #IMPLIED>
+		<!ATTLIST Device ID CDATA #IMPLIED>
 	<!ELEMENT Comment (#PCDATA)>
 		<!ATTLIST Comment Author CDATA #REQUIRED>
 ]>
-
 <ROOT>
-	<Machine Name="Dialog" Info="Show dialog">
-		<Comment Author="me">Диалог с пользователем</Comment>
-		<State Name="First" Info="first status"><Comment Author="me">bugaga</Comment></State>
-		<State Name="Last" Info="las status" />
-		<State Name="Midst" Enter="DoOne" Info="las status" />
-		<Transition From="First" To="Last" Info="one trans" 
-								Pushes="Start"
-								Checks="IsAllGood IsUserHasRights"
-								Acts="Make"
-								/>
-		<Transition From="Midst" To="Last" Pushes="Finish" Acts="DoOne" />
-		<Push Name="Start" />
-		<Push Name="Finish" />
-		<Check Name="IsUserHasRights" Device="dev1" Test="IsOK" Info="test user rights" />
-		<Check Name="IsAllGood" Device="dev2" Test="IsOnline" />
-		<Check Name="IsDev2" Device="dev2" />
-		<Check Name="IsFunc" />
-		<Act Name="Make" Device="dev2" Change="Offline()">
-			<Comment Author="me">Big brown fox</Comment>
-		</Act>
-		<Act Name="DoOne"  />
-		<Act Name="DoOne2" />
-		<Device Name="dev1" Type="Dev1" Getter="new Type()" Info="some dev1" />
-		<Device Name="dev2" Type="Dev2" Getter="new Type()" Info="some dev2" />
-		<Device Name="dev3" Type="Dev2" Getter="Type.Instance" Info="another dev2" />
-	</Machine>
+  <Machine Name="Dialog">
+    <State Name="Created" ID="Rectangle" />
+    <State Name="Prepared" ID="Rectangle.6" />
+    <State Name="HasData" ID="Rectangle.7" />
+    <Transition From="Created" To="Prepared" Pushes="Prepare" Checks="IsOnline IsOK" Acts="Connect" ID="Dynamic connector" />
+    <Transition From="Prepared" To="HasData" Pushes="Select" Checks="IsOK" Acts="Disconnect" ID="Dynamic connector.5" />
+    <Push Name="Prepare" />
+    <Push Name="Select" />
+    <Check Name="IsOnline" Device="dev1" ID="Diamond.13" Test="IsOnline" />
+    <Check Name="IsOK" Device="dev2" ID="Diamond.15" Test="IsOK" />
+    <Act Name="Disconnect" Device="dev1" ID="Diamond" Change="Online = false" />
+    <Act Name="One" Device="dev2" ID="Diamond.18" Change="Do(14)" />
+    <Act Name="Connect" Device="dev1" ID="Diamond.20" Change="Online = true" />
+    <Device Name="dev1" Type="Dev1" ID="Ellipse" Getter="new Type()" />
+    <Device Name="dev2" Type="Dev2" ID="Ellipse.11" />
+  </Machine>
 </ROOT>
-

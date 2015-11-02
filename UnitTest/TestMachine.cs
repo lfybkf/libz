@@ -15,9 +15,9 @@ namespace UnitTest
 		public void TestMachineOne()
 		{
 			smDialog machine = new smDialog();
-			machine.Push(smDialogPUSH.Start);
+			machine.Push(smDialogPUSH.Prepare);
 			Assert.IsTrue(machine.IsPushOK);
-			machine.Push(smDialogPUSH.Start);
+			machine.Push(smDialogPUSH.Select);
 			Assert.IsTrue(machine.IsPushOK == false);
 
 		}//function

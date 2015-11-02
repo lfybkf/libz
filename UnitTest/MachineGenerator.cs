@@ -1,13 +1,12 @@
 ﻿
 
-// Generated 01.11.2015 13:33:27
+// Directory = D:\Repository\libz\UnitTest
+// Machines.Count = 1
+// Generated 03.11.2015 1:15:22
 // Machine Dialog
 //NO errors
 //warnings
-//Act=DoOne2 is never used
-//Check=IsDev2 is not used
-//Check=IsFunc is not used
-//Device=dev3 is never used
+//Act=One is never used
 
 using System;
 using System.Collections.Generic;
@@ -19,18 +18,18 @@ using BDB;
 namespace UnitTest
 {
 
-public enum smDialogSTATE { First, Last, Midst }
-public enum smDialogPUSH { Start, Finish }
+public enum smDialogSTATE { Created, Prepared, HasData }
+public enum smDialogPUSH { Prepare, Select }
 
 ///<summary>
-///Show dialog
+///
 ///</summary>
-/*me:Диалог с пользователем*/
+/**/
 public sealed partial class smDialog
 {
 	public smDialog()
 	{
-		CurrentState = smDialogSTATE.First;
+		CurrentState = smDialogSTATE.Created;
 	}//constructor
 
 	public bool IsCheckOK {get; private set;}
@@ -39,7 +38,7 @@ public sealed partial class smDialog
 	public smDialogSTATE CurrentState { get; private set; }
 
 	#region devices
-///<summary>some dev1</summary>
+///<summary></summary>
 public Dev1 dev1;
 private Dev1 get_dev1()
 {
@@ -47,61 +46,51 @@ if (dev1 == null) { dev1=new Dev1(); }
 return dev1;
 }
 
-///<summary>some dev2</summary>
+///<summary></summary>
 public Dev2 dev2;
 private Dev2 get_dev2()
 {
-if (dev2 == null) { dev2=new Dev2(); }
 return dev2;
-}
-
-///<summary>another dev2</summary>
-public Dev2 dev3;
-private Dev2 get_dev3()
-{
-if (dev3 == null) { dev3=Dev2.Instance; }
-return dev3;
 }
 
 	#endregion
 
 	#region checks
-///<summary>test user rights</summary>
-void checkIsUserHasRights()
+///<summary></summary>
+void checkIsOnline()
 {
-IsCheckOK = get_dev1().IsOK;
+IsCheckOK = get_dev1().IsOnline;
 }
 
 ///<summary></summary>
-void checkIsAllGood()
+void checkIsOK()
 {
-IsCheckOK = get_dev2().IsOnline;
+IsCheckOK = get_dev2().IsOK;
 }
-
-///<summary></summary>
-void checkIsDev2()
-{
-IsCheckOK = dev2 != null;
-}
-
-///<summary></summary>
-partial void checkIsFunc();
 
 	#endregion
 	
 #region acts
 ///<summary></summary>
-void actMake()
+void actDisconnect()
 {
-get_dev2().Offline();
+get_dev1().Online = false;
 IsActOK = true;
 }
 
 ///<summary></summary>
-partial void actDoOne();
+void actOne()
+{
+get_dev2().Do(14);
+IsActOK = true;
+}
 
 ///<summary></summary>
-partial void actDoOne2();
+void actConnect()
+{
+get_dev1().Online = true;
+IsActOK = true;
+}
 
 #endregion
 
@@ -110,24 +99,24 @@ public bool Push(smDialogPUSH push)
 	IsPushOK = false;
 	switch (push)
 	{
-case smDialogPUSH.Start:
+case smDialogPUSH.Prepare:
 		
-if (CurrentState == smDialogSTATE.First)
+if (CurrentState == smDialogSTATE.Created)
 {
-	IsCheckOK = false; checkIsAllGood(); if (!IsCheckOK) { break; }
-IsCheckOK = false; checkIsUserHasRights(); if (!IsCheckOK) { break; }
-	IsActOK = false; actMake(); if (!IsActOK) { break; }
-	CurrentState = smDialogSTATE.Last;
+	IsCheckOK = false; checkIsOnline(); if (!IsCheckOK) { break; }
+IsCheckOK = false; checkIsOK(); if (!IsCheckOK) { break; }
+	IsActOK = false; actConnect(); if (!IsActOK) { break; }
+	CurrentState = smDialogSTATE.Prepared;
 	IsPushOK = true;
 }//if
 break;
-case smDialogPUSH.Finish:
+case smDialogPUSH.Select:
 		
-if (CurrentState == smDialogSTATE.Midst)
+if (CurrentState == smDialogSTATE.Prepared)
 {
-	
-	IsActOK = false; actDoOne(); if (!IsActOK) { break; }
-	CurrentState = smDialogSTATE.Last;
+	IsCheckOK = false; checkIsOK(); if (!IsCheckOK) { break; }
+	IsActOK = false; actDisconnect(); if (!IsActOK) { break; }
+	CurrentState = smDialogSTATE.HasData;
 	IsPushOK = true;
 }//if
 break;
