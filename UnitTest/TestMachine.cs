@@ -14,11 +14,17 @@ namespace UnitTest
 		[TestMethod]
 		public void TestMachineOne()
 		{
+			Action<object> write = BDB.SimpleLogger.Instance.Info;
 			smDialog machine = new smDialog();
+			machine.dev1 = new DevOne { IsOnline = true, IsOK = true };
+			machine.dev2 = new DevTwo { IsOK = true };
 			machine.Push(smDialogPUSH.Prepare);
+			write(machine.BadCheck);
 			Assert.IsTrue(machine.IsPushOK);
 			machine.Push(smDialogPUSH.Select);
-			Assert.IsTrue(machine.IsPushOK == false);
+			write(machine.BadCheck);
+			Assert.IsTrue(machine.IsPushOK);
+
 
 		}//function
 

@@ -6,22 +6,21 @@ using System.Threading.Tasks;
 
 namespace UnitTest
 {
-	public class Dev1 
+	public class DevOne 
 	{
 		public bool IsOnline;
-		public bool Online;
 		public bool IsOK { get; set; }
-		public Dev1()
+		public DevOne()
 		{
 			IsOK = true;
 		}//constructor
 	}
-	public class Dev2 { 
+	public class DevTwo { 
 		public bool IsOnline { get; set; } 
-		public static Dev2 Instance;
+		public static DevTwo Instance;
 		public bool IsOK;
 
-		public Dev2()
+		public DevTwo()
 		{
 			IsOnline = true;
 		}//constructor

@@ -51,12 +51,11 @@
     <Transition From="Prepared" To="HasData" Pushes="Select" Checks="IsOK" Acts="Disconnect" ID="Dynamic connector.5" />
     <Push Name="Prepare" />
     <Push Name="Select" />
-    <Check Name="IsOnline" Device="dev1" ID="Diamond.13" Test="IsOnline" />
-    <Check Name="IsOK" Device="dev2" ID="Diamond.15" Test="IsOK" />
-    <Act Name="Disconnect" Device="dev1" ID="Diamond" Change="Online = false" />
-    <Act Name="One" Device="dev2" ID="Diamond.18" Change="Do(14)" />
-    <Act Name="Connect" Device="dev1" ID="Diamond.20" Change="Online = true" />
-    <Device Name="dev1" Type="Dev1" ID="Ellipse" Getter="new Type()" />
-    <Device Name="dev2" Type="Dev2" ID="Ellipse.11" />
+    <Check Name="IsOK" Device="dev2" ID="Check_2" Test="IsOK" />
+    <Check Name="IsOnline" Device="dev1" ID="Check_3" Test="IsOnline" />
+    <Act Name="Connect" Device="dev1" ID="Act_4" Change="IsOnline=true" />
+    <Act Name="Disconnect" Device="dev1" ID="Act_5" Change="IsOnline=false" />
+    <Device Name="dev1" Type="DevOne" ID="Device_0" Getter="new Type()" />
+    <Device Name="dev2" Type="DevTwo" ID="Device_1" Getter="new Type()" />
   </Machine>
 </ROOT>

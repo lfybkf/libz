@@ -19,13 +19,15 @@ map.LoadMachines();
 		write("// Directory = {0}".fmt(map.MachineDirectory));
 		write("// Machines.Count = {0}".fmt(map.machines.Count()));
 
-string pushEnum, stateEnum, className, fileName;
+string pushEnum, stateEnum, actEnum, checkEnum, className, fileName;
 
 // START MACHINES ================================================
 foreach (Machine machine in map.machines) 
 {
 pushEnum = "sm{0}PUSH".fmt(machine.Name);
 stateEnum = "sm{0}STATE".fmt(machine.Name);
+actEnum = "sm{0}ACT".fmt(machine.Name);
+checkEnum = "sm{0}CHECK".fmt(machine.Name);
 className = "sm{0}".fmt(machine.Name);
 fileName = "sm{0}_generated.cs".fmt(machine.Name);
 
@@ -60,22 +62,30 @@ namespace UnitTest
 
 public enum <#=stateEnum#> { <#=machine.states.print(st => st.Name, ", ")#> }
 public enum <#=pushEnum#> { <#=machine.pushes.print(st => st.Name, ", ")#> }
+public enum <#=actEnum#> { <#=machine.acts.print(st => st.Name, ", ")#>, NONE }
+public enum <#=checkEnum#> { <#=machine.checks.print(st => st.Name, ", ")#>, NONE }
 
 ///<summary>
 ///<#=machine.Info #>
 ///</summary>
-/*<#=						machine.comments.print(c => "{0}:{1}".fmt(c.Author, c.Content), R.CR) #>*/
+/*<#=machine.comments.print(c => "{0}:{1}".fmt(c.Author, c.Content), R.CR) #>*/
 public sealed partial class <#=className#>
 {
 	public <#=className#>()
 	{
 		CurrentState = <#=stateEnum#>.<#=machine.states.First().Name#>;
+		LastState = CurrentState;
+		BadAct = <#=actEnum#>.NONE;
+		BadCheck = <#=checkEnum#>.NONE;
 	}//constructor
 
 	public bool IsCheckOK {get; private set;}
 	public bool IsActOK {get; private set;}
 	public bool IsPushOK {get; private set;}
 	public <#=stateEnum#> CurrentState { get; private set; }
+	public <#=stateEnum#> LastState { get; private set; }
+	public <#=actEnum#> BadAct { get; private set; }
+	public <#=checkEnum#> BadCheck { get; private set; }
 
 	#region devices
 <#
@@ -150,8 +160,8 @@ foreach (Push push in machine.pushes)
 #>		
 if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 {
-	<#=transition.checks.print(s => "IsCheckOK = false; check{0}(); if (!IsCheckOK) {{ break; }}".fmt(s), R.CR) #>
-	<#=transition.acts.print(s => "IsActOK = false; act{0}(); if (!IsActOK) {{ break; }}".fmt(s), R.CR) #>
+	<#=transition.checks.print(s => "IsCheckOK = false; check{0}(); if (!IsCheckOK) {{ BadCheck = {1}.{0}; break; }}".fmt(s, checkEnum), R.CR) #>
+	<#=transition.acts.print(s => "IsActOK = false; act{0}(); if (!IsActOK) {{ BadAct = {1}.{0}; break; }}".fmt(s, actEnum), R.CR) #>
 	CurrentState = <#=stateEnum#>.<#=transition.To#>;
 	IsPushOK = true;
 }//if
