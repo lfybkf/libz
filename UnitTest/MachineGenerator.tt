@@ -33,6 +33,12 @@ fileName = "sm{0}_generated.cs".fmt(machine.Name);
 
 write("// Generated " + DateTime.Now.ToString());
 write("// Machine " + machine.Name);
+write("// States.Count = {0}".fmt(machine.states.Count()));
+write("// Transitions.Count = {0}".fmt(machine.transitions.Count()));
+write("// Pushes.Count = {0}".fmt(machine.pushes.Count()));
+write("// Checks.Count = {0}".fmt(machine.checks.Count()));
+write("// Act.Count = {0}".fmt(machine.acts.Count()));
+write("// Devices.Count = {0}".fmt(machine.devices.Count()));
 machine.Validate();
 if (machine.hasErrors)
 {
@@ -146,6 +152,27 @@ Func<Act, string> printAct = (z) =>
 #>
 #endregion
 
+public IEnumerable<<#=pushEnum#>> availablePushes
+{ get {
+	IEnumerable<<#=pushEnum#>> result = null;
+	switch (CurrentState)
+	{
+
+<#
+foreach (State state in machine.states)
+				{
+						write("case {0}.{1}:".fmt(stateEnum, state.Name));
+						var transitions = machine.transitions.Where(z => z.From == state.Name);
+						var pushes = transitions.SelectMany(z => z.pushes);
+						var result = pushes.print(z => "{0}.{1}".fmt(pushEnum, z), ", ");
+						write("result = new {0}[] {{ {1} }};".fmt(pushEnum, result) );
+						write("break;");
+				}//for
+#>
+	}//switch
+return result;
+}}
+
 public bool Push(<#=pushEnum#> push)
 {
 	IsPushOK = false;
@@ -157,7 +184,7 @@ foreach (Push push in machine.pushes)
 	write("case {0}.{1}:".fmt(pushEnum, push.Name));
 	foreach (Transition transition in push.transitions)
 	{
-#>		
+#>
 if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 {
 	<#=transition.checks.print(s => "IsCheckOK = false; check{0}(); if (!IsCheckOK) {{ BadCheck = {1}.{0}; break; }}".fmt(s, checkEnum), R.CR) #>

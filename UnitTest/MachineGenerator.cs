@@ -2,8 +2,14 @@
 
 // Directory = D:\Repository\libz\UnitTest
 // Machines.Count = 1
-// Generated 03.11.2015 21:24:09
+// Generated 05.11.2015 0:13:02
 // Machine Dialog
+// States.Count = 3
+// Transitions.Count = 3
+// Pushes.Count = 5
+// Checks.Count = 2
+// Act.Count = 2
+// Devices.Count = 2
 //NO errors
 //NO warnings
 
@@ -18,7 +24,7 @@ namespace UnitTest
 {
 
 public enum smDialogSTATE { Created, Prepared, HasData }
-public enum smDialogPUSH { Prepare, Select }
+public enum smDialogPUSH { Prepare, Puush1, Select, Puush2, Puush3 }
 public enum smDialogACT { Connect, Disconnect, NONE }
 public enum smDialogCHECK { IsOK, IsOnline, NONE }
 
@@ -95,13 +101,41 @@ IsActOK = true;
 
 #endregion
 
+public IEnumerable<smDialogPUSH> availablePushes
+{ get {
+	IEnumerable<smDialogPUSH> result = null;
+	switch (CurrentState)
+	{
+
+case smDialogSTATE.Created:
+result = new smDialogPUSH[] { smDialogPUSH.Prepare, smDialogPUSH.Puush1 };
+break;
+case smDialogSTATE.Prepared:
+result = new smDialogPUSH[] { smDialogPUSH.Select, smDialogPUSH.Puush2 };
+break;
+case smDialogSTATE.HasData:
+result = new smDialogPUSH[] { smDialogPUSH.Puush3 };
+break;
+	}//switch
+return result;
+}}
+
 public bool Push(smDialogPUSH push)
 {
 	IsPushOK = false;
 	switch (push)
 	{
 case smDialogPUSH.Prepare:
-		
+if (CurrentState == smDialogSTATE.Created)
+{
+	IsCheckOK = false; checkIsOnline(); if (!IsCheckOK) { BadCheck = smDialogCHECK.IsOnline; break; }
+IsCheckOK = false; checkIsOK(); if (!IsCheckOK) { BadCheck = smDialogCHECK.IsOK; break; }
+	IsActOK = false; actConnect(); if (!IsActOK) { BadAct = smDialogACT.Connect; break; }
+	CurrentState = smDialogSTATE.Prepared;
+	IsPushOK = true;
+}//if
+break;
+case smDialogPUSH.Puush1:
 if (CurrentState == smDialogSTATE.Created)
 {
 	IsCheckOK = false; checkIsOnline(); if (!IsCheckOK) { BadCheck = smDialogCHECK.IsOnline; break; }
@@ -112,12 +146,29 @@ IsCheckOK = false; checkIsOK(); if (!IsCheckOK) { BadCheck = smDialogCHECK.IsOK;
 }//if
 break;
 case smDialogPUSH.Select:
-		
 if (CurrentState == smDialogSTATE.Prepared)
 {
 	IsCheckOK = false; checkIsOK(); if (!IsCheckOK) { BadCheck = smDialogCHECK.IsOK; break; }
 	IsActOK = false; actDisconnect(); if (!IsActOK) { BadAct = smDialogACT.Disconnect; break; }
 	CurrentState = smDialogSTATE.HasData;
+	IsPushOK = true;
+}//if
+break;
+case smDialogPUSH.Puush2:
+if (CurrentState == smDialogSTATE.Prepared)
+{
+	IsCheckOK = false; checkIsOK(); if (!IsCheckOK) { BadCheck = smDialogCHECK.IsOK; break; }
+	IsActOK = false; actDisconnect(); if (!IsActOK) { BadAct = smDialogACT.Disconnect; break; }
+	CurrentState = smDialogSTATE.HasData;
+	IsPushOK = true;
+}//if
+break;
+case smDialogPUSH.Puush3:
+if (CurrentState == smDialogSTATE.HasData)
+{
+	IsCheckOK = false; checkIsOnline(); if (!IsCheckOK) { BadCheck = smDialogCHECK.IsOnline; break; }
+	
+	CurrentState = smDialogSTATE.Prepared;
 	IsPushOK = true;
 }//if
 break;
