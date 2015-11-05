@@ -94,7 +94,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MachineDialog.xml" />
+    <Content Include="MachineDialog.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -173,9 +173,41 @@ foreach (State state in machine.states)
 return result;
 }}
 
+public bool Check(<#=pushEnum#> push)
+{
+	BadCheck = <#=checkEnum#>.NONE;
+	IsCheckOK = true;
+	switch (push)
+	{
+<#
+foreach (Push push in machine.pushes)
+{
+	write("case {0}.{1}:".fmt(pushEnum, push.Name));
+	foreach (Transition transition in push.transitions.Where(t => t.HasChecks))
+	{
+#>
+if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
+{
+	<#=transition.checks.print(s => "IsCheckOK = false; check{0}(); if (IsCheckOK == false) {{ BadCheck = {1}.{0}; break; }}".fmt(s, checkEnum), R.CR) #>
+}//if
+<#
+	}//for
+	write("break;");
+	write("//" + push.Name);
+	write("");
+}//for
+#>
+	}
+
+	return IsCheckOK;
+}//function
+
 public bool Push(<#=pushEnum#> push)
 {
-	IsPushOK = false;
+	BadAct = <#=actEnum#>.NONE;
+	IsPushOK = Check(push);
+	if (IsPushOK == false) {return IsPushOK;}
+
 	switch (push)
 	{
 <#
@@ -187,7 +219,7 @@ foreach (Push push in machine.pushes)
 #>
 if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 {
-	<#=transition.checks.print(s => "IsCheckOK = false; check{0}(); if (!IsCheckOK) {{ BadCheck = {1}.{0}; break; }}".fmt(s, checkEnum), R.CR) #>
+	IsPushOK = false;
 	<#=transition.acts.print(s => "IsActOK = false; act{0}(); if (!IsActOK) {{ BadAct = {1}.{0}; break; }}".fmt(s, actEnum), R.CR) #>
 	CurrentState = <#=stateEnum#>.<#=transition.To#>;
 	IsPushOK = true;
@@ -195,8 +227,9 @@ if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 <#
 	}//for
 	write("break;");
+	write("//" + push.Name);
+	write("");
 }//for
-
 #>
 	}
 	return IsPushOK;

@@ -49,5 +49,7 @@ namespace BDB.Templating
 		public bool IsCheckUsed(string name) { return checks.Contains(name); }
 		public bool IsActUsed(string name) { return acts.Contains(name); }
 		public bool IsPushUsed(string name) { return pushes.Contains(name); }
+		public bool HasChecks { get { return checks.Any(); } }
+		public bool HasActs { get { return acts.Any(); } }
 	}//class
 }//ns
