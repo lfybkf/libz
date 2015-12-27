@@ -32,9 +32,10 @@ namespace BDB
 			else	{		return defaultValue;		}//else
 		}//function
 
-		public static TSource execute<TSource>(this TSource source, Action<TSource> action)	where TSource : class		
-		{	
-			if (source != default(TSource))	{action(source);}		return source; 
+		public static void execute<TSource>(this Action<TSource> action, TSource source)
+			//where TSource : class
+		{
+			if (action != null) {action(source);}
 		}//function
 
 	}//class

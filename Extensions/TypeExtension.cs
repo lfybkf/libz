@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,5 +51,16 @@ namespace BDB
 		public static DbType getDbType(this Type t)		{			return typeMap.get(t);		}//function
 		public static bool isNullable(this Type t)		{			return (t.IsGenericType) ? (t.GetGenericTypeDefinition() == typeof(Nullable<>)) : false;}//function
 		public static Type getTypeUnderNullable(this Type t)	{	return t.isNullable() ? Nullable.GetUnderlyingType(t) : t;}//function
+
+		public static string getFieldValue(this Type t, object o, string fieldName) 
+		{
+			PropertyInfo fi = t.GetProperty(fieldName);
+			if (fi == null)
+			{
+				return null;
+			}//if
+
+			return fi.GetValue(o).ToString();
+		}//function
 	}//class
 }//ns

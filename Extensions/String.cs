@@ -17,6 +17,68 @@ namespace BDB
 		/// <returns></returns>
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 
+		/// <summary>
+		/// from "asd{name}qwer{age}ty" get 3,"{name}" ;14,"{age}"
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="cL"></param>
+		/// <param name="cR"></param>
+		/// <returns></returns>
+		public static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}') 
+		{
+			if (s.IndexOf(cL) < 0) { return null; }//if
+
+			IDictionary<int, string> result = new Dictionary<int, string>();
+			char c;
+			int iL = -1;
+			// "asd{ph}qwerty"
+			for (int i = 0; i < s.Length; i++)
+			{
+				c = s[i];
+				if (c == cL)
+				{
+					iL = i;//i=3
+				}//if
+				else if (c == cR && iL >= 0) //i=6
+				{
+					result.Add(iL, s.Substring(iL, i - iL+1));
+					iL = -1;
+				}//if
+			}//for
+
+			return result;
+		}//func
+
+
+		public static string fmto(this string s, object o)
+		{
+			var phS = s.getPlaceholders();
+			if (phS == null) {return s;}
+
+			Type t = o.GetType();
+			IDictionary<string, string> values = new Dictionary<string, string>();
+			foreach (var item in phS.Values.Distinct())
+			{
+				values.Add(item
+					, t.getFieldValue(o, item.Substring(1, item.Length - 2))); //2="{}".Length
+			}//for
+
+			string sPh;
+			StringBuilder sb = new StringBuilder();
+			int iPast = 0;//end of previous placeholder
+			foreach (int iPh in phS.Keys)
+			{
+				sb.Append(s.Substring(iPast, iPh-iPast)); //before Ph
+				sPh = phS[iPh]; //"{name}"
+				sb.Append(values[sPh]);
+				iPast = iPh + sPh.Length;
+			}//for
+			sb.Append(s.Substring(iPast));
+
+			return sb.ToString();
+		}//function
+
+
 		/// <summary>string not IsNullOrWhiteSpace</summary>
 		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
 		public static bool isEmpty(this string s) { return string.IsNullOrWhiteSpace(s); }

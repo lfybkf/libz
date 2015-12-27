@@ -9,6 +9,22 @@ namespace UnitTest
 	public class TestExtension
 	{
 		[TestMethod]
+		public void TestFmto()
+		{
+			string s = "My name is {name} and my age is {age}, so call me {name}!";
+			var phS = s.getPlaceholders();
+			Assert.IsTrue(phS.Values.Contains("{name}"));
+			Assert.IsTrue(phS.Values.Contains("{age}"));
+
+			var o = new {name = "Барсук", age = 38 };
+			string val = o.GetType().getFieldValue(o, "name");
+			Assert.AreEqual("Барсук", val);
+
+			string sfmto = s.fmto(o);
+			Assert.AreEqual("My name is Барсук and my age is 38, so call me Барсук!", sfmto);
+		}//function
+
+		[TestMethod]
 		public void TestPropis()
 		{
 			string s = "сто двадцать";
