@@ -11,13 +11,13 @@ namespace UnitTest
 		[TestMethod]
 		public void TestFmto()
 		{
-			string s = "My name is {name} and my age is {age}, so call me {name}!";
-			var phS = s.getPlaceholders();
-			Assert.IsTrue(phS.Values.Contains("{name}"));
-			Assert.IsTrue(phS.Values.Contains("{age}"));
+			string s = "My name is {name} and my age is {age}, so call me {name}!{bo}";
+			//var phS = s.getPlaceholders();
+			//Assert.IsTrue(phS.Values.Contains("{name}"));
+			//Assert.IsTrue(phS.Values.Contains("{age}"));
 
-			var o = new {name = "Барсук", age = 38 };
-			string val = o.GetType().getFieldValue(o, "name");
+			var o = new {name = "Барсук", age = 38};
+			string val = o.getPropertyValue("name");
 			Assert.AreEqual("Барсук", val);
 
 			string sfmto = s.fmto(o);

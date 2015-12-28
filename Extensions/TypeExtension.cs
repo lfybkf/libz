@@ -52,8 +52,9 @@ namespace BDB
 		public static bool isNullable(this Type t)		{			return (t.IsGenericType) ? (t.GetGenericTypeDefinition() == typeof(Nullable<>)) : false;}//function
 		public static Type getTypeUnderNullable(this Type t)	{	return t.isNullable() ? Nullable.GetUnderlyingType(t) : t;}//function
 
-		public static string getFieldValue(this Type t, object o, string fieldName) 
+		public static string getPropertyValue(this object o, string fieldName) 
 		{
+			Type t = o.GetType();
 			PropertyInfo fi = t.GetProperty(fieldName);
 			if (fi == null)
 			{

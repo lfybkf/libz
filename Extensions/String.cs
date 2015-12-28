@@ -24,7 +24,7 @@ namespace BDB
 		/// <param name="cL"></param>
 		/// <param name="cR"></param>
 		/// <returns></returns>
-		public static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}') 
+		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}') 
 		{
 			if (s.IndexOf(cL) < 0) { return null; }//if
 
@@ -60,7 +60,7 @@ namespace BDB
 			foreach (var item in phS.Values.Distinct())
 			{
 				values.Add(item
-					, t.getFieldValue(o, item.Substring(1, item.Length - 2))); //2="{}".Length
+					, o.getPropertyValue(item.Substring(1, item.Length - 2))); //2="{}".Length
 			}//for
 
 			string sPh;
@@ -70,7 +70,7 @@ namespace BDB
 			{
 				sb.Append(s.Substring(iPast, iPh-iPast)); //before Ph
 				sPh = phS[iPh]; //"{name}"
-				sb.Append(values[sPh]);
+				sb.Append(values[sPh] ?? string.Empty);
 				iPast = iPh + sPh.Length;
 			}//for
 			sb.Append(s.Substring(iPast));
