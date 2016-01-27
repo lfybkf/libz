@@ -54,6 +54,12 @@ namespace BDB
 
 		public static string getPropertyValue(this object o, string name) 
 		{
+			if (o == null) { return null; }
+			if (o is IDictionary<string, string>)
+			{
+				var dict = (o as IDictionary<string, string>);
+				return dict.ContainsKey(name) ? dict[name] : null;
+			}//if
 			Type t = o.GetType();
 			PropertyInfo fi = t.GetProperty(name);
 			if (fi == null)
@@ -66,6 +72,7 @@ namespace BDB
 
 		public static string getMethodValue(this object o, string name, params object[] parameters)
 		{
+			if (o == null) { return null; }
 			Type t = o.GetType();
 			MethodInfo mi = t.GetMethod(name);
 			if (mi == null)

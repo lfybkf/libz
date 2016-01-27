@@ -114,6 +114,12 @@ namespace BDB.Templating
 
 		public static string getPropertyValue(this object o, string name)
 		{
+			if (o == null) { return null; }
+			if (o is IDictionary<string, string>)
+			{
+				var dict = (o as IDictionary<string, string>);
+				return dict.ContainsKey(name) ? dict[name] : null;
+			}//if
 			Type t = o.GetType();
 			PropertyInfo fi = t.GetProperty(name);
 			if (fi == null)
@@ -172,40 +178,56 @@ namespace BDB.Templating
 		}//func
 
 
-		public static string fmto(this string s, object o)
+		public static string fmto(this string s, params object[] oo)
 		{
+			//получаем список плейс-холдеров
 			var phS = s.getPlaceholders();
 			if (phS == null) { return s; }
 
-			Type t = o.GetType();
+			#region заполняем значения плейс-холдеров
 			IDictionary<string, string> values = new Dictionary<string, string>();
 			string ph;
+			string method;
+			string[] args;
+			string value;
 			int iL, iR; //номер скобок
 			foreach (var item in phS.Values.Distinct())
 			{
 				ph = item.Substring(1, item.Length - 2);//2="{}".Length
+				method = null;
+				args = null;
 				iL = ph.IndexOf('(');
 				if (iL >= 0)
 				{
 					iR = ph.IndexOf(')');
-					if (iR > iL + 1) //has args. func(arg1,arg2,arg3) func(a)
+					method = ph.Substring(0, iL);
+					args = (iR > iL + 1) ? ph.Substring(iL + 1, iR - iL - 1).Split(',') : null;
+				}//if
+
+				//обходим каждый объект из входящего списка
+				//вдруг у кого-то есть нужное свойство или метод
+				foreach (object o in oo)
+				{
+					if (method != null)
 					{
-						values.Add(item, o.getMethodValue(ph.Substring(0, iL)
-							, ph.Substring(iL + 1, iR - iL - 1).Split(',')
-							));
+						value = o.getMethodValue(method, args);
 					}//if
 					else
 					{
-						values.Add(item, o.getMethodValue(ph.Substring(0, iL)));
+						value = o.getPropertyValue(ph);
 					}//else
 
-				}//if
-				else
-				{
-					values.Add(item, o.getPropertyValue(ph));
-				}//else
+					//нашлось - записываем и дальше не смотрим
+					if (value != null)
+					{
+						values.Add(item, value);
+						break;
+					}//if
+				}//for
 			}//for
+			#endregion
 
+			#region формируем строку-результат
 			string sPh;
 			StringBuilder sb = new StringBuilder();
 			int iPast = 0;//end of previous placeholder
@@ -213,10 +235,11 @@ namespace BDB.Templating
 			{
 				sb.Append(s.Substring(iPast, iPh - iPast)); //before Ph
 				sPh = phS[iPh]; //"{name}"
-				sb.Append(values[sPh] ?? string.Empty);
+				sb.Append(values.ContainsKey(sPh) ? values[sPh] : string.Empty);
 				iPast = iPh + sPh.Length;
 			}//for
 			sb.Append(s.Substring(iPast));
+			#endregion
 
 			return sb.ToString();
 		}//function

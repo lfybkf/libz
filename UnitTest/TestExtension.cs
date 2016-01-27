@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BDB;
+using System.Collections.Generic;
 
 namespace UnitTest
 {
@@ -38,6 +39,11 @@ namespace UnitTest
 			var goo = new Goo2 { Age = 44, Name = "Пятнадцатов" };
 			s = "name={{Name}{Age}}. {Tim(A,F)} Fre {ToString()}. Tim={Tim(БАКЛЯ,букля)}";
 			sfmto = s.fmto(goo);
+			Assert.IsTrue(sfmto != string.Empty);
+
+			var dict = new Dictionary<string, string>() { { "name", "AA" }, { "age", "55" } };
+			s = "name={name} age={age} Name={Name} {Tim(A,F)} {NONONO} {Name}"; 
+			sfmto=s.fmto(dict, goo);
 			Assert.IsTrue(sfmto != string.Empty);
 		}//function
 
