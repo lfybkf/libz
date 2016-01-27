@@ -95,7 +95,7 @@ namespace BDB
 		public bool Load()
 		{
 			entity = CreateEntity();
-			DbCommand cmd =  entity.cmdLoad(this);
+			DbCommand cmd =  entity.cmdRead(this);
 			if (cmd == null) { AddError("cmdRead is null"); return false; }
 
 			bool result = true;
@@ -120,7 +120,7 @@ namespace BDB
 		public bool Save()
 		{
 			if (entity == null) { AddError("entity is null"); return false; }
-			DbCommand cmd = entity.IsNew ? entity.cmdInsert(this) : entity.cmdUpdate(this);
+			DbCommand cmd = entity.IsNew ? entity.cmdCreate(this) : entity.cmdUpdate(this);
 			if (cmd == null) { AddError("cmdSave is null"); return false; }
 
 			var Validate = getRegistry(type).with(z => z.Validate);

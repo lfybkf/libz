@@ -13,9 +13,9 @@ namespace BDB
 	{
 		bool IsNew { get; }
 
-		DbCommand cmdInsert(EC entityContext);
+		DbCommand cmdCreate(EC entityContext);
 		DbCommand cmdUpdate(EC entityContext);
-		DbCommand cmdLoad(EC entityContext);
+		DbCommand cmdRead(EC entityContext);
 		DbCommand cmdDelete(EC entityContext);
 		bool Read(DbDataReader ddr);
 	}//class
