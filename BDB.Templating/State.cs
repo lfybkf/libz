@@ -9,8 +9,8 @@ namespace BDB.Templating
 {
 	public class State: AttrzME
 	{
-		public string Enter;
-		public string Exit;
+		public string Enter { get; set; }
+		public string Exit { get; set; }
 		internal override void Read(XElement src)
 		{
 			base.Read(src);

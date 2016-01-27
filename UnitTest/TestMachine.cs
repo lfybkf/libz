@@ -18,7 +18,7 @@ namespace UnitTest
 			smDialog machine = new smDialog();
 			machine.dev1 = new DevOne { IsOnline = true, IsOK = true };
 			machine.dev2 = new DevTwo { IsOK = true };
-			machine.Push(smDialogPUSH.Prepare);
+			machine.Push(smDialogPUSH.Connect);
 			write(machine.BadCheck);
 			Assert.IsTrue(machine.IsPushOK);
 			machine.Push(smDialogPUSH.Select);

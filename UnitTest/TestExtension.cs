@@ -5,6 +5,18 @@ using BDB;
 
 namespace UnitTest
 {
+	class Goo 
+	{
+		public int Age { get; set; }
+		public string Name { get; set; }
+		public DateTime Now() { return DateTime.Now; }
+		public override string ToString()
+		{
+			return Name.ToUpper() + "!!";
+		} 
+	}
+	class Goo2 : Goo { public string Tim(string s1, string s2) { return s1 + Age + s2; } }
+
 	[TestClass]
 	public class TestExtension
 	{
@@ -16,12 +28,17 @@ namespace UnitTest
 			//Assert.IsTrue(phS.Values.Contains("{name}"));
 			//Assert.IsTrue(phS.Values.Contains("{age}"));
 
-			var o = new {name = "Барсук", age = 38};
+			var o = new { name = "Барсук", age = 38};
 			string val = o.getPropertyValue("name");
 			Assert.AreEqual("Барсук", val);
 
 			string sfmto = s.fmto(o);
 			Assert.AreEqual("My name is Барсук and my age is 38, so call me Барсук!", sfmto);
+
+			var goo = new Goo2 { Age = 44, Name = "Пятнадцатов" };
+			s = "name={{Name}{Age}}. {Tim(A,F)} Fre {ToString()}. Tim={Tim(БАКЛЯ,букля)}";
+			sfmto = s.fmto(goo);
+			Assert.IsTrue(sfmto != string.Empty);
 		}//function
 
 		[TestMethod]

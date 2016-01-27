@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +9,8 @@ namespace BDB.Templating
 {
 	/// <summary>
 	/// класс расширений для шаблонов
-	/// несмотря на то, что эти функции есть в BDB.Extensions.dll, все равно нужен, чтобы шаблоны могли ссылаться только на BDB.Bently.dll
+	/// несмотря на то, что эти функции есть в BDB.Extensions.dll
+	/// , все равно нужен, чтобы шаблоны могли ссылаться только на BDB.Templating.dll
 	/// </summary>
 	public static class Extensions
 	{
@@ -37,6 +39,8 @@ namespace BDB.Templating
 		/// <returns></returns>
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//function
 
+		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
+		public static bool isEmpty(this string s) { return string.IsNullOrWhiteSpace(s); }
 
 		public static IEnumerable<T> forEach<T>(this IEnumerable<T> source, Action<T> action)
 		{
@@ -104,5 +108,118 @@ namespace BDB.Templating
 				return string.Empty;
 		}//func
 
+
+		#region fmtO
+
+
+		public static string getPropertyValue(this object o, string name)
+		{
+			Type t = o.GetType();
+			PropertyInfo fi = t.GetProperty(name);
+			if (fi == null)
+			{
+				return null;
+			}//if
+
+			return fi.GetValue(o).ToString();
+		}//function
+
+		public static string getMethodValue(this object o, string name, params object[] parameters)
+		{
+			Type t = o.GetType();
+			MethodInfo mi = t.GetMethod(name);
+			if (mi == null)
+			{
+				return null;
+			}//if
+
+			string result = null;
+			try
+			{
+				object res = mi.Invoke(o, parameters);
+				if (res != null) { result = res.ToString(); }
+			}//try
+			catch
+			{
+
+			}//catch
+			return result;
+		}//function
+
+		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}')
+		{
+			if (s.IndexOf(cL) < 0) { return null; }//if
+
+			IDictionary<int, string> result = new Dictionary<int, string>();
+			char c;
+			int iL = -1;
+			// "asd{ph}qwerty"
+			for (int i = 0; i < s.Length; i++)
+			{
+				c = s[i];
+				if (c == cL)
+				{
+					iL = i;//i=3
+				}//if
+				else if (c == cR && iL >= 0) //i=6
+				{
+					result.Add(iL, s.Substring(iL, i - iL + 1));
+					iL = -1;
+				}//if
+			}//for
+
+			return result;
+		}//func
+
+
+		public static string fmto(this string s, object o)
+		{
+			var phS = s.getPlaceholders();
+			if (phS == null) { return s; }
+
+			Type t = o.GetType();
+			IDictionary<string, string> values = new Dictionary<string, string>();
+			string ph;
+			int iL, iR; //номер скобок
+			foreach (var item in phS.Values.Distinct())
+			{
+				ph = item.Substring(1, item.Length - 2);//2="{}".Length
+				iL = ph.IndexOf('(');
+				if (iL >= 0)
+				{
+					iR = ph.IndexOf(')');
+					if (iR > iL + 1) //has args. func(arg1,arg2,arg3) func(a)
+					{
+						values.Add(item, o.getMethodValue(ph.Substring(0, iL)
+							, ph.Substring(iL + 1, iR - iL - 1).Split(',')
+							));
+					}//if
+					else
+					{
+						values.Add(item, o.getMethodValue(ph.Substring(0, iL)));
+					}//else
+
+				}//if
+				else
+				{
+					values.Add(item, o.getPropertyValue(ph));
+				}//else
+			}//for
+
+			string sPh;
+			StringBuilder sb = new StringBuilder();
+			int iPast = 0;//end of previous placeholder
+			foreach (int iPh in phS.Keys)
+			{
+				sb.Append(s.Substring(iPast, iPh - iPast)); //before Ph
+				sPh = phS[iPh]; //"{name}"
+				sb.Append(values[sPh] ?? string.Empty);
+				iPast = iPh + sPh.Length;
+			}//for
+			sb.Append(s.Substring(iPast));
+
+			return sb.ToString();
+		}//function
+		#endregion
 	}//class
 }//ns

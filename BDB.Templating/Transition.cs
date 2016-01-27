@@ -13,8 +13,8 @@ namespace BDB.Templating
 			get	{	return (From != null && To != null) ? fmtName.fmt(From, To) : "Bad transition";	}
 			set	{	;	}
 		}
-		public string From;
-		public string To;
+		public string From { get; set; }
+		public string To { get; set; }
 
 		private IEnumerable<string> _checks, _acts, _pushes;
 		public IEnumerable<string> checks { get { return _checks; } }
@@ -27,9 +27,9 @@ namespace BDB.Templating
 			base.Read(src);
 			From = Get(R.FROM);
 			To = Get(R.TO);
-			_checks = Get(R.Checks, string.Empty).Split(' ').Where(s => s.Length > 0).ToArray();
-			_acts = Get(R.Acts, string.Empty).Split(' ').Where(s => s.Length > 0).ToArray();
-			_pushes = Get(R.Pushes, string.Empty).Split(' ').Where(s => s.Length > 0).ToArray();
+			_checks = Gef(R.Checks, string.Empty).Split(' ').Where(s => s.Length > 0).ToArray();
+			_acts = Gef(R.Acts, string.Empty).Split(' ').Where(s => s.Length > 0).ToArray();
+			_pushes = Gef(R.Pushes, string.Empty).Split(' ').Where(s => s.Length > 0).ToArray();
 		}//function
 
 		public override bool Validate()

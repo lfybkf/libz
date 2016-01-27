@@ -57,10 +57,31 @@ namespace BDB
 
 			Type t = o.GetType();
 			IDictionary<string, string> values = new Dictionary<string, string>();
+			string ph;
+			int iL, iR; //номер скобок
 			foreach (var item in phS.Values.Distinct())
 			{
-				values.Add(item
-					, o.getPropertyValue(item.Substring(1, item.Length - 2))); //2="{}".Length
+				ph = item.Substring(1, item.Length - 2);//2="{}".Length
+				iL = ph.IndexOf('(');
+				if (iL >= 0)
+				{
+					iR = ph.IndexOf(')');
+					if (iR > iL + 1) //has args. func(arg1,arg2,arg3) func(a)
+					{
+						values.Add(item, o.getMethodValue(ph.Substring(0, iL)
+							, ph.Substring(iL + 1, iR - iL-1).splitComma()
+							));
+					}//if
+					else
+					{
+						values.Add(item, o.getMethodValue(ph.Substring(0, iL)));
+					}//else
+					
+				}//if
+				else
+				{
+					values.Add(item, o.getPropertyValue(ph)); 
+				}//else
 			}//for
 
 			string sPh;

@@ -45,21 +45,19 @@
 <ROOT>
   <Machine Name="Dialog">
     <State Name="Created" ID="Rectangle" />
-    <State Name="Prepared" ID="Rectangle.6" />
+    <State Name="Ready" ID="Rectangle.6" />
     <State Name="HasData" ID="Rectangle.7" />
-    <Transition From="Created" To="Prepared" Pushes="Prepare Puush1" Checks="IsOnline IsOK" Acts="Connect" ID="Dynamic connector" />
-    <Transition From="Prepared" To="HasData" Pushes="Select Puush2" Checks="IsOK" Acts="Disconnect" ID="Dynamic connector.5" />
-    <Transition From="HasData" To="Prepared" Pushes="Puush3" Checks="IsOnline" Acts="" ID="Dynamic connector.8" />
-    <Push Name="Prepare" />
-    <Push Name="Puush1" />
+    <Transition From="Created" To="Ready" Pushes="Connect" Checks="IsOnline" Acts="Connect" ID="Dynamic connector" />
+    <Transition From="Ready" To="HasData" Pushes="Select" Checks="IsOK" Acts="Disconnect" ID="Dynamic connector.5" />
+    <Transition From="HasData" To="Ready" Pushes="Puush3" Checks="IsOnline" Acts="" ID="Dynamic connector.8" />
+    <Push Name="Connect" />
     <Push Name="Select" />
-    <Push Name="Puush2" />
     <Push Name="Puush3" />
     <Check Name="IsOK" Device="dev2" ID="Check_2" Test="IsOK" />
     <Check Name="IsOnline" Device="dev1" ID="Check_3" Test="IsOnline" />
     <Act Name="Connect" Device="dev1" ID="Act_4" Change="IsOnline=true" />
     <Act Name="Disconnect" Device="dev1" ID="Act_5" Change="IsOnline=false" />
-    <Device Name="dev1" Type="DevOne" ID="Device_0" Getter="new Type()" />
-    <Device Name="dev2" Type="DevTwo" ID="Device_1" Getter="new Type()" />
+    <Device Name="dev1" Type="DevOne" ID="Device_0" />
+    <Device Name="dev2" Type="DevTwo" ID="Device_1" Getter="DevTwo.Create()" />
   </Machine>
 </ROOT>

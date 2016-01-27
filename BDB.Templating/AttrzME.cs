@@ -34,7 +34,7 @@ namespace BDB.Templating
 		internal override void Read(System.Xml.Linq.XElement src)
 		{
 			Name = Get(R.NAME);
-			Info = Get(R.INFO, string.Empty);
+			Info = Gef(R.INFO, string.Empty);
 			FillListFromXlist<Comment>(_comments, src.Elements(R.COMMENT));
 		}//function
 

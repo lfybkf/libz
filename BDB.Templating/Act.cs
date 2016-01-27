@@ -7,8 +7,8 @@ namespace BDB.Templating
 {
 	public class Act:AttrzME
 	{
-		public string Device;
-		public string Change;
+		public string Device { get; set; }
+		public string Change { get; set; }
 
 		internal override void Read(System.Xml.Linq.XElement src)
 		{

@@ -9,13 +9,13 @@ namespace BDB.Templating
 {
 	public class Field: Attrz
 	{
-		public string Name;
-		public string Type;
-		public string Ref;
-		public string Default;
-		public bool IsNullable;
-		public bool NotInsert;
-		public bool NotUpdate;
+		public string Name { get; set; }
+		public string Type { get; set; }
+		public string Ref { get; set; }
+		public string Default { get; set; }
+		public bool IsNullable { get; set; }
+		public bool NotInsert { get; set; }
+		public bool NotUpdate { get; set; }
 		
 		static string[] value_types = { "bool", "datetime", "decimal", "int", "long", "float", "double" };
 

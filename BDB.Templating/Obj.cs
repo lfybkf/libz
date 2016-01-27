@@ -14,7 +14,7 @@ namespace BDB.Templating
 		public static string defaultIDtype = "long";
 		public static string TablePrefix = string.Empty;
 
-		public string Name;
+		public string Name { get; set; }
 		public string FileSource {get; internal set;}
 		public List<Field> fields = new List<Field>();
 

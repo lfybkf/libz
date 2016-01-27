@@ -24,12 +24,12 @@ string pushEnum, stateEnum, actEnum, checkEnum, className, fileName;
 // START MACHINES ================================================
 foreach (Machine machine in map.machines) 
 {
-pushEnum = "sm{0}PUSH".fmt(machine.Name);
-stateEnum = "sm{0}STATE".fmt(machine.Name);
-actEnum = "sm{0}ACT".fmt(machine.Name);
-checkEnum = "sm{0}CHECK".fmt(machine.Name);
-className = "sm{0}".fmt(machine.Name);
-fileName = "sm{0}_generated.cs".fmt(machine.Name);
+pushEnum = "sm{Name}PUSH".fmto(machine);
+stateEnum = "sm{Name}STATE".fmto(machine);
+actEnum = "sm{Name}ACT".fmto(machine);
+checkEnum = "sm{Name}CHECK".fmto(machine);
+className = "sm{Name}".fmto(machine);
+fileName = "sm{Name}_generated.cs".fmto(machine);
 
 write("// Generated " + DateTime.Now.ToString());
 write("// Machine " + machine.Name);
@@ -68,21 +68,21 @@ namespace UnitTest
 
 public enum <#=stateEnum#> { <#=machine.states.print(st => st.Name, ", ")#> }
 public enum <#=pushEnum#> { <#=machine.pushes.print(st => st.Name, ", ")#> }
-public enum <#=actEnum#> { <#=machine.acts.print(st => st.Name, ", ")#>, NONE }
-public enum <#=checkEnum#> { <#=machine.checks.print(st => st.Name, ", ")#>, NONE }
+public enum <#=actEnum#> { <#=machine.acts.print(st => st.Name, ", ")#> }
+public enum <#=checkEnum#> { <#=machine.checks.print(st => st.Name, ", ")#> }
 
 ///<summary>
 ///<#=machine.Info #>
+<#=machine.comments.print(c => "///{Author}:{Content}".fmto(c), R.CR) #>
 ///</summary>
-/*<#=machine.comments.print(c => "{0}:{1}".fmt(c.Author, c.Content), R.CR) #>*/
 public sealed partial class <#=className#>
 {
 	public <#=className#>()
 	{
 		CurrentState = <#=stateEnum#>.<#=machine.states.First().Name#>;
 		LastState = CurrentState;
-		BadAct = <#=actEnum#>.NONE;
-		BadCheck = <#=checkEnum#>.NONE;
+		BadAct = null;
+		BadCheck = null;
 	}//constructor
 
 	public bool IsCheckOK {get; private set;}
@@ -90,67 +90,16 @@ public sealed partial class <#=className#>
 	public bool IsPushOK {get; private set;}
 	public <#=stateEnum#> CurrentState { get; private set; }
 	public <#=stateEnum#> LastState { get; private set; }
-	public <#=actEnum#> BadAct { get; private set; }
-	public <#=checkEnum#> BadCheck { get; private set; }
+	public <#=actEnum#>? BadAct { get; private set; }
+	public <#=checkEnum#>? BadCheck { get; private set; }
 
-	#region devices
+	#region devices checks acts
 <#
-Func<Device, string> printDevice = (z) => 
-{
-StringBuilder result = new StringBuilder();
-Func<string, StringBuilder> line = result.AppendLine;
-line("///<summary>{0}</summary>".fmt(z.Info));
-line("public {0} {1};".fmt(z.Type, z.Name));
-line("private {0} get_{1}()".fmt(z.Type, z.Name));
-line("{");
-if (z.Getter != null) {line("if ({0} == null) {{ {0}={1}; }}".fmt(z.Name, z.Getter.Replace("Type", z.Type)));}
-line("return {0};".fmt(z.Name));
-line("}");
-return result.ToString();
-};
-				write(machine.devices.print(printDevice, R.CR));
+write(machine.devices.print(printDevice, R.CR));
+write(machine.checks.print(printCheck, R.CR));
+write(machine.acts.print(printAct, R.CR));
 #>
 	#endregion
-
-	#region checks
-<#
-Func<Check, string> printCheck = (z) => 
-{ 
-		StringBuilder result = new StringBuilder();
-		Func<string, StringBuilder> line = result.AppendLine;
-		line("///<summary>{0}</summary>".fmt(z.Info));
-		if (z.Device != null) {
-			line("void check{0}()".fmt(z.Name));
-			line("{");
-			if (z.Test != null)	{line("IsCheckOK = get_{0}().{1};".fmt(z.Device, z.Test));}
-			if (z.Test == null) {line("IsCheckOK = {0} != null;".fmt(z.Device));}
-			line("}");
-		}	else {line("partial void check{0}();".fmt(z.Name));}
-		return result.ToString();
-};
-				write(machine.checks.print(printCheck, R.CR));
-#>
-	#endregion
-	
-#region acts
-<#
-Func<Act, string> printAct = (z) => 
-{ 
-		StringBuilder result = new StringBuilder();
-		Func<string, StringBuilder> line = result.AppendLine;
-		line("///<summary>{0}</summary>".fmt(z.Info));
-		if (z.Device != null) {
-			line("void act{0}()".fmt(z.Name));
-			line("{");
-			line("get_{0}().{1};".fmt(z.Device, z.Change));
-			line("IsActOK = true;");
-			line("}");
-		}	else {line("partial void act{0}();".fmt(z.Name));}
-		return result.ToString();
-};
-				write(machine.acts.print(printAct, R.CR));
-#>
-#endregion
 
 public IEnumerable<<#=pushEnum#>> availablePushes
 { get {
@@ -175,7 +124,7 @@ return result;
 
 public bool Check(<#=pushEnum#> push)
 {
-	BadCheck = <#=checkEnum#>.NONE;
+	BadCheck = null;
 	IsCheckOK = true;
 	switch (push)
 	{
@@ -204,7 +153,7 @@ if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 
 public bool Push(<#=pushEnum#> push)
 {
-	BadAct = <#=actEnum#>.NONE;
+	BadAct = null;
 	IsPushOK = Check(push);
 	if (IsPushOK == false) {return IsPushOK;}
 
@@ -249,12 +198,60 @@ if (CurrentState == <#=stateEnum#>.<#=transition.From#>)
 
 
 <#+
-  void SaveOutput(string outputFileName)
-  {
-      string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
-      string outputFilePath = Path.Combine(templateDirectory, outputFileName);
-      File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+string printDevice(Device z)
+{
+z.Set("Getter", z.Getter == null 
+? "new {Type}()".fmto(z) 
+: z.Getter.Replace("Type", z.Type));
 
-      this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
-  }
+				string s = @"///<summary>{Info}</summary>
+						public {Type} {Name};
+						private {Type} get_{Name}()
+						{
+						if ({Name} == null) {{Name}={Get(Getter)};}
+						return {Name};
+						}
+						";
+return s.fmto(z);
+}
+
+string printCheck(Check z)
+{ 
+z.Set("Check", (z.Test == null 
+? "{Device} != null" 
+: "get_{Device}().{Test}").fmto(z)
+);
+
+string s = @"///<summary>{Info}</summary>
+	void check{Name}() { IsCheckOK = {Get(Check)};}";
+
+string sPartial = @"///<summary>{Info}</summary>
+	partial void check{Name}();";
+
+return z.Device != null ? s.fmto(z) : sPartial.fmto(z);
+}
+
+string printAct(Act z)
+{ 
+string s = @"///<summary>{Info}</summary>
+	void act{Name}() { get_{Device}().{Change}; IsActOK = true;}";
+
+string sPartial = @"///<summary>{Info}</summary>
+	partial void act{Name}();";
+
+return z.Device != null ? s.fmto(z) : sPartial.fmto(z);
+}
+
+
+
+//"
+void SaveOutput(string outputFileName)
+{
+    string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+    string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+    File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+
+    this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+}
+
 #>

@@ -8,8 +8,8 @@ namespace BDB.Templating
 {
 	public class Comment: Attrz
 	{
-		public string Author;
-		public string Content;
+		public string Author { get; set; }
+		public string Content { get; set; }
 
 		internal override void Read(System.Xml.Linq.XElement src)
 		{

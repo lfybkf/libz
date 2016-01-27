@@ -52,16 +52,38 @@ namespace BDB
 		public static bool isNullable(this Type t)		{			return (t.IsGenericType) ? (t.GetGenericTypeDefinition() == typeof(Nullable<>)) : false;}//function
 		public static Type getTypeUnderNullable(this Type t)	{	return t.isNullable() ? Nullable.GetUnderlyingType(t) : t;}//function
 
-		public static string getPropertyValue(this object o, string fieldName) 
+		public static string getPropertyValue(this object o, string name) 
 		{
 			Type t = o.GetType();
-			PropertyInfo fi = t.GetProperty(fieldName);
+			PropertyInfo fi = t.GetProperty(name);
 			if (fi == null)
 			{
 				return null;
 			}//if
 
 			return fi.GetValue(o).ToString();
+		}//function
+
+		public static string getMethodValue(this object o, string name, params object[] parameters)
+		{
+			Type t = o.GetType();
+			MethodInfo mi = t.GetMethod(name);
+			if (mi == null)
+			{
+				return null;
+			}//if
+
+			string result = null;
+			try
+			{
+				object res = mi.Invoke(o, parameters);
+				if (res != null) { result = res.ToString(); }
+			}//try
+			catch
+			{
+				
+			}//catch
+			return result;
 		}//function
 	}//class
 }//ns

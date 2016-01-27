@@ -16,7 +16,8 @@ namespace BDB.Templating
 		public bool HasNot(string key) { return !attrS.ContainsKey(key); }
 		public bool HasNot(string key, string value) { return attrS.get(key) != value; }
 		public string Get(string key) { return attrS.get(key); }
-		public string Get(string key, string defaultValue) { return attrS.get(key, defaultValue); }
+		public string Gef(string key, string defaultValue) { return attrS.get(key, defaultValue); }
+		public void Set(string key, string value) { attrS[key] = value; }
 
 		internal abstract void Read(XElement src);
 

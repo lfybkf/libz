@@ -34,6 +34,11 @@ namespace UnitTest
 		{
 			throw new NotImplementedException();
 		}
+
+		internal static DevTwo Create()
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 
