@@ -9,8 +9,13 @@ namespace BDB
 {
 	public class EC
 	{
+		#region properties
 		public static IStoreSQL defaultStore;
 		public IStoreSQL store = defaultStore;
+
+		//названия статических функций для типов
+		public static string cmdDeleteOnID = "cmdDeleteOnID";
+		public static string cmdMaxID = "cmdMaxID";
 
 		public long ID;
 		public long parentID;
@@ -19,25 +24,27 @@ namespace BDB
 		public Func<EC, DbCommand> cmdSelect;
 		public string link;
 
-		private Type type;
+		public Type type;
+		//private Type type { get { return entity.with(z => z.GetType()); } }
+		#endregion
 
-		public EC(Type type)
+		public EC()
 		{
-			this.type = type;
+			
 		}//constructor
 
 		#region registry
 		public class Registry
 		{
 			public Type type;
-			public Action<IEntity, EC> BeforeLoad;
-			public Action<IEntity, EC> AfterLoad;
+			public Action<IEntity, EC> BeforeRead;
+			public Action<IEntity, EC> AfterRead;
 			public Action<IEntity, EC> BeforeSave;
 			public Action<IEntity, EC> AfterSave;
 			public Action<IEntity, EC> BeforeDelete;
 			public Action<IEntity, EC> AfterDelete;
-			public Action<IEntity, EC> BeforeRead;
-			public Action<IEntity, EC> AfterRead;
+			public Action<IEntity, EC> BeforeRecord;
+			public Action<IEntity, EC> AfterRecord;
 			public Func<IEntity, EC, bool> Validate;
 		}//struct
 
@@ -48,12 +55,15 @@ namespace BDB
 		#endregion
 
 		#region errors
-		List<Exception> errS = null;
+		private List<Exception> errS = null;
 		public void AddError(string msg) { LastError = new Exception(msg); }
 		public Exception LastError
 		{
-			get { if (errS == null) { return null; } else { return errS.LastOrDefault(); } }
-			set { if (errS == null) { errS = new List<Exception>(); } errS.Add(value); }
+			get { return errS.with(z => z.LastOrDefault());}
+			set { 
+				if (value == null) { return; } 
+				errS = errS ?? new List<Exception>(); errS.Add(value); 
+			}
 		}
 		#endregion
 
@@ -75,26 +85,27 @@ namespace BDB
 		public IEnumerable<string> ParamNames { get { return paramS == null ? new string[0] : paramS.Keys;} }
 		#endregion
 
-		bool ReadRecord(DbDataReader reader)
+		bool Record(DbDataReader reader)
 		{
 			bool IsReaded = reader.Read();
 			if (IsReaded)
 			{
-					RunAction(getRegistry(type).with(z => z.BeforeRead));
-					entity.Read(reader);
-					RunAction(getRegistry(type).with(z => z.AfterRead));
+				var reg = getRegistry(type);
+				runAction(reg.with(z => z.BeforeRecord));
+				entity.Read(reader);
+				runAction(reg.with(z => z.AfterRecord));
 			}//if
 			return IsReaded;
 		}//function
 
-		IEntity CreateEntity()
+		private IEntity createEntity()
 		{
 			return (IEntity)Activator.CreateInstance(type);
 		}//function
 
-		public bool Load()
+		public bool Read()
 		{
-			entity = CreateEntity();
+			entity = createEntity();
 			DbCommand cmd =  entity.cmdRead(this);
 			if (cmd == null) { AddError("cmdRead is null"); return false; }
 
@@ -102,10 +113,10 @@ namespace BDB
 			DbDataReader reader = null;
 			try
 			{
-				RunAction(getRegistry(type).with(z => z.BeforeLoad));
+				runAction(getRegistry(type).with(z => z.BeforeRead));
 				reader = store.OpenReader(cmd);
-				while (ReadRecord(reader)) { break; } //read one record
-				RunAction(getRegistry(type).with(z => z.AfterLoad));
+				while (Record(reader)) { break; } //read one record
+				runAction(getRegistry(type).with(z => z.AfterRead));
 			}//try
 			catch (Exception exception)
 			{
@@ -128,9 +139,17 @@ namespace BDB
 			bool result = true;
 			try
 			{
-				RunAction(getRegistry(type).with(z => z.BeforeSave));
+				runAction(getRegistry(type).with(z => z.BeforeSave));
 				result = store.Execute(cmd);
-				RunAction(getRegistry(type).with(z => z.AfterSave));
+				if (result)
+				{
+					runAction(getRegistry(type).with(z => z.AfterSave));	
+				}//if
+				else
+				{
+					LastError = store.LastError;
+				}//else
+				
 			}//try
 			catch (Exception exception)
 			{
@@ -140,18 +159,58 @@ namespace BDB
 			return result;
 		}//function
 
+
+		public long MaxID()
+		{
+			long result = 0L;
+			DbCommand cmd = getCmd(null, cmdMaxID);
+			DbDataReader reader = null;
+			try
+			{
+				reader = store.OpenReader(cmd);
+				while (reader.Read()) {
+					result = reader.GetInt64("ID");
+					break; 
+				} 
+			}//try
+			catch (Exception exception)
+			{
+				LastError = exception;
+			}//catch
+			finally { reader.Close(); reader.Dispose(); }
+			return result;
+		}//function
+
+		private DbCommand getCmd(object obj, string name)
+		{
+			var result = type.with(z => z.GetMethod(name))
+				.with(z => z.Invoke(obj, new object[] { this }));
+
+			return (result as DbCommand);
+		}//function
+
 		public bool Delete()
 		{
-			if (entity == null) { AddError("entity is null"); return false; }
-			DbCommand cmd = entity.cmdDelete(this);
+			DbCommand cmd = null;
+			if (entity != null) { cmd = entity.cmdDelete(this); }
+			else { cmd = getCmd(null, cmdDeleteOnID); }
+
 			if (cmd == null) { AddError("cmdDelete is null"); return false; }
 
 			bool result = true;
 			try
 			{
-				RunAction(getRegistry(type).with(z => z.BeforeDelete));
+				runAction(getRegistry(type).with(z => z.BeforeDelete));
 				result = store.Execute(cmd);
-				RunAction(getRegistry(type).with(z => z.AfterDelete));
+				if (result)
+				{
+					runAction(getRegistry(type).with(z => z.AfterDelete));	
+				}//if
+				else
+				{
+					LastError = store.LastError;
+				}//else
+				
 			}//try
 			catch (Exception exception)
 			{
@@ -166,17 +225,18 @@ namespace BDB
 			list = null;
 			if (cmdSelect == null) { AddError("cmdSelect is null"); return false; }
 
+			type = cmdSelect.Method.DeclaringType;
 			bool result = true;
 			DbDataReader reader = null;
 			try
 			{
 				reader = store.OpenReader(cmdSelect(this));
 				list = new HashSet<IEntity>();
-				entity = CreateEntity();
-				while (ReadRecord(reader)) 
+				entity = createEntity();
+				while (Record(reader)) 
 				{
 					list.Add(entity);
-					entity = CreateEntity();
+					entity = createEntity();
 				}//while
 			}//try
 			catch (Exception exception)
@@ -189,7 +249,7 @@ namespace BDB
 
 		}//function
 
-		void RunAction(Action<IEntity, EC> action)
+		void runAction(Action<IEntity, EC> action)
 		{
 			if (action == null) { return; }
 			action(entity, this);

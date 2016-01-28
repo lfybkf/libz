@@ -33,9 +33,13 @@ namespace BDB
 		}//function
 
 		public static void execute<TSource>(this Action<TSource> action, TSource source)
-			//where TSource : class
 		{
 			if (action != null) {action(source);}
+		}//function
+
+		public static void execute<T1, T2>(this Action<T1,T2> action, T1 arg1, T2 arg2)
+		{
+			if (action != null) { action(arg1, arg2); }
 		}//function
 
 	}//class
