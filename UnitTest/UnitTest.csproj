@@ -96,6 +96,7 @@
   <ItemGroup>
     <Content Include="MachineDialog.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Choose>

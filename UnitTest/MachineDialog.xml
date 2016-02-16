@@ -43,7 +43,9 @@
 		<!ATTLIST Comment Author CDATA #REQUIRED>
 ]>
 <ROOT>
-  <Machine Name="Dialog">
+  
+  
+  <Machine Name="Dialog" TestAttr="Колбаса">HerE
     <State Name="Created" ID="Rectangle" />
     <State Name="Ready" ID="Rectangle.6" />
     <State Name="HasData" ID="Rectangle.7" />
@@ -60,4 +62,6 @@
     <Device Name="dev1" Type="DevOne" ID="Device_0" />
     <Device Name="dev2" Type="DevTwo" ID="Device_1" Getter="DevTwo.Create()" />
   </Machine>
+  
+  <Machine Name="test">ValUE</Machine>
 </ROOT>

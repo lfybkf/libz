@@ -20,6 +20,8 @@ namespace UnitTest
 			Machine machine = map.machines.First();
 			machine.Validate();
 
+			Assert.AreEqual(machine["TestAttr"], "Колбаса");
+
 			write("==errors=======");
 			machine.errors.forEach(z => write(z));
 			write("==warning=======");

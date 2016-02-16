@@ -32,7 +32,7 @@ className = "sm{Name}".fmto(machine);
 fileName = "sm{Name}_generated.cs".fmto(machine);
 
 write("// Generated " + DateTime.Now.ToString());
-write("// Machine " + machine.Name);
+write("// Machine {Name} {TestAttr}".fmto(machine, new {TestAttr = machine["TestAttr"]}));
 write("// States.Count = {0}".fmt(machine.states.Count()));
 write("// Transitions.Count = {0}".fmt(machine.transitions.Count()));
 write("// Pushes.Count = {0}".fmt(machine.pushes.Count()));

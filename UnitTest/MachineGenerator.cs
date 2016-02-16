@@ -1,9 +1,9 @@
 ﻿
 
-// Directory = D:\Repository\libz\UnitTest
+// Directory = C:\Repository\libz\UnitTest
 // Machines.Count = 1
-// Generated 27.01.2016 3:25:27
-// Machine Dialog
+// Generated 16.02.2016 14:51:58
+// Machine Dialog Колбаса
 // States.Count = 3
 // Transitions.Count = 3
 // Pushes.Count = 3

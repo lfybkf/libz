@@ -18,12 +18,13 @@ namespace BDB.Templating
 		public string Get(string key) { return attrS.get(key); }
 		public string Gef(string key, string defaultValue) { return attrS.get(key, defaultValue); }
 		public void Set(string key, string value) { attrS[key] = value; }
+		public string this[string key] { get { return attrS.get(key); } }
 
 		internal abstract void Read(XElement src);
 
 		internal void FillContentFromAttrs(XElement src)
 		{
-			if (!src.IsEmpty) { attrS.Add(string.Empty, src.Value); }//if
+			if (src.Value.isEmpty() == false) { attrS.Add(string.Empty, src.Value); }//if
 			foreach (XAttribute attr in src.Attributes())
 			{
 				attrS.Add(attr.Name.LocalName, attr.Value); 
