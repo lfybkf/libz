@@ -262,11 +262,8 @@ namespace BDB
 			}//else
 		}//function
 
-		public static int parse(this string s, int def)
-		{
-			int z;
-			return int.TryParse(s, out z) ? z : def;
-		}//function
+		public static int parse(this string s, int def)	{	int z;	return int.TryParse(s, out z) ? z : def;}//function
+		public static string parse(this string s, string def)	{	return s ?? def;	}//function
 		#endregion
 
 		#region split
