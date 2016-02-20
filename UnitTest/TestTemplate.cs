@@ -29,5 +29,13 @@ namespace UnitTest
 
 		}//function
 
+		[TestMethod]
+		public void TestStringTemplate()
+		{
+			string tmpl = "if ({Name} > 3) { return null; } //{Age}";
+			string res = tmpl.fmto(new { Name = "Var", Age = 511 });
+			Assert.AreEqual(res, "if (Var > 3) { return null; } //511");
+
+		}//function
 	}//class
 }//ns

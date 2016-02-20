@@ -152,6 +152,9 @@ namespace BDB.Templating
 			return result;
 		}//function
 
+		//если эти символы в плейсхолдере, то это не он и его игнорируем
+		private static char[] badCharsForPlaceholder = { ' ', '\t', '\n' };
+
 		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}')
 		{
 			if (s.IndexOf(cL) < 0) { return null; }//if
@@ -159,6 +162,7 @@ namespace BDB.Templating
 			IDictionary<int, string> result = new Dictionary<int, string>();
 			char c;
 			int iL = -1;
+			string ph;
 			// "asd{ph}qwerty"
 			for (int i = 0; i < s.Length; i++)
 			{
@@ -169,14 +173,15 @@ namespace BDB.Templating
 				}//if
 				else if (c == cR && iL >= 0) //i=6
 				{
-					result.Add(iL, s.Substring(iL, i - iL + 1));
+					ph = s.Substring(iL, i - iL + 1);
+					if (badCharsForPlaceholder.Any(z => ph.Contains(z)) == false)
+					{ result.Add(iL, ph); }
 					iL = -1;
 				}//if
 			}//for
 
 			return result;
 		}//func
-
 
 		public static string fmto(this string s, params object[] oo)
 		{
