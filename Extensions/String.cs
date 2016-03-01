@@ -248,11 +248,15 @@ namespace BDB
 			Decimal z;
 			if (formatProvider == null)
 			{
-				bool OK = Decimal.TryParse(s, out z);
-				if (OK) { return z; }//if
-				OK = Decimal.TryParse(s.Replace(cPoint, cComma), out z);
-				if (OK) { return z; }//if
-				OK = Decimal.TryParse(s.Replace(cComma, cPoint), out z);
+
+				//NumberFormatInfo nf = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat;
+				NumberFormatInfo nf = CultureInfo.InvariantCulture.NumberFormat;
+				string s2 = s;
+				if (nf.CurrencyGroupSeparator != sSpace &&  s.IndexOf(cSpace) >= 0) { s2 = s.Replace(sSpace, string.Empty); }
+				if (nf.CurrencyDecimalSeparator == sPoint && s.IndexOf(cComma) >= 0) { s2 = s2.Replace(cComma, cPoint); }
+				if (nf.CurrencyDecimalSeparator == sComma && s.IndexOf(cPoint) >= 0) { s2 = s2.Replace(cPoint, cComma); }
+
+				bool OK = Decimal.TryParse(s2, out z);
 				if (OK) { return z; }//if
 				return def;
 			}//if
@@ -268,9 +272,9 @@ namespace BDB
 
 		#region split
 		const char cTab = '\t';
-		const char cSpace = ' ';
-		const char cPoint = '.';
-		const char cComma = ',';
+		const char cSpace = ' '; const string sSpace = " ";
+		const char cPoint = '.'; const string sPoint = ".";
+		const char cComma = ','; const string sComma = ",";
 		const char cColon = ':';
 		const char cSemicolon = ';';
 

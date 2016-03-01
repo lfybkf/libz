@@ -97,5 +97,15 @@ namespace UnitTest
 
 
 		}//function
+
+		[TestMethod]
+		public void TestParse()
+		{
+			Action<string> write = SimpleLogger.Instance.Info;
+			Decimal d1 = "6123.45".parse(decimal.Zero);
+			Decimal d2 = "7123,45".parse(decimal.Zero);
+			Decimal d3 = "8 123.45".parse(decimal.Zero);
+			return;
+		}//function
 	}//class
 }//ns
