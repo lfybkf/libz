@@ -94,18 +94,11 @@ namespace UnitTest
 			Assert.IsTrue("1.00".parse(Decimal.MinusOne) == 1M, "wrong decimal");
 			Assert.IsTrue("4 145.40".parse(Decimal.MinusOne) == 4145.4M, "wrong decimal");
 			Assert.IsTrue("4".parse(0) == 4, "wrong int");
+			Assert.IsTrue("6123.45".parse(Decimal.MinusOne) == 6123.45M, "wrong decimal");
+			Assert.IsTrue("7123,45".parse(Decimal.MinusOne) == 7123.45M, "wrong decimal");
+			Assert.IsTrue("8 123.45".parse(Decimal.MinusOne) == 8123.45M, "wrong decimal");
+			Assert.IsTrue("9 123,45".parse(Decimal.MinusOne) == 9123.45M, "wrong decimal");
 
-
-		}//function
-
-		[TestMethod]
-		public void TestParse()
-		{
-			Action<string> write = SimpleLogger.Instance.Info;
-			Decimal d1 = "6123.45".parse(decimal.Zero);
-			Decimal d2 = "7123,45".parse(decimal.Zero);
-			Decimal d3 = "8 123.45".parse(decimal.Zero);
-			return;
 		}//function
 	}//class
 }//ns
