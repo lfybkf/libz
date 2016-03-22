@@ -91,13 +91,31 @@ namespace UnitTest
 			Assert.IsTrue("26,01,2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2015, 01, 26)));
 			Assert.IsTrue("26/01/2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2015, 01, 26)));
 			Assert.IsTrue("ttt26.01.2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2001, 12, 31)),  "wrong date");
-			Assert.IsTrue("1.00".parse(Decimal.MinusOne) == 1M, "wrong decimal");
-			Assert.IsTrue("4 145.40".parse(Decimal.MinusOne) == 4145.4M, "wrong decimal");
-			Assert.IsTrue("4".parse(0) == 4, "wrong int");
-			Assert.IsTrue("6123.45".parse(Decimal.MinusOne) == 6123.45M, "wrong decimal");
-			Assert.IsTrue("7123,45".parse(Decimal.MinusOne) == 7123.45M, "wrong decimal");
-			Assert.IsTrue("8 123.45".parse(Decimal.MinusOne) == 8123.45M, "wrong decimal");
-			Assert.IsTrue("9 123,45".parse(Decimal.MinusOne) == 9123.45M, "wrong decimal");
+
+			Dictionary<string, decimal> testSD = new Dictionary<string, decimal>();
+			testSD.Add("1.00", 1M);
+			testSD.Add("4 145,00", 4145.0M);
+			testSD.Add("4", 4M);
+			testSD.Add("0.5", 0.5M);
+			testSD.Add("6123.45", 6123.45M);
+			testSD.Add("7 123,45", 7123.45M);
+			foreach (var item in testSD)
+			{
+				Assert.IsTrue(item.Key.parse(Decimal.MinusOne) == item.Value, "wrong decimal " + item.Key);	
+			}//for
+
+			//testSD = new Dictionary<string, decimal>();
+			testSD.Add("cdj5vj9  01vd,f 0..,0vp1==", 5901.001M);
+			testSD.Add("cdj5vj9  01vd,f 90vp", 5901.90M);
+			testSD.Add(".00", 0M);
+			testSD.Add("cdsu7vw80-v90", 78090M);
+			testSD.Add("cdj5vj9  01vd,f 9...,0vp", 5901.90M);
+			testSD.Add("156.0008", 156.0008M);
+			testSD.Add("156,00 08", 156.0008M);
+			foreach (var item in testSD)
+			{
+				Assert.IsTrue(item.Key.parseDecimal() == item.Value, "wrong decimal " + item.Key);
+			}//for
 
 		}//function
 	}//class

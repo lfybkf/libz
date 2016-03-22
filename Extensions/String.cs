@@ -24,7 +24,7 @@ namespace BDB
 		/// <param name="cL"></param>
 		/// <param name="cR"></param>
 		/// <returns></returns>
-		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}') 
+		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}')
 		{
 			if (s.IndexOf(cL) < 0) { return null; }//if
 
@@ -41,7 +41,7 @@ namespace BDB
 				}//if
 				else if (c == cR && iL >= 0) //i=6
 				{
-					result.Add(iL, s.Substring(iL, i - iL+1));
+					result.Add(iL, s.Substring(iL, i - iL + 1));
 					iL = -1;
 				}//if
 			}//for
@@ -54,12 +54,12 @@ namespace BDB
 		{
 			//получаем список плейс-холдеров
 			var phS = s.getPlaceholders();
-			if (phS == null) {return s;}
+			if (phS == null) { return s; }
 
 			#region заполняем значения плейс-холдеров
 			IDictionary<string, string> values = new Dictionary<string, string>();
 			string ph;
-			string method; 
+			string method;
 			string[] args;
 			string value;
 			int iL, iR; //номер скобок
@@ -105,7 +105,7 @@ namespace BDB
 			int iPast = 0;//end of previous placeholder
 			foreach (int iPh in phS.Keys)
 			{
-				sb.Append(s.Substring(iPast, iPh-iPast)); //before Ph
+				sb.Append(s.Substring(iPast, iPh - iPast)); //before Ph
 				sPh = phS[iPh]; //"{name}"
 				sb.Append(values.ContainsKey(sPh) ? values[sPh] : string.Empty);
 				iPast = iPh + sPh.Length;
@@ -127,7 +127,7 @@ namespace BDB
 		/// <param name="s"></param>
 		/// <param name="ss">массив, в котором искать</param>
 		/// <returns></returns>
-		public static bool inList(this string s, params string[] ss)		{return ss.Contains(s);	}//func
+		public static bool inList(this string s, params string[] ss) { return ss.Contains(s); }//func
 
 		#region substring
 		/// <summary>
@@ -137,7 +137,7 @@ namespace BDB
 		/// <param name="s"></param>
 		/// <param name="Prefix">искомая строка</param>
 		/// <returns></returns>
-		public static string after(this string s, string Prefix) 
+		public static string after(this string s, string Prefix)
 		{
 			int i = s.IndexOf(Prefix);
 			if (i >= 0)
@@ -233,15 +233,63 @@ namespace BDB
 			DateTime z;
 			if (formatProvider == null)
 			{
-				return DateTime.TryParse(s, out z) ? z : def;	
+				return DateTime.TryParse(s, out z) ? z : def;
 			}//if
 			else
 			{
-				return DateTime.TryParse(s, formatProvider, DateTimeStyles.None, out z) ? z : def;	
+				return DateTime.TryParse(s, formatProvider, DateTimeStyles.None, out z) ? z : def;
 			}//else
-			
+
 		}//function
 
+		public static Decimal parseDecimal(this string s)
+		{
+			Func<IEnumerable<char>, IEnumerable<char>> digits = (cc) => (cc.Where(ch => char.IsDigit(ch)));
+			Func<IEnumerable<char>, int> chars2int = (cc) => {
+				if (cc == null) {return 0;}
+				var digitS = digits(cc);
+				if (digitS.Any())
+				{
+					return Convert.ToInt32(new string(digitS.ToArray()));
+				}//if
+				else
+				{
+					return 0;
+				}//else
+			};
+
+			int iLen = s.Length;
+			if (iLen == 0) { return 0; }//if
+
+			IEnumerable<char> ccBig, ccPart;
+			int iSeparator = s.IndexOfAny(new char[] { cComma, cPoint });
+			if (iSeparator == 0)
+			{
+				ccBig = null;
+				ccPart = s.Skip(1);
+			}//if
+			else if (iSeparator == iLen - 1 || iSeparator < 0)
+			{
+				ccBig = s;
+				ccPart = null;
+			}//if
+			else
+			{
+				ccBig = s.Take(iSeparator);
+				ccPart = s.Skip(iSeparator + 1);
+			}//if
+
+			int iBig = chars2int(ccBig);
+			int iPart = chars2int(ccPart);
+
+			Decimal result = iBig;
+			if (iPart > 0)
+			{
+				result += (decimal)(iPart / (Math.Pow(10, digits(ccPart).Count())));
+			}//if
+
+			return result;
+		}//function
 
 		public static Decimal parse(this string s, Decimal def, IFormatProvider formatProvider = null)
 		{
@@ -252,7 +300,7 @@ namespace BDB
 				//NumberFormatInfo nf = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat;
 				NumberFormatInfo nf = CultureInfo.InvariantCulture.NumberFormat;
 				string s2 = s;
-				if (nf.CurrencyGroupSeparator != sSpace &&  s.IndexOf(cSpace) >= 0) { s2 = s.Replace(sSpace, string.Empty); }
+				if (nf.CurrencyGroupSeparator != sSpace && s.IndexOf(cSpace) >= 0) { s2 = s.Replace(sSpace, string.Empty); }
 				if (nf.CurrencyDecimalSeparator == sPoint && s.IndexOf(cComma) >= 0) { s2 = s2.Replace(cComma, cPoint); }
 				if (nf.CurrencyDecimalSeparator == sComma && s.IndexOf(cPoint) >= 0) { s2 = s2.Replace(cPoint, cComma); }
 
@@ -266,8 +314,8 @@ namespace BDB
 			}//else
 		}//function
 
-		public static int parse(this string s, int def)	{	int z;	return int.TryParse(s, out z) ? z : def;}//function
-		public static string parse(this string s, string def)	{	return s ?? def;	}//function
+		public static int parse(this string s, int def) { int z; return int.TryParse(s, out z) ? z : def; }//function
+		public static string parse(this string s, string def) { return s ?? def; }//function
 		#endregion
 
 		#region split
@@ -281,7 +329,7 @@ namespace BDB
 		/// <summary>
 		/// split : двоеточие
 		/// </summary>
-		public static string[] splitColon(this string s)	{	return s.Split(cColon);	}//function
+		public static string[] splitColon(this string s) { return s.Split(cColon); }//function
 		/// <summary>
 		/// split , запятая
 		/// </summary>

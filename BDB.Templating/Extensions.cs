@@ -30,6 +30,16 @@ namespace BDB.Templating
 			return string.Join(delimiter, source.Select(z => toString(z)));
 		}//function
 
+		public static string printNewLine<T>(this IEnumerable<T> source, Func<T, string> toString)
+		{
+			return source.print(toString, Environment.NewLine);
+		}//function
+
+		public static string printComma<T>(this IEnumerable<T> source, Func<T, string> toString)
+		{
+			return source.print(toString, ", ");
+		}//function
+
 		/// <summary>
 		/// формат строки
 		/// usage: "Value1={0}, Value2={1}".fmt(Value1, Value2)
