@@ -121,6 +121,16 @@ namespace BDB
 		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
 		public static bool isEmpty(this string s) { return string.IsNullOrWhiteSpace(s); }
 
+
+		/// <summary>
+		/// Contains IgnoreCase
+		/// </summary>
+		/// <returns></returns>
+		public static bool containsIgnoreCase(this string s, string what)
+		{
+			return s.IndexOf(what, StringComparison.OrdinalIgnoreCase) >= 0;
+		}
+
 		/// <summary>
 		/// есть ли строка в массиве
 		/// </summary>

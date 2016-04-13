@@ -9,6 +9,14 @@ using RazorEngine.Templating;
 
 namespace BDB.Web
 {
+	public class CAI
+	{
+		public string Controller;
+		public string Action;
+		public string ID;
+	}//class
+
+
 	public abstract class RequestHandlerBase
 	{
 		protected IDictionary<string, object> Environment { get; private set; }
@@ -48,12 +56,12 @@ namespace BDB.Web
 			{
 				var template = new io.StreamReader(viewPath).ReadToEnd();
 				var razor = RazorEngine.Engine.Razor;
-				var result = razor.RunCompile(template, null, model);
+				var result = razor.RunCompile(template, viewPath, null, model);
 				await writer.WriteAsync(result);
 			}
 		}
 
-		protected Route GetRoute(string routeName)
+		protected Route getRoute(string routeName)
 		{
 			var route = this.Routes.FirstOrDefault(x => x.Name.ToLower() == routeName.ToLower());
 			if (route == null)
@@ -73,13 +81,14 @@ namespace BDB.Web
 			return (IView)actionMethod.Invoke(controllerInstance, new object[] { });
 		}
 
-		protected string[] GetControllerAndAction()
+		protected CAI parsePath()
 		{
-			var result = new string[2];
+			var result = new CAI();
 			var requestPath = this.RequestPath.Substring(1).Split('/');
 
-			result[0] = requestPath[0];
-			result[1] = (requestPath.Length > 1) ? requestPath[1] : "Index";
+			result.Controller = requestPath[0];
+			result.Action = (requestPath.Length > 1) ? requestPath[1] : null;
+			result.ID = (requestPath.Length > 2) ? requestPath[2] : null;
 
 			return result;
 		}

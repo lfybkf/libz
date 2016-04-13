@@ -12,8 +12,8 @@ namespace BDB.Web
 
 		public async override Task<object> Handle()
 		{
-			var controllerAndAction = base.GetControllerAndAction();
-			var route = base.GetRoute(controllerAndAction[0]);
+			var cai = base.parsePath();
+			var route = base.getRoute(cai.Controller);
 			var view = base.InvokeController(route.Controller, controllerAndAction[1]);
 			var viewPath = base.GetViewPath(controllerAndAction[0], view.ViewName);
 			await base.WriteResponse(viewPath, view.Model);
