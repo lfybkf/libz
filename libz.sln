@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Kommand", "Kommand\BDB.Kommand.csproj", "{3891C999-1688-4A5B-989A-F5E7E79CE115}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Extensions", "Extensions\BDB.Extensions.csproj", "{902E99C0-1294-4F7F-8624-70CAC2C84872}"
@@ -12,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Bently", "Bently\BDB.Bently.csproj", "{98D120A6-86BF-4C93-A1DE-9C8332767892}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Templating", "BDB.Templating\BDB.Templating.csproj", "{45D2BD49-8914-4A4A-B470-C65DEA7E0952}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Web", "BDB.Web\BDB.Web.csproj", "{7DEA5A66-5183-4239-8C73-142EE3FDAE39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +47,10 @@ Global
 		{45D2BD49-8914-4A4A-B470-C65DEA7E0952}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45D2BD49-8914-4A4A-B470-C65DEA7E0952}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45D2BD49-8914-4A4A-B470-C65DEA7E0952}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DEA5A66-5183-4239-8C73-142EE3FDAE39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DEA5A66-5183-4239-8C73-142EE3FDAE39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DEA5A66-5183-4239-8C73-142EE3FDAE39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DEA5A66-5183-4239-8C73-142EE3FDAE39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
