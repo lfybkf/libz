@@ -14,8 +14,8 @@ namespace BDB.Web
 		{
 			var cai = base.parsePath();
 			var route = base.getRoute(cai.Controller);
-			var view = base.InvokeController(route.Controller, controllerAndAction[1]);
-			var viewPath = base.GetViewPath(controllerAndAction[0], view.ViewName);
+			var view = base.InvokeController(route.Controller, cai.Action);
+			var viewPath = base.GetViewPath(cai.Controller, view.ViewName);
 			await base.WriteResponse(viewPath, view.Model);
 
 			return Task.FromResult<object>(null);
