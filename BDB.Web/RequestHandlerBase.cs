@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using io = System.IO;
 using RazorEngine;
 using RazorEngine.Templating;
+using BDB;
 
 namespace BDB.Web
 {
@@ -19,6 +19,9 @@ namespace BDB.Web
 
 	public abstract class RequestHandlerBase
 	{
+		public static Action<string> Log = Console.WriteLine;
+		static System.Text.Encoding encoding = System.Text.Encoding.Default;
+
 		protected IDictionary<string, object> Environment { get; private set; }
 		protected IEnumerable<Route> Routes { get; private set; }
 
@@ -52,11 +55,22 @@ namespace BDB.Web
 		{
 			if (!io.File.Exists(viewPath)) { throw new Exception("View not found. Path: " + viewPath); }
 
-			using (var writer = new io.StreamWriter((io.Stream)this.Environment[OWIN.ResponseBody]))
+			Log(string.Format("WriteResponse. {0}.{1}", viewPath, model));
+
+			using (var writer = new io.StreamWriter((io.Stream)this.Environment[OWIN.ResponseBody], encoding ) )
 			{
-				var template = new io.StreamReader(viewPath).ReadToEnd();
-				var razor = RazorEngine.Engine.Razor;
-				var result = razor.RunCompile(template, viewPath, null, model);
+				string result = string.Empty;
+				try
+				{
+					var template = new io.StreamReader(viewPath).ReadToEnd();
+					var razor = RazorEngine.Engine.Razor;
+					result = razor.RunCompile(template, viewPath, null, model);
+				}//try
+				catch (Exception exception)
+				{
+					Log(exception.Message);
+					result = exception.Message + "\r\n" + exception.StackTrace;
+				}//catch
 				await writer.WriteAsync(result);
 			}
 		}
