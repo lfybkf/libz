@@ -11,15 +11,20 @@ namespace BDB.Web
 {
 	public class CAI
 	{
-		public string Controller;
+		public string ControllerMark;
 		public string Action;
 		public string ID;
+
+		public override string ToString()
+		{
+			return "{0}/{1}/{2}".fmt(ControllerMark, Action, ID ?? "not");
+		}
 	}//class
 
 
 	public abstract class RequestHandlerBase
 	{
-		public static Action<string> Log = Console.WriteLine;
+		public static Action<object> Log = Console.WriteLine;
 		static System.Text.Encoding encoding = System.Text.Encoding.Default;
 
 		protected IDictionary<string, object> Environment { get; private set; }
@@ -46,17 +51,15 @@ namespace BDB.Web
 
 		public abstract Task<object> Handle();
 
-		protected string GetViewPath(string controller, string viewName)
+		protected string getViewPath(string controller, string viewName)
 		{
-			return io.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "View", controller, viewName + ".cshtml");
+			return io.Path.Combine(AppDomain.CurrentDomain.BaseDirectory
+				, VIEW.view, controller, viewName + ".cshtml");
 		}
 
 		protected async Task WriteResponse(string viewPath, object model)
 		{
 			if (!io.File.Exists(viewPath)) { throw new Exception("View not found. Path: " + viewPath); }
-
-			Log(string.Format("WriteResponse. {0}.{1}", viewPath, model));
-
 			using (var writer = new io.StreamWriter((io.Stream)this.Environment[OWIN.ResponseBody], encoding ) )
 			{
 				string result = string.Empty;
@@ -100,9 +103,9 @@ namespace BDB.Web
 			var result = new CAI();
 			var requestPath = this.RequestPath.Substring(1).Split('/');
 
-			result.Controller = requestPath[0];
-			result.Action = (requestPath.Length > 1) ? requestPath[1] : null;
-			result.ID = (requestPath.Length > 2) ? requestPath[2] : null;
+			result.ControllerMark = requestPath[0].ToLower();
+			result.Action = (requestPath.Length > 1) ? requestPath[1].ToLower() : VIEW.index;
+			result.ID = (requestPath.Length > 2) ? requestPath[2].ToLower() : null;
 
 			return result;
 		}

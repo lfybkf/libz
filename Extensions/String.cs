@@ -335,6 +335,7 @@ namespace BDB
 		const char cComma = ','; const string sComma = ",";
 		const char cColon = ':';
 		const char cSemicolon = ';';
+		const char cSlash = '/';
 
 		/// <summary>
 		/// split : двоеточие
@@ -364,7 +365,10 @@ namespace BDB
 		/// split line
 		/// </summary>
 		public static string[] splitLine(this string s) { return s.Split(Environment.NewLine.ToCharArray()); }//function
-
+		/// <summary>
+		/// split /
+		/// </summary>
+		public static string[] splitSlash(this string s) { return s.Split('/'); }//function
 		#endregion
 	}//class
 }//ns
