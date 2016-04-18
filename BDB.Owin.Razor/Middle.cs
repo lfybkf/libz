@@ -68,7 +68,7 @@ namespace BDB.Owin.Razor
 			getViewFromUri getView = routes[routeName];
 			if (getView == null) { LastError = "no function view"; return; }
 			View view = getView(ctx);
-			if (view == null) { LastError = "view is null"; return; }
+			if (view == null) { LastError = LastError ?? "view is null"; return; }
 			string templatePath = TemplatePathBase.addToPath(view.Name) + Ext;
 			if (io.File.Exists(templatePath) == false) { LastError = templatePath + " no exists"; return; }
 			
