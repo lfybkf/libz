@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using io = System.IO;
 using text = System.Text;
+using json = System.Web.Script.Serialization;
 using RazorEngine;
 using RazorEngine.Templating;
 using BDB;
@@ -46,7 +47,7 @@ namespace BDB.Owin.Razor
 		public async override Task Invoke(IOwinContext context)
 		{
 			ctx = context;
-			if (ctx.Request.Method == "GET")
+			if (ctx.Request.Method == WEB.GET)
 			{
 				doGet();
 				if (LastError.isEmpty() == false)
@@ -69,22 +70,27 @@ namespace BDB.Owin.Razor
 			if (getView == null) { LastError = "no function view"; return; }
 			View view = getView(ctx);
 			if (view == null) { LastError = LastError ?? "view is null"; return; }
-			string templatePath = TemplatePathBase.addToPath(view.Name) + Ext;
-			if (io.File.Exists(templatePath) == false) { LastError = templatePath + " no exists"; return; }
-			
-			try
+
+			ctx.Response.Headers[CONTENT_TYPE.Header] = view.ContentType;
+			string content = string.Empty;
+			if (view.ContentType == CONTENT_TYPE.HTML)
 			{
-				ctx.Response.Headers["Content-Type"] = "text/html";
+				string templatePath = TemplatePathBase.addToPath(view.Name) + Ext;
+				if (io.File.Exists(templatePath) == false) { LastError = templatePath + " no exists"; return; }
 				string template = io.File.ReadAllText(templatePath);
 				var razor = RazorEngine.Engine.Razor;
-				var html = razor.RunCompile(template, view.Name, null, view.Model);
-				await ctx.Response.Body.WriteAsync(encoding.GetBytes(html), 0, html.Length);
-			}//try
-			catch (Exception exception)
+				content = razor.RunCompile(template, view.Name, null, view.Model);
+			}//if
+			else if (view.ContentType == CONTENT_TYPE.JSON)
 			{
-				LastError = exception.Message + "\r\n" + exception.StackTrace;
-			}//catch
-			
+				var serializer = new json.JavaScriptSerializer();
+				content = serializer.Serialize(view.Model);
+			}//if
+			else
+			{
+				content = view.Model.ToString();
+			}//else
+			await ctx.Response.Body.WriteAsync(encoding.GetBytes(content), 0, content.Length);
 		}
 	}//class
 }//namespace
