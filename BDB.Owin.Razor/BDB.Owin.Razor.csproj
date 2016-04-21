@@ -52,6 +52,7 @@
     <Compile Include="MiddlePathFilter.cs" />
     <Compile Include="MiddleRazor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Route.cs" />
     <Compile Include="View.cs" />
     <Compile Include="WebConst.cs" />
   </ItemGroup>

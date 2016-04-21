@@ -27,7 +27,6 @@ namespace BDB.Owin.Razor
 			}
 		}
 
-		public delegate View getViewFromUri(IOwinContext context);
 		public const string Mark = "MiddleRazor";
 		public static string TemplatePathBase = Environment.CurrentDirectory.addToPath("View");
 		public static text.Encoding encoding = text.Encoding.Default;
@@ -36,10 +35,14 @@ namespace BDB.Owin.Razor
 		private const string Ext = ".cshtml";
 		private IOwinContext ctx;
 
-		private static IDictionary<string, getViewFromUri> routes = new Dictionary<string, getViewFromUri>();
-		public static void AddRoute(string routeName, getViewFromUri func)
+		private static List<Route> routes = new List<Route>();
+		public static void AddRoute(Route route)
 		{
-			routes[routeName] = func;
+			if (routes.Any(z => z.Name == route.Name))
+			{
+				throw new Exception("Not unique route with Name=" + route.Name);
+			}//if
+			routes.Add(route);
 		}//function
 
 		public MiddleRazor(OwinMiddleware next) : base(next) { }
@@ -65,10 +68,9 @@ namespace BDB.Owin.Razor
 			string uri = ctx.Request.Path.Value;
 			string routeName = getRouteFromUri(uri);
 			if (routeName.isEmpty()) { LastError = "cant get route from uri"; return; }
-			if (routes.ContainsKey(routeName) == false) { LastError = routeName + " is not here"; return; }
-			getViewFromUri getView = routes[routeName];
-			if (getView == null) { LastError = "no function view"; return; }
-			View view = getView(ctx);
+			var route = routes.FirstOrDefault(z => z.Name == routeName);
+			if (route == null) { LastError = routeName + " is not here"; return; }
+			View view = route.getView(ctx);
 			if (view == null) { LastError = LastError ?? "view is null"; return; }
 
 			ctx.Response.Headers[CONTENT_TYPE.Header] = view.ContentType;
