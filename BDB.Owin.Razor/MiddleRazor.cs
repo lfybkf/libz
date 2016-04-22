@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using io = System.IO;
 using text = System.Text;
-using json = System.Web.Script.Serialization;
-using RazorEngine;
-using RazorEngine.Templating;
 using BDB;
 
 
@@ -28,11 +25,8 @@ namespace BDB.Owin.Razor
 		}
 
 		public const string Mark = "MiddleRazor";
-		public static string TemplatePathBase = Environment.CurrentDirectory.addToPath("View");
 		public static text.Encoding encoding = text.Encoding.Default;
 		public static Func<string, string> getRouteFromUri;
-
-		private const string Ext = ".cshtml";
 		private IOwinContext ctx;
 
 		private static List<Route> routes = new List<Route>();
@@ -70,28 +64,11 @@ namespace BDB.Owin.Razor
 			if (routeName.isEmpty()) { LastError = "cant get route from uri"; return; }
 			var route = routes.FirstOrDefault(z => z.Name == routeName);
 			if (route == null) { LastError = routeName + " is not here"; return; }
-			View view = route.getView(ctx);
+			View view = route.getView(ctx); 
 			if (view == null) { LastError = LastError ?? "view is null"; return; }
-
 			ctx.Response.Headers[CONTENT_TYPE.Header] = view.ContentType;
-			string content = string.Empty;
-			if (view.ContentType == CONTENT_TYPE.HTML)
-			{
-				string templatePath = TemplatePathBase.addToPath(view.Name) + Ext;
-				if (io.File.Exists(templatePath) == false) { LastError = templatePath + " no exists"; return; }
-				string template = io.File.ReadAllText(templatePath);
-				var razor = RazorEngine.Engine.Razor;
-				content = razor.RunCompile(template, view.Name, null, view.Model);
-			}//if
-			else if (view.ContentType == CONTENT_TYPE.JSON)
-			{
-				var serializer = new json.JavaScriptSerializer();
-				content = serializer.Serialize(view.Model);
-			}//if
-			else
-			{
-				content = view.Model.ToString();
-			}//else
+			string content = view.Parse();
+			if (content.isEmpty()) { LastError = LastError ?? "view is not parsed "; return; }
 			await ctx.Response.Body.WriteAsync(encoding.GetBytes(content), 0, content.Length);
 		}
 	}//class
