@@ -13,6 +13,7 @@ namespace BDB.Owin.Razor
 	{
 		public static string TemplatePathBase = Environment.CurrentDirectory.addToPath("View");
 		private const string Ext = ".cshtml";
+		private Lazy<json.JavaScriptSerializer> serializer = new Lazy<json.JavaScriptSerializer>();
 
 		public string ContentType = CONTENT_TYPE.HTML;
 		public string Name { get; set; }
@@ -21,7 +22,7 @@ namespace BDB.Owin.Razor
 
 		public string Parse()
 		{
-			Console.WriteLine("View is parsing - {0}", Name);
+			//Console.WriteLine("View is parsing - {0}", Name);
 			string result = string.Empty;
 			if (ContentType == CONTENT_TYPE.HTML)
 			{
@@ -33,8 +34,7 @@ namespace BDB.Owin.Razor
 			}//if
 			else if (ContentType == CONTENT_TYPE.JSON)
 			{
-				var serializer = new json.JavaScriptSerializer();
-				result = serializer.Serialize(Model);
+				result = serializer.Value.Serialize(Model);
 			}//if
 			else
 			{

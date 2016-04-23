@@ -51,7 +51,6 @@ namespace BDB.Owin.Razor
 				{
 					Console.WriteLine(LastError);	
 				}//if
-				
 			}//if
 			await Next.Invoke(context);
 		}
@@ -68,6 +67,7 @@ namespace BDB.Owin.Razor
 			if (view == null) { LastError = LastError ?? "view is null"; return; }
 			ctx.Response.Headers[CONTENT_TYPE.Header] = view.ContentType;
 			string content = view.Parse();
+			//Console.WriteLine("{0} is parsed", view.Name);
 			if (content.isEmpty()) { LastError = LastError ?? "view is not parsed "; return; }
 			await ctx.Response.Body.WriteAsync(encoding.GetBytes(content), 0, content.Length);
 		}
