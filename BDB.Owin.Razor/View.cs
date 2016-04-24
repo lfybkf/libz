@@ -42,5 +42,18 @@ namespace BDB.Owin.Razor
 			}//else
 			return result;
 		}//function
+
+		public static View CreateTEXT(object model)
+		{
+			return new View { ContentType = CONTENT_TYPE.TEXT, Model = model };
+		}//function
+		public static View CreateJSON(object model)
+		{
+			return new View { ContentType = CONTENT_TYPE.JSON, Model = model };
+		}//function
+		public static View CreateUrl(object model)
+		{
+			return new View { ContentType = CONTENT_TYPE.Url, Model = model };
+		}//function
 	}//class
 }//namespace

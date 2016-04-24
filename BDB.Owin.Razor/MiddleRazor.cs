@@ -65,6 +65,14 @@ namespace BDB.Owin.Razor
 			if (route == null) { LastError = routeName + " is not here"; return; }
 			View view = route.getView(ctx); 
 			if (view == null) { LastError = LastError ?? "view is null"; return; }
+			if (view.ContentType == CONTENT_TYPE.Url)
+			{
+				var redirectTo = view.Model.ToString();
+				Console.WriteLine("redirected to {0}".fmt(redirectTo));
+				ctx.Response.Redirect(redirectTo);
+				return;
+			}//if
+
 			ctx.Response.Headers[CONTENT_TYPE.Header] = view.ContentType;
 			string content = view.Parse();
 			//Console.WriteLine("{0} is parsed", view.Name);

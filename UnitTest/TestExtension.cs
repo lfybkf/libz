@@ -48,6 +48,15 @@ namespace UnitTest
 		}//function
 
 		[TestMethod]
+		public void TestTranslate()
+		{
+			string s = "СП2";
+			Assert.AreEqual(s.translate("СП2", "SP4"), "SP4");
+			Assert.AreEqual(s.translate("СП2", "SP"), "SP2");
+		}//function
+
+
+		[TestMethod]
 		public void TestPropis()
 		{
 			string s = "сто двадцать";

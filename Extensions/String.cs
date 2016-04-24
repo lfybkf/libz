@@ -178,6 +178,18 @@ namespace BDB
 			else
 				return string.Empty;
 		}//func
+
+
+		public static string translate(this string input, string source, string destination)
+		{
+			StringBuilder result = new StringBuilder(input);
+			int minLength = Math.Min(source.Length, destination.Length);
+			for (int i = 0; i < minLength; i++)
+			{
+				result.Replace(source[i], destination[i]);
+			}
+			return result.ToString();
+		}//function
 		#endregion
 
 		#region add

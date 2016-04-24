@@ -13,6 +13,7 @@ namespace BDB.Owin.Razor
 		public const string JSON = "application/json";
 		public const string TEXT = "text/plain";
 		public const string XML = "application/xml";
+		public const string Url = "Url";
 	}//class
 
 	public static class WEB
