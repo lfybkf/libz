@@ -12,7 +12,7 @@ namespace UnitTest
 		[TestMethod]
 		public void TestHelpers()
 		{
-			string link = "СП".tagLink("/Dog", "Org", "СП"); //.addSlash("Index", "CG")
+			string link = "СП".tagLink("/Dog"); //.addSlash("Index", "CG")
 			string tr = "td".tagThem("Код", "Номер");
 			return;
 		}

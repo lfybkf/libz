@@ -13,17 +13,15 @@ namespace BDB.Owin.Razor
 			if (tag == null || args.Any() == false)
 				return string.Empty;
 
-			return string.Join(string.Empty
-				, args.Select(z => "<{0}>{1}</{0}>".fmt(tag, z.ToString())));
+			return string.Join(string.Empty, args.Select(z => "<{0}>{1}</{0}>".fmt(tag, z.ToString())));
 		}//function
 
-		public static string tagLink(this string what, params string[] args)
+		public static string tagLink(this string what, string href, string clazz = null)
 		{
 			if (what == null)
 				return string.Empty;
 
-			string href = string.Join("/", args);
-			string result = "<a href='{0}'>{1}</a>".fmt(href, what);
+			string result = clazz.isEmpty() ? "<a href='{1}'>{0}</a>".fmt(what, href) : "<a href='{1}' class='{2}'>{0}</a>".fmt(what, href, clazz);
 			return result;
 		}//function
 
