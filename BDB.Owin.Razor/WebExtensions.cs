@@ -8,12 +8,18 @@ namespace BDB.Owin.Razor
 {
 	public static class WebExtensions
 	{
-		public static string tagThem(this string tag, params object[] args)
+		public static string tagIt(this string tag, string what, string clazz = null)
 		{
-			if (tag == null || args.Any() == false)
-				return string.Empty;
+			if (tag == null) { return string.Empty; }
 
-			return string.Join(string.Empty, args.Select(z => "<{0}>{1}</{0}>".fmt(tag, z.ToString())));
+			string result = clazz.isEmpty() ? "<{1}>{0}</{1}>".fmt(what, tag) : "<{1} class='{2}'>{0}</{1}>".fmt(what, tag, clazz);
+			return result;
+		}//function
+
+		public static string tagThem(this string tag, params object[] what)
+		{
+			if (tag == null || what.Any() == false) { return string.Empty; }
+			return string.Join(string.Empty, what.Select(z => "<{0}>{1}</{0}>".fmt(tag, z.ToString())));
 		}//function
 
 		public static string tagLink(this string what, string href, string clazz = null)
