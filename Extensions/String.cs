@@ -120,15 +120,25 @@ namespace BDB
 		/// <summary>string not IsNullOrWhiteSpace</summary>
 		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
 		public static bool isEmpty(this string s) { return string.IsNullOrWhiteSpace(s); }
+		public static string whenEmpty(this string s, string def)
+		{
+			return string.IsNullOrWhiteSpace(s) ? def : s;
+		}
+
 
 
 		/// <summary>
 		/// Contains IgnoreCase
 		/// </summary>
 		/// <returns></returns>
-		public static bool containsIgnoreCase(this string s, string what)
+		public static bool containsCI(this string s, string what)
 		{
 			return s.IndexOf(what, StringComparison.OrdinalIgnoreCase) >= 0;
+		}
+
+		public static bool equalCI(this string s, string what)
+		{
+			return string.Compare(s, what, true) == 0;
 		}
 
 		/// <summary>
