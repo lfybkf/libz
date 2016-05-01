@@ -11,17 +11,32 @@ namespace BDB
 {
 	public class SqlCE: IStoreSQL
 	{
-		SqlCeConnection NewConnection { get { return new SqlCeConnection(_ConnectionString ?? defaultConnectionString); } }
-		public static string defaultConnectionString;
+		public string Name
+		{
+			set {
+				string file = System.IO.Directory.EnumerateFiles(
+					Environment.CurrentDirectory,
+					value + ".sdf",
+					System.IO.SearchOption.AllDirectories).FirstOrDefault();
+				File = file;
+			}
+		}
 		string _ConnectionString;
-		public string File	{ set { _ConnectionString = "Data Source=File;Persist Security Info=False;".Replace("File", value); } }
-		public string ConnectionString	{ set { _ConnectionString = value; } }
+		public string ConnectionString { set { _ConnectionString = value; } get { return _ConnectionString; } }
+		SqlCeConnection NewConnection { get { return new SqlCeConnection(_ConnectionString); } }
+		public string File { set { if (value != null) { _ConnectionString = "Data Source={0};Persist Security Info=False;".fmt(value); } } }
+
 		static Exception exceptionLast = null;
 		public Exception LastError { get { return exceptionLast; } }
 		public DbCommand getCommand() { return new SqlCeCommand(); }
 		public DbParameter getParameter() { return new SqlCeParameter(); }
 
-		public bool TestConnection(string testConnectionString) { try { var c = new SqlCeConnection(testConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
+		public bool TestConnection() { try { var c = new SqlCeConnection(ConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
+
+		public SqlCE(string Name)
+		{
+			this.Name = Name;
+		}//constructor
 
 		public bool Execute(DbCommand cmd)
 		{

@@ -12,10 +12,13 @@ namespace BDB
 {
 	public class SqlExpress: IStoreSQL
 	{
-		public static string defaultConnectionString;
+		public string Name
+		{
+			set { ConnectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog={0};Integrated Security=True".fmt(value) ; }
+		}
 		string _ConnectionString;
-		public string ConnectionString { set { _ConnectionString = value; } }
-		SqlConnection NewConnection { get { return new SqlConnection(_ConnectionString ?? defaultConnectionString); } }
+		public string ConnectionString { set { _ConnectionString = value; } get { return _ConnectionString; } }
+		SqlConnection NewConnection { get { return new SqlConnection(_ConnectionString); } }
 
 		static Exception exceptionLast = null;
 		public Exception LastError { get { return exceptionLast; } }
@@ -24,7 +27,7 @@ namespace BDB
 		public DbCommand getCommand() { return new SqlCommand(); }
 		public DbParameter getParameter() { return new SqlParameter(); }
 
-		public bool TestConnection(string testConnectionString) { try { var c = new SqlConnection(testConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
+		public bool TestConnection() { try { var c = new SqlConnection(ConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
 
 
 		public bool Execute(DbCommand cmd)
@@ -71,6 +74,5 @@ namespace BDB
 			return Ret;
 
 		}
-
 	}//class
 }//ns
