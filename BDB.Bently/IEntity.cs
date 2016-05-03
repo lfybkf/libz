@@ -18,5 +18,6 @@ namespace BDB
 		DbCommand cmdRead(EC entityContext);
 		DbCommand cmdDelete(EC entityContext);
 		bool Read(DbDataReader ddr);
-	}//class
+	}//interface
+
 }//ns

@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Kommand", "Kommand\BDB.Kommand.csproj", "{3891C999-1688-4A5B-989A-F5E7E79CE115}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Kommand", "BDB.Kommand\BDB.Kommand.csproj", "{3891C999-1688-4A5B-989A-F5E7E79CE115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Extensions", "Extensions\BDB.Extensions.csproj", "{902E99C0-1294-4F7F-8624-70CAC2C84872}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Extensions", "BDB.Extensions\BDB.Extensions.csproj", "{902E99C0-1294-4F7F-8624-70CAC2C84872}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Propis", "Propis\BDB.Propis.csproj", "{0113A03D-DBA1-4418-A749-F4A9B274A023}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Propis", "BDB.Propis\BDB.Propis.csproj", "{0113A03D-DBA1-4418-A749-F4A9B274A023}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{94E24404-AFD4-4446-ABD9-C107785A3D1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Bently", "Bently\BDB.Bently.csproj", "{98D120A6-86BF-4C93-A1DE-9C8332767892}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Bently", "BDB.Bently\BDB.Bently.csproj", "{98D120A6-86BF-4C93-A1DE-9C8332767892}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDB.Templating", "BDB.Templating\BDB.Templating.csproj", "{45D2BD49-8914-4A4A-B470-C65DEA7E0952}"
 EndProject

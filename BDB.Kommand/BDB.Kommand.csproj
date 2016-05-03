@@ -49,7 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Extensions\BDB.Extensions.csproj">
+    <ProjectReference Include="..\BDB.Extensions\BDB.Extensions.csproj">
       <Project>{902e99c0-1294-4f7f-8624-70cac2c84872}</Project>
       <Name>BDB.Extensions</Name>
     </ProjectReference>
