@@ -40,13 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Act.cs" />
+    <Compile Include="Guard.cs" />
     <Compile Include="Attrz.cs" />
     <Compile Include="AttrzME.cs" />
-    <Compile Include="Check.cs" />
     <Compile Include="Comment.cs" />
     <Compile Include="Const.cs" />
-    <Compile Include="Device.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Machine.cs" />

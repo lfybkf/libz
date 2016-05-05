@@ -11,50 +11,38 @@ namespace BDB.Templating
 {
 	public class Machine: AttrzME
 	{
-		private List<State> _states = new List<State>();
-		private List<Transition> _transitions = new List<Transition>();
-		private List<Act> _acts = new List<Act>();
-		private List<Check> _checks = new List<Check>();
-		private List<Device> _devices = new List<Device>();
-		private List<Push> _pushes = new List<Push>();
+		private List<State> states = new List<State>();
+		private List<Transition> transitions = new List<Transition>();
+		private List<Guard> guards = new List<Guard>();
+		private List<Push> pushes = new List<Push>();
 
-		public IEnumerable<State> states { get { return _states; } }
-		public IEnumerable<Transition> transitions { get { return _transitions; } }
-		public IEnumerable<Act> acts { get { return _acts; } }
-		public IEnumerable<Check> checks { get { return _checks; } }
-		public IEnumerable<Device> devices { get { return _devices; } }
-		public IEnumerable<Push> pushes { get { return _pushes; } }
+		public IEnumerable<State> States { get { return states; } }
+		public IEnumerable<Transition> Transitions { get { return transitions; } }
+		public IEnumerable<Guard> Guards { get { return guards; } }
+		public IEnumerable<Push> Pushes { get { return pushes; } }
 
-		public State getState(string name) {return states.FirstOrDefault(z => z.Name == name);}
-		public Act getAct(string name) { return acts.FirstOrDefault(z => z.Name == name); }
-		public Check getCheck(string name) { return checks.FirstOrDefault(z => z.Name == name); }
-		public Device getDevice(string name) { return devices.FirstOrDefault(z => z.Name == name); }
-		public Push getPush(string name) { return pushes.FirstOrDefault(z => z.Name == name); }
+		public State getState(string name) {return States.FirstOrDefault(z => z.Name == name);}
+		public Guard getGuard(string name) { return Guards.FirstOrDefault(z => z.Name == name); }
+		public Push getPush(string name) { return Pushes.FirstOrDefault(z => z.Name == name); }
 
 		internal override void Read(XElement src)
 		{
 			base.Read(src);
 
-			FillListFromXlist<State>(_states, src.Elements(R.STATE));
-			FillListFromXlist<Transition>(_transitions, src.Elements(R.TRANSITION));
-			FillListFromXlist<Act>(_acts, src.Elements(R.ACT));
-			FillListFromXlist<Check>(_checks, src.Elements(R.CHECK));
-			FillListFromXlist<Device>(_devices, src.Elements(R.DEVICE));
-			FillListFromXlist<Push>(_pushes, src.Elements(R.PUSH));
+			FillListFromXlist<State>(states, src.Elements(R.State));
+			FillListFromXlist<Transition>(transitions, src.Elements(R.Transition));
+			FillListFromXlist<Guard>(guards, src.Elements(R.Guard));
+			FillListFromXlist<Push>(pushes, src.Elements(R.Push));
 
-			states.forEach(z => z.MachineName = Name);
-			transitions.forEach(z => z.MachineName = Name);
-			acts.forEach(z => z.MachineName = Name);
-			checks.forEach(z => z.MachineName = Name);
-			devices.forEach(z => z.MachineName = Name);
-			pushes.forEach(z => z.MachineName = Name);
+			States.forEach(z => z.MachineName = Name);
+			Transitions.forEach(z => z.MachineName = Name);
+			Guards.forEach(z => z.MachineName = Name);
+			Pushes.forEach(z => z.MachineName = Name);
 		}//function
 
-		internal bool HasState(string name) { return states.Any(z => z.Name == name); }
-		internal bool HasCheck(string name) { return checks.Any(z => z.Name == name); }
-		internal bool HasAct(string name) { return acts.Any(z => z.Name == name); }
-		internal bool HasPush(string name) { return pushes.Any(z => z.Name == name); }
-		internal bool HasDevice(string name) { return devices.Any(z => z.Name == name); }
+		internal bool HasState(string name) { return States.Any(z => z.Name == name); }
+		internal bool HasGuard(string name) { return Guards.Any(z => z.Name == name); }
+		internal bool HasPush(string name) { return Pushes.Any(z => z.Name == name); }
 
 		public override bool Validate()
 		{
@@ -65,17 +53,15 @@ namespace BDB.Templating
 					addWarnings(z.warnings);
 				};
 
-			states.forEach(validate);
-			transitions.forEach(validate);
-			acts.forEach(validate);
-			checks.forEach(validate);
-			devices.forEach(validate);
-			pushes.forEach(validate);
+			States.forEach(validate);
+			Transitions.forEach(validate);
+			Guards.forEach(validate);
+			Pushes.forEach(validate);
 
 			return hasErrors;
 		}//function
 
-		public static string XmlDTD()
+		public static string zXmlDTD()
 		{
 			return @"	
 <!DOCTYPE ROOT [ 

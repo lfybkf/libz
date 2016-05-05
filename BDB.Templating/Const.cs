@@ -8,14 +8,28 @@ namespace BDB.Templating
 {
 	public static class R
 	{
+		public static readonly string[] EmptyStrings = new string[0];
+
 		public const string ZPT = ", ";
 		public const string CR = "\r\n";
 
+		public const string Enter = "Enter";
+		public const string Exit = "Exit";
+		public const string From = "From";
+		public const string Push = "Push";
+		public const string Pushes = "Pushes";
+		public const string Guard = "Guard";
+		public const string Guards = "Guards";
+		public const string To = "To";
+		public const string Transition = "Transition";
+		public const string ID = "ID";
+		public const string Info = "Info";
+		public const string Machine = "Machine";
+		public const string Name = "Name";
+		public const string State = "State";
+
 		public const string NotInsert = "NotInsert";
 		public const string NotUpdate = "NotUpdate";
-		public const string Checks = "Checks";
-		public const string Acts = "Acts";
-		public const string Pushes = "Pushes";
 
 		public const string OBJECT = "Object";
 		public const string FIELD = "Field";
@@ -27,22 +41,6 @@ namespace BDB.Templating
 		public const string AUTHOR = "Author";
 		public const string COMMENT = "Comment";
 		public const string INFO = "Info";
-		public const string ACT = "Act";
-		public const string CHECK = "Check";
-		public const string DEVICE = "Device";
-		public const string MACHINE = "Machine";
-		public const string STATE = "State";
-		public const string TRANSITION = "Transition";
-		public const string FROM = "From";
-		public const string TO = "To";
 		public const string DEFAULT = "Default";
-		public const string ENTER = "Enter";
-		public const string EXIT = "Exit";
-		public const string PUSH = "Push";
-		public const string TEST = "Test";
-		public const string SET = "Set";
-		public const string GETTER = "Getter";
-		public const string CHANGE = "Change";
-
 	}//class
 }

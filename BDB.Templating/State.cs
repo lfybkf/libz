@@ -11,31 +11,30 @@ namespace BDB.Templating
 	{
 		public string Enter { get; set; }
 		public string Exit { get; set; }
+
+		string[] enterGuards = R.EmptyStrings;
+		string[] exitGuards = R.EmptyStrings;
+		IEnumerable<string> EnterGuards { get { return enterGuards; } }
+		IEnumerable<string> ExitGuards { get { return exitGuards; } }
+
 		internal override void Read(XElement src)
 		{
 			base.Read(src);
-			Enter = Get(R.ENTER);
-			Exit = Get(R.EXIT);
+			Enter = Get(R.Enter);
+			Exit = Get(R.Exit);
+			if (Enter.isEmpty()) { enterGuards = Enter.Split(' '); }
+			if (Exit.isEmpty()) { exitGuards = Exit.Split(' '); }
 		}//function
 
 		public override bool Validate()
 		{
-			if (Enter != null && machine.HasAct(Enter) == false)
-			{
-				addError("State={0} has wrong Enter".fmt(Name));
-			}//if
-
-			if (Exit != null && machine.HasAct(Exit) == false)
-			{
-				addError("State={0} has wrong Exit".fmt(Name));
-			}//if
-
-			if (machine.transitions.Any(z => z.IsStateUsed(Name)) == false)
+			if (machine.Transitions.Any(z => z.IsStateUsed(Name)) == false)
 			{
 				addWarning("State={0} is not used".fmt(Name));
 			}//if
 			return hasErrors;
 		}
-		public bool IsActUsed(string name) { return Enter == name || Exit == name; }
+
+		public bool IsGuardUsed(string name) { return enterGuards.Contains(name) || exitGuards.Contains(name); }
 	}//class
 }//ns

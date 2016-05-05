@@ -10,7 +10,7 @@ namespace BDB.Templating
 	{
 		public override bool Validate()
 		{
-			if (machine.transitions.Any(tr => tr.IsPushUsed(Name)) == false)
+			if (machine.Transitions.Any(tr => tr.IsPushUsed(Name)) == false)
 			{
 				addWarning("Push={0} is never used".fmt(Name));
 			}//if 
@@ -19,7 +19,7 @@ namespace BDB.Templating
 
 		public IEnumerable<Transition> transitions
 		{
-			get { return machine.transitions.Where(z => z.IsPushUsed(Name)); }
+			get { return machine.Transitions.Where(z => z.IsPushUsed(Name)); }
 		}//property
 		
 	}//class

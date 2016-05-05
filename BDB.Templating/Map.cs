@@ -48,7 +48,7 @@ namespace BDB.Templating
 			foreach (var file in files)
 			{
 				xdoc = XDocument.Load(file);
-				Attrz.FillListFromXlist<Machine>(_machines, xdoc.Root.Elements(R.MACHINE));
+				Attrz.FillListFromXlist<Machine>(_machines, xdoc.Root.Elements(R.Machine));
 			}//for
 		}//function
 
