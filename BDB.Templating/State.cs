@@ -14,8 +14,8 @@ namespace BDB.Templating
 
 		string[] enterGuards = R.EmptyStrings;
 		string[] exitGuards = R.EmptyStrings;
-		IEnumerable<string> EnterGuards { get { return enterGuards; } }
-		IEnumerable<string> ExitGuards { get { return exitGuards; } }
+		IEnumerable<Guard> EnterGuards { get { return enterGuards.Select(s => machine.getGuard(s)); } }
+		IEnumerable<Guard> ExitGuards { get { return exitGuards.Select(s => machine.getGuard(s)); } }
 
 		internal override void Read(XElement src)
 		{

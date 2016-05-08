@@ -15,12 +15,12 @@ namespace BDB.Templating
 		}
 		public string From { get; set; }
 		public string To { get; set; }
-		public IEnumerable<string> States { get { yield return From; yield return To; } }
+		public IEnumerable<State> States { get { yield return machine.getState(From); yield return machine.getState(To); } }
 
 		string[] guards = R.EmptyStrings;
 		string[] pushes = R.EmptyStrings;
-		public IEnumerable<string> Guards { get { return guards; } }
-		public IEnumerable<string> Pushes { get { return pushes; } }
+		public IEnumerable<Guard> Guards { get { return guards.Select(s => machine.getGuard(s)); } }
+		public IEnumerable<Push> Pushes { get { return pushes.Select(s => machine.getPush(s)); } }
 
 
 		internal override void Read(System.Xml.Linq.XElement src)
@@ -44,9 +44,9 @@ namespace BDB.Templating
 			return hasErrors;
 		}//function
 
-		public bool IsStateUsed(string name)	{return States.Contains(name);} 
-		public bool IsGuardUsed(string name) { return Guards.Contains(name); }
-		public bool IsPushUsed(string name) { return Pushes.Contains(name); }
+		public bool IsStateUsed(string name) {return States.Any(st => st.Name == name);} 
+		public bool IsGuardUsed(string name) { return guards.Contains(name); }
+		public bool IsPushUsed(string name) { return pushes.Contains(name); }
 		public bool HasGuards { get { return Guards.Any(); } }
 	}//class
 }//ns
