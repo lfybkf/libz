@@ -14,16 +14,16 @@ namespace BDB.Templating
 
 		string[] enterGuards = R.EmptyStrings;
 		string[] exitGuards = R.EmptyStrings;
-		IEnumerable<Guard> EnterGuards { get { return enterGuards.Select(s => machine.getGuard(s)); } }
-		IEnumerable<Guard> ExitGuards { get { return exitGuards.Select(s => machine.getGuard(s)); } }
+		public IEnumerable<Guard> EnterGuards { get { return enterGuards.Select(s => machine.getGuard(s)); } }
+		public IEnumerable<Guard> ExitGuards { get { return exitGuards.Select(s => machine.getGuard(s)); } }
 
 		internal override void Read(XElement src)
 		{
 			base.Read(src);
 			Enter = Get(R.Enter);
 			Exit = Get(R.Exit);
-			if (Enter.isEmpty()) { enterGuards = Enter.Split(' '); }
-			if (Exit.isEmpty()) { exitGuards = Exit.Split(' '); }
+			if (Enter.isEmpty() == false) { enterGuards = Enter.Split(' '); }
+			if (Exit.isEmpty() == false) { exitGuards = Exit.Split(' '); }
 		}//function
 
 		public override bool Validate()
