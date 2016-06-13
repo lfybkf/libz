@@ -13,10 +13,6 @@ namespace BDB
 		public static IStoreSQL defaultStore;
 		public IStoreSQL store = defaultStore;
 
-		//названия статических функций для типов
-		public static string cmdDeleteOnID = "cmdDeleteOnID";
-		public static string cmdMaxID = "cmdMaxID";
-
 		public long ID;
 		public long parentID;
 		public IEntity entity = null;
@@ -43,8 +39,8 @@ namespace BDB
 			public Action<IEntity, EC> AfterSave;
 			public Action<IEntity, EC> BeforeDelete;
 			public Action<IEntity, EC> AfterDelete;
-			public Action<IEntity, EC> BeforeRecord;
-			public Action<IEntity, EC> AfterRecord;
+			public Action<IEntity, EC> BeforeMaterialize;
+			public Action<IEntity, EC> AfterMaterialize;
 			public Func<IEntity, EC, bool> Validate;
 		}//struct
 
@@ -85,15 +81,15 @@ namespace BDB
 		public IEnumerable<string> ParamNames { get { return paramS == null ? new string[0] : paramS.Keys;} }
 		#endregion
 
-		bool Record(DbDataReader reader)
+		bool Materialize(DbDataReader reader)
 		{
 			bool IsReaded = reader.Read();
 			if (IsReaded)
 			{
 				var reg = getRegistry(type);
-				runAction(reg.with(z => z.BeforeRecord));
+				runAction(reg.with(z => z.BeforeMaterialize));
 				entity.Read(reader);
-				runAction(reg.with(z => z.AfterRecord));
+				runAction(reg.with(z => z.AfterMaterialize));
 			}//if
 			return IsReaded;
 		}//function
@@ -101,6 +97,14 @@ namespace BDB
 		private IEntity createEntity()
 		{
 			return (IEntity)Activator.CreateInstance(type);
+		}//function
+
+		public T Read<T>(long ID) where T : class, IEntity
+		{
+			this.ID = ID;
+			bool ok = Read();
+			return ok ? this.entity as T : null;
+
 		}//function
 
 		public bool Read()
@@ -115,7 +119,7 @@ namespace BDB
 			{
 				runAction(getRegistry(type).with(z => z.BeforeRead));
 				reader = store.OpenReader(cmd);
-				while (Record(reader)) { break; } //read one record
+				while (Materialize(reader)) { break; } //read one record
 				runAction(getRegistry(type).with(z => z.AfterRead));
 			}//try
 			catch (Exception exception)
@@ -160,16 +164,16 @@ namespace BDB
 		}//function
 
 
-		public long MaxID()
+		public long zMaxID()
 		{
 			long result = 0L;
-			DbCommand cmd = getCmd(null, cmdMaxID);
+			DbCommand cmd = getCmdMaxID();
 			DbDataReader reader = null;
 			try
 			{
 				reader = store.OpenReader(cmd);
 				while (reader.Read()) {
-					result = reader.GetInt64("ID");
+					result = reader.GetInt64(0);
 					break; 
 				} 
 			}//try
@@ -181,19 +185,10 @@ namespace BDB
 			return result;
 		}//function
 
-		private DbCommand getCmd(object obj, string name)
-		{
-			var result = type.with(z => z.GetMethod(name))
-				.with(z => z.Invoke(obj, new object[] { this }));
-
-			return (result as DbCommand);
-		}//function
-
 		public bool Delete()
 		{
 			DbCommand cmd = null;
-			if (entity != null) { cmd = entity.cmdDelete(this); }
-			else { cmd = getCmd(null, cmdDeleteOnID); }
+			cmd = entity.cmdDelete(this);
 
 			if (cmd == null) { AddError("cmdDelete is null"); return false; }
 
@@ -210,7 +205,6 @@ namespace BDB
 				{
 					LastError = store.LastError;
 				}//else
-				
 			}//try
 			catch (Exception exception)
 			{
@@ -233,7 +227,7 @@ namespace BDB
 				reader = store.OpenReader(cmdSelect(this));
 				list = new HashSet<IEntity>();
 				entity = createEntity();
-				while (Record(reader)) 
+				while (Materialize(reader)) 
 				{
 					list.Add(entity);
 					entity = createEntity();
