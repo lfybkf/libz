@@ -17,7 +17,7 @@ namespace BDB
 		DbCommand cmdUpdate(EC entityContext);
 		DbCommand cmdRead(EC entityContext);
 		DbCommand cmdDelete(EC entityContext);
-		bool Read(DbDataReader ddr);
+		bool Materialize(DbDataReader ddr);
 	}//interface
 
 }//ns

@@ -83,14 +83,18 @@ namespace BDB
 		bool Materialize(DbDataReader reader)
 		{
 			bool IsReaded = reader.Read();
+			bool result = false;
 			if (IsReaded)
 			{
 				var reg = getRegistry(type);
 				runAction(reg.with(z => z.BeforeMaterialize));
-				entity.Read(reader);
-				runAction(reg.with(z => z.AfterMaterialize));
+				result = entity.Materialize(reader);
+				if (result)
+				{
+					runAction(reg.with(z => z.AfterMaterialize));	
+				}//if
 			}//if
-			return IsReaded;
+			return result;
 		}//function
 
 		private IEntity createEntity()
