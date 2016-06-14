@@ -17,7 +17,6 @@ namespace BDB
 		public long parentID;
 		public IEntity entity = null;
 		public ISet<IEntity> list;
-		public Func<EC, DbCommand> cmdSelect;
 		public string link;
 
 		public Type type;
@@ -164,10 +163,11 @@ namespace BDB
 		}//function
 
 
-		public long zMaxID()
+		public long Read(string field, string table, string where, long Default)
 		{
-			long result = 0L;
-			DbCommand cmd = getCmdMaxID();
+			long result = Default;
+			DbCommand cmd = store.getCommand();
+			cmd.CommandText = "select {0} from {1} where {2}".fmt(field, table, where);
 			DbDataReader reader = null;
 			try
 			{
@@ -177,11 +177,37 @@ namespace BDB
 					break; 
 				} 
 			}//try
-			catch (Exception exception)
-			{
-				LastError = exception;
-			}//catch
+			catch (Exception exception) { LastError = exception; }//catch
 			finally { reader.Close(); reader.Dispose(); }
+			return result;
+		}//function
+
+		public bool Update(string field, string table, string where, long Value)
+		{
+			bool result = false;
+			DbCommand cmd = store.getCommand();
+			cmd.CommandText = "update {1} set {0}={3} where {2}".fmt(field, table, where, Value);
+			try
+			{
+				result = store.Execute(cmd);
+			}//try
+			catch (Exception exception)	{	LastError = exception; }//catch
+			finally {  }//finally
+			return result;
+		}//function
+
+		public bool Delete(string table, string where)
+		{
+			DbCommand cmd = store.getCommand();
+			cmd.CommandText = "delete from {0} where {1}".fmt(table, where);
+
+			bool result = false;
+			try
+			{
+				result = store.Execute(cmd);
+				if (result == false) { LastError = store.LastError; }//if
+			}//try
+			catch (Exception exception)	{ LastError = exception; }//catch
 			return result;
 		}//function
 
@@ -192,7 +218,7 @@ namespace BDB
 
 			if (cmd == null) { AddError("cmdDelete is null"); return false; }
 
-			bool result = true;
+			bool result = false;
 			try
 			{
 				runAction(getRegistry(type).with(z => z.BeforeDelete));
@@ -206,25 +232,44 @@ namespace BDB
 					LastError = store.LastError;
 				}//else
 			}//try
-			catch (Exception exception)
-			{
-				LastError = exception;
-				result = false;
-			}//catch
+			catch (Exception exception)	{	LastError = exception;}//catch
 			return result;
 		}//function
 
-		public bool Select()
+		public  bool Select(string sql)
+		{
+			DbCommand cmd = store.getCommand();
+			cmd.CommandText = sql;
+			return Select(cmd);
+		}//function
+
+		public bool Select(string fields, string table, string where)
+		{
+			DbCommand cmd = store.getCommand();
+			cmd.CommandText = "select {0} from {1} where {2}".fmt(fields, table, where);
+			return Select(cmd);
+		}//function
+
+		public bool  Select<T>(DbCommand cmd) where T : IEntity
+		{
+			type = typeof(T);
+			return Select(cmd);
+		}//function
+
+		public bool Select<T>(string sql) where T : IEntity
+		{
+			type = typeof(T);
+			return Select(sql);
+		}//function
+
+		public bool Select(DbCommand cmd)
 		{
 			list = null;
-			if (cmdSelect == null) { AddError("cmdSelect is null"); return false; }
-
-			type = cmdSelect.Method.DeclaringType;
-			bool result = true;
+			bool result = false;
 			DbDataReader reader = null;
 			try
 			{
-				reader = store.OpenReader(cmdSelect(this));
+				reader = store.OpenReader(cmd);
 				list = new HashSet<IEntity>();
 				entity = createEntity();
 				while (Materialize(reader)) 
@@ -232,12 +277,9 @@ namespace BDB
 					list.Add(entity);
 					entity = createEntity();
 				}//while
+				result = true;
 			}//try
-			catch (Exception exception)
-			{
-				LastError = exception;
-				result = false;
-			}//catch
+			catch (Exception exception)	{	LastError = exception; }//catch
 			finally { reader.Close(); reader.Dispose(); }
 			return result;
 
