@@ -20,7 +20,6 @@ namespace BDB
 		public string link;
 
 		public Type type;
-		//private Type type { get { return entity.with(z => z.GetType()); } }
 		#endregion
 
 		public EC()
@@ -238,6 +237,16 @@ namespace BDB
 			}//try
 			catch (Exception exception)	{	LastError = exception;}//catch
 			return result;
+		}//function
+
+		public  long GetIdentity()
+		{
+			DbCommand cmd = store.getCommand();
+			cmd.CommandText = "select @@IDENTITY";
+			using (var conn = store.)
+			{
+				
+			}//using
 		}//function
 
 		public  bool Select(string sql)
