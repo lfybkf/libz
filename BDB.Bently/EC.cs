@@ -171,17 +171,11 @@ namespace BDB
 			long result = Default;
 			DbCommand cmd = store.getCommand();
 			cmd.CommandText = "select {0} from {1} where {2}".fmt(field, table, where);
-			DbDataReader reader = null;
-			try
+			var o = store.Scalar(cmd);
+			if (o != null)
 			{
-				reader = store.OpenReader(cmd);
-				while (reader.Read()) {
-					result = reader.GetInt64(0);
-					break; 
-				} 
-			}//try
-			catch (Exception exception) { LastError = exception; }//catch
-			finally { reader.Close(); reader.Dispose(); }
+				result = Convert.ToInt64(o);
+			}//if
 			return result;
 		}//function
 
@@ -239,14 +233,20 @@ namespace BDB
 			return result;
 		}//function
 
-		public  long GetIdentity()
+		public long Max(string field, string table)
 		{
 			DbCommand cmd = store.getCommand();
-			cmd.CommandText = "select @@IDENTITY";
-			using (var conn = store.)
-			{
-				
-			}//using
+			cmd.CommandText = "select MAX({0}) from {1}".fmt(field, table);
+			object result = store.Scalar(cmd);
+			return result == null ? long.MinValue : Convert.ToInt64(result);
+		}//function
+
+		public long Min(string field, string table)
+		{
+			DbCommand cmd = store.getCommand();
+			cmd.CommandText = "select MIN({0}) from {1}".fmt(field, table);
+			object result = store.Scalar(cmd);
+			return result == null ? long.MaxValue : Convert.ToInt64(result);
 		}//function
 
 		public  bool Select(string sql)
@@ -256,10 +256,21 @@ namespace BDB
 			return Select(cmd);
 		}//function
 
+		const string allFields = "*";
 		public bool Select(string fields, string table, string where)
 		{
 			DbCommand cmd = store.getCommand();
-			cmd.CommandText = "select {0} from {1} where {2}".fmt(fields, table, where);
+			string _fields = fields.isEmpty() ? allFields : fields;
+
+			if (where.isEmpty())
+			{
+				cmd.CommandText = "select {0} from {1}".fmt(_fields, table);
+			}//if
+			else
+			{
+				cmd.CommandText = "select {0} from {1} where {2}".fmt(_fields, table, where);
+			}//else
+			
 			return Select(cmd);
 		}//function
 

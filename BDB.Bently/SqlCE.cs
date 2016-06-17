@@ -27,11 +27,12 @@ namespace BDB
 		public string File { set { if (value != null) { _ConnectionString = "Data Source={0};Persist Security Info=False;".fmt(value); } } }
 
 		static Exception exceptionLast = null;
-		public Exception LastError { get { return exceptionLast; } }
+		public Exception LastError { get { return exceptionLast; } set { exceptionLast = value; } }
 		public DbCommand getCommand() { return new SqlCeCommand(); }
 		public DbParameter getParameter() { return new SqlCeParameter(); }
 
 		public bool TestConnection() { try { var c = new SqlCeConnection(ConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
+		public void Connect(DbCommand cmd) { cmd.Connection = NewConnection; }
 
 		public SqlCE(string Name)
 		{
@@ -41,7 +42,7 @@ namespace BDB
 		public bool Execute(DbCommand cmd)
 		{
 			bool Ret;
-			cmd.Connection = NewConnection;
+			Connect(cmd);
 			try
 			{
 				cmd.Connection.Open();
@@ -80,5 +81,6 @@ namespace BDB
 			}
 			return Ret;
 		}//function
+		
 	}//class
 }//ns

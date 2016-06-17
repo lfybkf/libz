@@ -21,14 +21,14 @@ namespace BDB
 		SqlConnection NewConnection { get { return new SqlConnection(_ConnectionString); } }
 
 		static Exception exceptionLast = null;
-		public Exception LastError { get { return exceptionLast; } }
+		public Exception LastError { get { return exceptionLast; } set { exceptionLast = value; } }
 		public int rows = 0;
 
 		public DbCommand getCommand() { return new SqlCommand(); }
 		public DbParameter getParameter() { return new SqlParameter(); }
 
 		public bool TestConnection() { try { var c = new SqlConnection(ConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
-
+		public void Connect(DbCommand cmd) { cmd.Connection = NewConnection; }
 
 		public bool Execute(DbCommand cmd)
 		{
@@ -50,7 +50,6 @@ namespace BDB
 				cmd.Connection.Close();
 			}
 			return Ret;
-
 		}
 
 		public DbDataReader OpenReader(DbCommand cmd)
