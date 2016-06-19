@@ -49,6 +49,7 @@
     <Compile Include="IStoreSQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLogger.cs" />
+    <Compile Include="Sqlbuilder.cs" />
     <Compile Include="SqlCE.cs" />
     <Compile Include="SqlExpress.cs" />
   </ItemGroup>

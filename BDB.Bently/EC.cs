@@ -22,10 +22,8 @@ namespace BDB
 		public Type type;
 		#endregion
 
-		public EC()
-		{
-			
-		}//constructor
+		public EC(){}//constructor
+		public static EC New {get {return new EC();}}
 
 		#region registry
 		public class Registry
@@ -166,11 +164,10 @@ namespace BDB
 		}//function
 
 
-		public long Read(string field, string table, string where, long Default)
+		public long Read(SqlBuilder sqlb, long Default)
 		{
 			long result = Default;
-			DbCommand cmd = store.getCommand();
-			cmd.CommandText = "select {0} from {1} where {2}".fmt(field, table, where);
+			DbCommand cmd = store.getCommand(sqlb.Select);
 			var o = store.Scalar(cmd);
 			if (o != null)
 			{
@@ -179,11 +176,10 @@ namespace BDB
 			return result;
 		}//function
 
-		public bool Update(string field, string table, string where, long Value)
+		public bool Update(SqlBuilder sqlb)
 		{
 			bool result = false;
-			DbCommand cmd = store.getCommand();
-			cmd.CommandText = "update {1} set {0}={3} where {2}".fmt(field, table, where, Value);
+			DbCommand cmd = store.getCommand(sqlb.Update);
 			try
 			{
 				result = store.Execute(cmd);
@@ -193,11 +189,9 @@ namespace BDB
 			return result;
 		}//function
 
-		public bool Delete(string table, string where)
+		public bool Delete(SqlBuilder sqlb)
 		{
-			DbCommand cmd = store.getCommand();
-			cmd.CommandText = "delete from {0} where {1}".fmt(table, where);
-
+			DbCommand cmd = store.getCommand(sqlb.Delete);
 			bool result = false;
 			try
 			{
@@ -256,21 +250,9 @@ namespace BDB
 			return Select(cmd);
 		}//function
 
-		const string allFields = "*";
-		public bool Select(string fields, string table, string where)
+		public bool Select(SqlBuilder sqlb)
 		{
-			DbCommand cmd = store.getCommand();
-			string _fields = fields.isEmpty() ? allFields : fields;
-
-			if (where.isEmpty())
-			{
-				cmd.CommandText = "select {0} from {1}".fmt(_fields, table);
-			}//if
-			else
-			{
-				cmd.CommandText = "select {0} from {1} where {2}".fmt(_fields, table, where);
-			}//else
-			
+			DbCommand cmd = store.getCommand(sqlb.Select);
 			return Select(cmd);
 		}//function
 
