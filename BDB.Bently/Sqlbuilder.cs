@@ -15,19 +15,21 @@ namespace BDB
 		public string Where;
 		public object Value;
 		public long LongValue;
+		public int Top = 0;
 
 		public string Select
 		{
 			get
 			{
+				string _select = Top > 0 ? "SELECT TOP " + Top : "SELECT";
 				string _field = Field.isEmpty() ? allFields : Field;
 				if (Where.isEmpty())
 				{
-					return "SELECT {0} FROM {1}".fmt(_field, Table);
+					return "{0} {1} FROM {2}".fmt(_select, _field, Table);
 				}//if
 				else
 				{
-					return "SELECT {0} FROM {1} WHERE {2}".fmt(_field, Table, Where);
+					return "{0} {1} FROM {2} WHERE {3}".fmt(_select, _field, Table, Where);
 				}//else
 			}
 		}//function
@@ -81,6 +83,22 @@ namespace BDB
 				else
 				{
 					return "SELECT Min({0}) FROM {1} WHERE {2}".fmt(Field, Table, Where);
+				}//else
+			}
+		}//function
+
+		public string Count
+		{
+			get
+			{
+				string _field = Field.isEmpty() ? allFields : Field;
+				if (Where.isEmpty())
+				{
+					return "SELECT Count({0}) FROM {1}".fmt(_field, Table);
+				}//if
+				else
+				{
+					return "SELECT Count({0}) FROM {1} WHERE {2}".fmt(_field, Table, Where);
 				}//else
 			}
 		}//function

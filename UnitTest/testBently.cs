@@ -24,7 +24,6 @@ namespace UnitTest
 			var ec = new EC();
 			var min = ec.Min("ID", "Author");
 			var max = ec.Max("ID", "Author");
-
 			Assert.IsTrue(true);
 		}
 
@@ -49,6 +48,20 @@ namespace UnitTest
 
 			
 			Assert.IsTrue(newId != null);
+		}
+
+		[TestMethod]
+		public void TestScalar()
+		{
+			var store = new SqlCE("Onto");
+			var cmd = store.getCommand (new SqlBuilder { Table = "Author" }.Count);
+			var count = store.Scalar(cmd);
+			var err = store.LastError;
+
+			cmd = store.getCommand(new SqlBuilder { Table = "Author", Field = "ID", Where="ID=-1", Top=1 }.Select);
+			var has = store.Scalar(cmd);
+
+			Assert.IsTrue(count != null);
 		}
 
 
