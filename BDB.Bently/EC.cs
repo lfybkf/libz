@@ -11,6 +11,7 @@ namespace BDB
 	{
 		#region properties
 		public static IStoreSQL defaultStore;
+		///<summary>по умолчанию =defaultStore. Но можно поменять у экземпляра</summary>
 		public IStoreSQL store = defaultStore;
 
 		public long ID;
