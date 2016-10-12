@@ -200,6 +200,13 @@ namespace BDB
 			}
 			return result.ToString();
 		}//function
+		
+		public static string left(this string value, int maxLength)
+		{
+			if (string.IsNullOrEmpty(value)) {return value;}
+			maxLength = Math.Abs(maxLength);
+			return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+		}
 		#endregion
 
 		#region add
@@ -274,6 +281,22 @@ namespace BDB
 
 		}//function
 
+		private static readonly char[] ccPointAndComma = { ',', '.' };
+		public static decimal parseMoney(this string s)
+		{
+			int iPoint = s.IndexOfAny(ccPointAndComma);
+			if (iPoint < 0)
+			{
+				return s.parseDecimal();
+			}//if
+			else if (iPoint >= 0)
+			{
+				string s2 = s.left(iPoint + 3);
+				return s2.parseDecimal();
+			}//if
+			return 0M;
+		}//function
+		
 		public static Decimal parseDecimal(this string s)
 		{
 			Func<IEnumerable<char>, IEnumerable<char>> digits = (cc) => (cc.Where(ch => char.IsDigit(ch)));
@@ -294,7 +317,7 @@ namespace BDB
 			if (iLen == 0) { return 0; }//if
 
 			IEnumerable<char> ccBig, ccPart;
-			int iSeparator = s.IndexOfAny(new char[] { cComma, cPoint });
+			int iSeparator = s.IndexOfAny(ccPointAndComma);
 			if (iSeparator == 0)
 			{
 				ccBig = null;
