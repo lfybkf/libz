@@ -1,1 +1,1 @@
-%SYSTEMROOT%\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe BDB.Bently.csproj > build.txt
+%SYSTEMROOT%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "BDB.Bently.csproj" > build.txt
