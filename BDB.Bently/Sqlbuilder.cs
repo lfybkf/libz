@@ -14,8 +14,9 @@ namespace BDB
 		public string Table;
 		public string Field;
 		public string Where;
+		public string Set;
 		public object Value;
-		public long LongValue;
+		//public long LongValue;
 		public int Top = 0;
 
 		///<summary>Table Top(0) Field(*) Where()</summary>
@@ -36,11 +37,25 @@ namespace BDB
 			}
 		}//function
 
-		///<summary>Table, Field, Where, Value</summary>
+		///<summary>Table, Field, Value</summary>
+		public string Insert
+		{
+			get
+			{
+				return "INSERT INTO {0} ({1}) VALUES ({2})".fmt(Table, Field, Value);
+			}
+		}//function
+
+		///<summary>Table, Field, Where, Value, Set()</summary>
 		public string Update
 		{
 			get
 			{
+				if (Set.notEmpty())
+				{
+					return "UPDATE {0} SET {1} WHERE {2}".fmt(Table, Set, Where);
+				}//if
+
 				if (Value is string)
 				{
 					return "UPDATE {0} SET {1}='{3}' WHERE {2}".fmt(Table, Field, Where, Value);
