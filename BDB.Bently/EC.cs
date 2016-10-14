@@ -100,14 +100,15 @@ namespace BDB
 			return (IEntity)Activator.CreateInstance(type);
 		}//function
 
+		///<summary>Загрузить из БД по ИД</summary>
 		public T Read<T>(long ID) where T : class, IEntity
 		{
 			this.ID = ID;
 			bool ok = Read();
 			return ok ? this.entity as T : null;
-
 		}//function
 
+		///<summary>Загрузить из БД по entity.cmdRead</summary>
 		public bool Read()
 		{
 			entity = createEntity();
@@ -130,9 +131,9 @@ namespace BDB
 			}//catch
 			finally { reader.Close(); reader.Dispose(); }
 			return result;
-
 		}//function
 
+		///<summary>Сохранение entity</summary>
 		public bool Save()
 		{
 			if (entity == null) { AddError("entity is null"); return false; }
@@ -164,7 +165,7 @@ namespace BDB
 			return result;
 		}//function
 
-
+		///<summary>считать произвольное целое. Default - значение по умолчанию</summary>
 		public long Read(SqlBuilder sqlb, long Default)
 		{
 			long result = Default;
@@ -177,6 +178,20 @@ namespace BDB
 			return result;
 		}//function
 
+		///<summary>считать произвольную строку. Default - значение по умолчанию</summary>
+		public string Read(SqlBuilder sqlb, string Default)
+		{
+			string result = Default;
+			DbCommand cmd = store.getCommand(sqlb.Select);
+			var o = store.Scalar(cmd);
+			if (o != null)
+			{
+				result = Convert.ToString(o);
+			}//if
+			return result;
+		}//function
+
+		///<summary>update. Пока одного поля (ограничение SqlBuilder)</summary>
 		public bool Update(SqlBuilder sqlb)
 		{
 			bool result = false;
@@ -190,6 +205,7 @@ namespace BDB
 			return result;
 		}//function
 
+		///<summary>Delete произвольный</summary>
 		public bool Delete(SqlBuilder sqlb)
 		{
 			DbCommand cmd = store.getCommand(sqlb.Delete);
@@ -203,6 +219,7 @@ namespace BDB
 			return result;
 		}//function
 
+		///<summary>Delete entity с событиями</summary>
 		public bool Delete()
 		{
 			DbCommand cmd = null;
@@ -244,6 +261,7 @@ namespace BDB
 			return result == null ? long.MaxValue : Convert.ToInt64(result);
 		}//function
 
+		///<summary>Select list</summary>
 		public  bool Select(string sql)
 		{
 			DbCommand cmd = store.getCommand();
@@ -251,24 +269,28 @@ namespace BDB
 			return Select(cmd);
 		}//function
 
+		///<summary>Select list</summary>
 		public bool Select(SqlBuilder sqlb)
 		{
 			DbCommand cmd = store.getCommand(sqlb.Select);
 			return Select(cmd);
 		}//function
 
+		///<summary>Select list</summary>
 		public bool  Select<T>(DbCommand cmd) where T : IEntity
 		{
 			type = typeof(T);
 			return Select(cmd);
 		}//function
 
+		///<summary>Select list</summary>
 		public bool Select<T>(string sql) where T : IEntity
 		{
 			type = typeof(T);
 			return Select(sql);
 		}//function
 
+		///<summary>Заполнение списка из БД по комманде</summary>
 		public bool Select(DbCommand cmd)
 		{
 			list = null;

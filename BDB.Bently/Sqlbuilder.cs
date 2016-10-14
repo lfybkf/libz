@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BDB
 {
+	///<summary>Построитель SQL</summary>
 	public class SqlBuilder
 	{
 		const string allFields = "*";
@@ -17,6 +18,7 @@ namespace BDB
 		public long LongValue;
 		public int Top = 0;
 
+		///<summary>Table Top(0) Field(*) Where()</summary>
 		public string Select
 		{
 			get
@@ -34,6 +36,7 @@ namespace BDB
 			}
 		}//function
 
+		///<summary>Table, Field, Where, Value</summary>
 		public string Update
 		{
 			get
@@ -49,6 +52,7 @@ namespace BDB
 			}
 		}//function
 
+		///<summary>Table, Where</summary>
 		public string Delete
 		{
 			get
@@ -57,6 +61,7 @@ namespace BDB
 			}
 		}//function
 
+		///<summary>Field, Table, Where()</summary>
 		public string Max
 		{
 			get
@@ -72,6 +77,7 @@ namespace BDB
 			}
 		}//function
 
+		///<summary>Field, Table, Where()</summary>
 		public string Min
 		{
 			get
@@ -87,6 +93,7 @@ namespace BDB
 			}
 		}//function
 
+		///<summary>Table, Field(*), Where()</summary>
 		public string Count
 		{
 			get
