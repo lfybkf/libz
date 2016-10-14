@@ -24,6 +24,8 @@ namespace UnitTest
 			var ec = new EC();
 			var min = ec.Min("ID", "Author");
 			var max = ec.Max("ID", "Author");
+
+			long minL = ec.Max("ID", "Author", 0);
 			Assert.IsTrue(true);
 		}
 

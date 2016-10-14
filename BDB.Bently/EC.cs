@@ -205,7 +205,7 @@ namespace BDB
 			return result;
 		}//function
 
-		///<summary>Delete произвольный</summary>
+		///<summary>Delete произвольный без событий</summary>
 		public bool Delete(SqlBuilder sqlb)
 		{
 			DbCommand cmd = store.getCommand(sqlb.Delete);
@@ -245,20 +245,32 @@ namespace BDB
 			return result;
 		}//function
 
-		public long Max(string field, string table)
+		public long Max(string field, string table, long Default)
+		{
+			object res = Max(field, table);
+			return (res != null || res != DBNull.Value) ? Convert.ToInt64(res) : Default;
+		}//function
+
+		public long Min(string field, string table, long Default)
+		{
+			object res = Min(field, table);
+			return (res != null || res != DBNull.Value) ? Convert.ToInt64(res) : Default;
+		}//function
+
+		public object Max(string field, string table)
 		{
 			DbCommand cmd = store.getCommand();
 			cmd.CommandText = "select MAX({0}) from {1}".fmt(field, table);
 			object result = store.Scalar(cmd);
-			return result == null ? long.MinValue : Convert.ToInt64(result);
+			return result;
 		}//function
 
-		public long Min(string field, string table)
+		public object Min(string field, string table)
 		{
 			DbCommand cmd = store.getCommand();
 			cmd.CommandText = "select MIN({0}) from {1}".fmt(field, table);
 			object result = store.Scalar(cmd);
-			return result == null ? long.MaxValue : Convert.ToInt64(result);
+			return result;
 		}//function
 
 		///<summary>Select list</summary>
