@@ -11,20 +11,32 @@ namespace BDB
 {
 	public class SqlCE: IStoreSQL
 	{
-		public string Name
-		{
-			set {
-				string file = System.IO.Directory.EnumerateFiles(
-					Environment.CurrentDirectory,
-					value + ".sdf",
-					System.IO.SearchOption.AllDirectories).FirstOrDefault();
-				File = file;
-			}
-		}
 		string _ConnectionString;
 		public string ConnectionString { set { _ConnectionString = value; } get { return _ConnectionString; } }
 		SqlCeConnection NewConnection { get { return new SqlCeConnection(_ConnectionString); } }
-		public string File { set { if (value != null) { _ConnectionString = "Data Source={0};Persist Security Info=False;".fmt(value); } } }
+		public string Name { 
+			set {
+				string file;
+				if (System.IO.File.Exists(value))
+				{
+					file = value;
+				}//if
+				else
+				{
+					file = System.IO.Directory.EnumerateFiles(
+						Environment.CurrentDirectory,
+						value + ".sdf",
+						System.IO.SearchOption.AllDirectories).FirstOrDefault();
+				}//else
+
+				if (file != null)
+				{ _ConnectionString = "Data Source={0};Persist Security Info=False;".fmt(file); }
+				else
+				{
+					_ConnectionString = string.Empty;
+				}//else
+			} 
+		}
 
 		static Exception exceptionLast = null;
 		public Exception LastError { get { return exceptionLast; } set { exceptionLast = value; } }
