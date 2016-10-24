@@ -248,13 +248,13 @@ namespace BDB
 		public long Max(string field, string table, long Default)
 		{
 			object res = Max(field, table);
-			return (res != null || res != DBNull.Value) ? Convert.ToInt64(res) : Default;
+			return (res != null && res != DBNull.Value) ? Convert.ToInt64(res) : Default;
 		}//function
 
 		public long Min(string field, string table, long Default)
 		{
 			object res = Min(field, table);
-			return (res != null || res != DBNull.Value) ? Convert.ToInt64(res) : Default;
+			return (res != null && res != DBNull.Value) ? Convert.ToInt64(res) : Default;
 		}//function
 
 		public object Max(string field, string table)
