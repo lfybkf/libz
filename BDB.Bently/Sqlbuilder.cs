@@ -10,16 +10,37 @@ namespace BDB
 	public class SqlBuilder
 	{
 		const string allFields = "*";
+		
+		#region fmt
+		const string _fmtFieldEqValue = "{0} = {1}";
+		public string fmtFieldEqValue {get{return _fmtFieldEqValue;}}
+		const string _fmtFieldGtValue = "{0} > {1}";
+		public string fmtFieldGtValue {get{return _fmtFieldGtValue;}}
+		const string _fmtFieldGeValue = "{0} >= {1}";
+		public string fmtFieldGeValue {get{return _fmtFieldGeValue;}}
+		const string _fmtFieldLsValue = "{0} < {1}";
+		public string fmtFieldLsValue {get{return _fmtFieldLsValue;}}
+		const string _fmtFieldLeValue = "{0} <= {1}";
+		public string fmtFieldLeValue {get{return _fmtFieldLeValue;}}
+		
+		const string _fmtFieldEqString = "{0} = '{1}'";
+		public string fmtFieldEqString {get{return _fmtFieldEqString;}}
+		const string _fmtFieldEqPar = "{0} = @{1}";
+		public string fmtFieldEqPar {get{return _fmtFieldEqPar;}}
+		#endregion
 
 		public string Table;
+		///<summary>SELECT {Field}, UPDATE {Field} = {Value}</summary>
 		public string Field;
+		///<summary>sql WHERE {Where}</summary>
 		public string Where;
+		///<summary>UPDATE TABLE {Set} WHERE</summary>
 		public string Set;
 		public object Value;
 		//public long LongValue;
 		public int Top = 0;
 
-		///<summary>Table Top(0) Field(*) Where()</summary>
+		///<summary>SELECT TOP {Top} {Field} FROM {Table} WHERE {Where}</summary>
 		public string Select
 		{
 			get
@@ -37,7 +58,7 @@ namespace BDB
 			}
 		}//function
 
-		///<summary>Table, Field, Value</summary>
+		///<summary>INSERT INTO {Table} ({Field}) VALUES ({Value})</summary>
 		public string Insert
 		{
 			get
@@ -46,7 +67,7 @@ namespace BDB
 			}
 		}//function
 
-		///<summary>Table, Field, Where, Value, Set()</summary>
+		///<summary>UPDATE {Table} SET {Set} WHERE {Where}, UPDATE {Table} SET {Field}={Value} WHERE {Where}</summary>
 		public string Update
 		{
 			get
