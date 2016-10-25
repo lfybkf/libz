@@ -251,19 +251,20 @@ namespace BDB
 			return sb.ToString();
 		}//function
 
-		/// <summary>
-		/// конкатенация к строке массива с разделителем
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="Delim"></param>
-		/// <param name="args"></param>
-		/// <returns></returns>
+		/// <summary>конкатенация к строке массива с разделителем</summary>
 		public static string addDelim(this string s, string Delim, params object[] args)
 		{
 			StringBuilder sb = new StringBuilder(s);
 			args.forEach(o => sb.AppendFormat("{0}{1}", Delim, o));
 			return sb.ToString();
 		}//function
+		
+		/// <summary>конкатенация к строке массива с разделителем Space</summary>
+		public static string addSpace(this string s, params object[] args)
+		{
+			return s.addDelim(" ", args);
+		}//function
+
 		#endregion
 
 		#region parse
