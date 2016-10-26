@@ -40,6 +40,20 @@ namespace BDB
 		//public long LongValue;
 		public int Top = 0;
 
+		public void ClearButTable()
+		{
+			Field = Where = Set = null;
+			Value = null;
+			Top = 0;
+		}
+		public void ClearAll()
+		{
+			Table = null;
+			Field = Where = Set = null;
+			Value = null;
+			Top = 0;
+		}
+		
 		///<summary>SELECT TOP {Top} {Field} FROM {Table} WHERE {Where}</summary>
 		public string Select
 		{

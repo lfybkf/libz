@@ -30,6 +30,14 @@ namespace BDB
 			return cmd;
 		}
 
+		public static DbParameter getParameter(this IStoreSQL store, string Name, object Value)
+		{
+			var result = store.getParameter();
+			result.ParameterName = Name;
+			result.Value = Value;
+			return result;
+		}
+		
 		public static object Scalar(this IStoreSQL store, DbCommand cmd)
 		{
 			object result = null;
@@ -50,6 +58,22 @@ namespace BDB
 			return result;
 		}//function
 
+		public static T Scalar<T>(this IStoreSQL store, DbCommand cmd, T def = default(T))
+		{
+			object result = store.Scalar(cmd);
+			return result != null ? (T)Convert.ChangeType(result, typeof(T)) : def;
+		}//function
 		
+		public static T Max<T>(this IStoreSQL store, string Table, string Field, T def = default(T))
+		{
+			DbCommand cmd = store.getCommand(string.Format("SELECT MAX({0}) FROM {1}", Field, Table));
+			return store.Scalar<T>(cmd, def);
+		}//function
+		
+		public static T Min<T>(this IStoreSQL store, string Table, string Field, T def = default(T))
+		{
+			DbCommand cmd = store.getCommand(string.Format("SELECT MIN({0}) FROM {1}", Field, Table));
+			return store.Scalar<T>(cmd, def);
+		}//function
 	}//class
 }//ns
