@@ -37,6 +37,18 @@ namespace BDB
 			result.Value = Value;
 			return result;
 		}
+
+		public static bool Execute(this IStoreSQL store, string sql)
+		{
+			var cmd = store.getCommand(sql);
+			return store.Execute(cmd);
+		}
+		
+		public static object Scalar(this IStoreSQL store, string sql)
+		{
+			var cmd = store.getCommand(sql);
+			return store.Scalar(cmd);
+		}
 		
 		public static object Scalar(this IStoreSQL store, DbCommand cmd)
 		{
