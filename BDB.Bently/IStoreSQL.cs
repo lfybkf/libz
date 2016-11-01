@@ -75,13 +75,46 @@ namespace BDB
 			object result = store.Scalar(cmd);
 			return result != null ? (T)Convert.ChangeType(result, typeof(T)) : def;
 		}//function
-		
+
 		public static T Scalar<T>(this IStoreSQL store, string sql, T def = default(T))
 		{
 			var cmd = store.getCommand(sql);
 			return store.Scalar<T>(cmd);
 		}//function
-		
+
+		public static IEnumerable<T> Scalars<T>(this IStoreSQL store, string sql)
+		{ return store.Scalars<T>(store.getCommand(sql)); }
+
+		public static IEnumerable<T> Scalars<T>(this IStoreSQL store, DbCommand cmd)
+		{
+			List<T> result = new List<T>();
+			object o;
+			T item;
+			DbDataReader reader = null;
+			try
+			{
+				reader = store.OpenReader(cmd);
+				while (reader.Read())
+				{
+					o = reader.GetValue(0);
+					if (o != DBNull.Value)
+					{
+						item = (T)Convert.ChangeType(o, typeof(T));
+						result.Add(item);
+					}//if
+				}//while
+			}//try
+			catch (Exception E)
+			{
+				store.LastError = E;
+			}
+			finally
+			{
+				reader.Close(); reader.Dispose();
+			}
+			return result;
+		}//function
+
 		public static T Max<T>(this IStoreSQL store, string Table, string Field, T def = default(T))
 		{
 			DbCommand cmd = store.getCommand(string.Format("SELECT MAX({0}) FROM {1}", Field, Table));
