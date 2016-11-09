@@ -40,6 +40,11 @@ namespace BDB.Templating
 			return source.print(toString, ", ");
 		}//function
 
+		public static string quote(this string s, char ch)
+		{
+			return "{0}{1}{2}".fmt(ch, s, C.Right(ch));
+		}//function
+
 		/// <summary>
 		/// формат строки
 		/// usage: "Value1={0}, Value2={1}".fmt(Value1, Value2)
@@ -163,7 +168,7 @@ namespace BDB.Templating
 		}//function
 
 		//если эти символы в плейсхолдере, то это не он и его игнорируем
-		private static char[] badCharsForPlaceholder = { ' ', '\t', '\n' };
+		private static char[] badCharsForPlaceholder = { C.Space, C.Tab, '\n' };
 
 		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}')
 		{

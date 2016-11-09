@@ -10,7 +10,7 @@ namespace BDB.Templating
 	{
 		public static readonly string[] EmptyStrings = new string[0];
 
-		public const string ZPT = ", ";
+		public const string ZPT_SPACE = ", ";
 		public const string CR = "\r\n";
 
 		public const string Enter = "Enter";
@@ -27,6 +27,12 @@ namespace BDB.Templating
 		public const string Machine = "Machine";
 		public const string Name = "Name";
 		public const string State = "State";
+		public const string Default = "Default";
+		public const string Def = "Def";
+		public const string Ref = "Ref";
+		public const string Key = "Key";
+		public const string Len = "Len";
+		public const string Length = "Length";
 
 		public const string NotInsert = "NotInsert";
 		public const string NotUpdate = "NotUpdate";
@@ -42,5 +48,6 @@ namespace BDB.Templating
 		public const string COMMENT = "Comment";
 		public const string INFO = "Info";
 		public const string DEFAULT = "Default";
+
 	}//class
 }

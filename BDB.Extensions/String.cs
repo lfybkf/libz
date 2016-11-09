@@ -125,6 +125,10 @@ namespace BDB
 			return string.IsNullOrWhiteSpace(s) ? def : s;
 		}
 
+		public static string quote(this string s, char ch)
+		{
+			return "{0}{1}{2}".fmt(ch, s, C.Right(ch));
+		}//function
 
 
 		/// <summary>
@@ -282,7 +286,7 @@ namespace BDB
 
 		}//function
 
-		private static readonly char[] ccPointAndComma = { ',', '.' };
+		private static readonly char[] ccPointAndComma = { C.Point, C.Comma };
 		public static decimal parseMoney(this string s)
 		{
 			int iPoint = s.IndexOfAny(ccPointAndComma);
@@ -356,9 +360,9 @@ namespace BDB
 				//NumberFormatInfo nf = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat;
 				NumberFormatInfo nf = CultureInfo.InvariantCulture.NumberFormat;
 				string s2 = s;
-				if (nf.CurrencyGroupSeparator != sSpace && s.IndexOf(cSpace) >= 0) { s2 = s.Replace(sSpace, string.Empty); }
-				if (nf.CurrencyDecimalSeparator == sPoint && s.IndexOf(cComma) >= 0) { s2 = s2.Replace(cComma, cPoint); }
-				if (nf.CurrencyDecimalSeparator == sComma && s.IndexOf(cPoint) >= 0) { s2 = s2.Replace(cPoint, cComma); }
+				if (nf.CurrencyGroupSeparator != S.Space && s.IndexOf(C.Space) >= 0) { s2 = s.Replace(S.Space, string.Empty); }
+				if (nf.CurrencyDecimalSeparator == S.Point && s.IndexOf(C.Comma) >= 0) { s2 = s2.Replace(C.Comma, C.Point); }
+				if (nf.CurrencyDecimalSeparator == S.Comma && s.IndexOf(C.Point) >= 0) { s2 = s2.Replace(C.Point, C.Comma); }
 
 				bool OK = Decimal.TryParse(s2, out z);
 				if (OK) { return z; }//if
@@ -375,38 +379,30 @@ namespace BDB
 		#endregion
 
 		#region split
-		const char cTab = '\t';
-		const char cSpace = ' '; const string sSpace = " ";
-		const char cPoint = '.'; const string sPoint = ".";
-		const char cComma = ','; const string sComma = ",";
-		const char cColon = ':';
-		const char cSemicolon = ';';
-		const char cSlash = '/';
-
 		/// <summary>
 		/// split : двоеточие
 		/// </summary>
-		public static string[] splitColon(this string s) { return s.Split(cColon); }//function
+		public static string[] splitColon(this string s) { return s.Split(C.Colon); }//function
 		/// <summary>
 		/// split , запятая
 		/// </summary>
-		public static string[] splitComma(this string s) { return s.Split(cComma); }//function
+		public static string[] splitComma(this string s) { return s.Split(C.Comma); }//function
 		/// <summary>
 		/// split ; точка с запятой
 		/// </summary>
-		public static string[] splitSemicolon(this string s) { return s.Split(cSemicolon); }//function
+		public static string[] splitSemicolon(this string s) { return s.Split(C.Semicolon); }//function
 		/// <summary>
 		/// split . точка
 		/// </summary>
-		public static string[] splitPoint(this string s) { return s.Split(cPoint); }//function
+		public static string[] splitPoint(this string s) { return s.Split(C.Point); }//function
 		/// <summary>
 		/// split ПРОБЕЛ
 		/// </summary>
-		public static string[] splitSpace(this string s) { return s.Split(cSpace); }//function
+		public static string[] splitSpace(this string s) { return s.Split(C.Space); }//function
 		/// <summary>
 		/// split TAB
 		/// </summary>
-		public static string[] splitTab(this string s) { return s.Split(cTab); }//function
+		public static string[] splitTab(this string s) { return s.Split(C.Tab); }//function
 		/// <summary>
 		/// split line
 		/// </summary>
@@ -414,7 +410,7 @@ namespace BDB
 		/// <summary>
 		/// split /
 		/// </summary>
-		public static string[] splitSlash(this string s) { return s.Split('/'); }//function
+		public static string[] splitSlash(this string s) { return s.Split(C.Slash); }//function
 		#endregion
 	}//class
 }//ns
