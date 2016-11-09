@@ -30,11 +30,19 @@ namespace BDB
 			return cmd;
 		}
 
-		public static DbParameter getParameter(this IStoreSQL store, string Name, object Value)
+		public static DbParameter getParameter(this IStoreSQL store, string Name, object Value, bool IsNullable = false)
 		{
 			var result = store.getParameter();
 			result.ParameterName = Name;
-			result.Value = Value;
+			if (IsNullable && Value == null)
+			{
+				result.Value = DBNull.Value;
+			}//if
+			else
+			{
+				result.Value = Value;
+			}//else
+			
 			return result;
 		}
 
