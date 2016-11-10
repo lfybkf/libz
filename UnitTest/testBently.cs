@@ -9,28 +9,6 @@ namespace UnitTest
 	public class testBently
 	{
 		[TestMethod]
-		public void TestConnection()
-		{
-			EC.defaultStore = new SqlCE("Onto");
-			bool ok = EC.defaultStore.TestConnection();
-
-			EC ec = new EC();
-			Assert.IsTrue(ok);
-		}
-
-		[TestMethod]
-		public void TestMaxMin()
-		{
-			EC.defaultStore = new SqlCE("Onto");
-			var ec = new EC();
-			var min = ec.Min("ID", "Author");
-			var max = ec.Max("ID", "Author");
-
-			long minL = ec.Max("ID", "Author", 0);
-			Assert.IsTrue(true);
-		}
-
-		[TestMethod]
 		public void TestInsert()
 		{
 			var store = new SqlCE("Onto");

@@ -9,26 +9,43 @@ namespace BDB
 	///<summary>Построитель SQL</summary>
 	public class SqlBuilder
 	{
-		const string allFields = "*";
-		
-		#region fmt
-		const string _fmtFieldEqValue = "{0} = {1}";
-		public string fmtFieldEqValue {get{return _fmtFieldEqValue;}}
-		const string _fmtFieldGtValue = "{0} > {1}";
-		public string fmtFieldGtValue {get{return _fmtFieldGtValue;}}
-		const string _fmtFieldGeValue = "{0} >= {1}";
-		public string fmtFieldGeValue {get{return _fmtFieldGeValue;}}
-		const string _fmtFieldLsValue = "{0} < {1}";
-		public string fmtFieldLsValue {get{return _fmtFieldLsValue;}}
-		const string _fmtFieldLeValue = "{0} <= {1}";
-		public string fmtFieldLeValue {get{return _fmtFieldLeValue;}}
-		
-		const string _fmtFieldEqString = "{0} = '{1}'";
-		public string fmtFieldEqString {get{return _fmtFieldEqString;}}
-		const string _fmtFieldEqPar = "{0} = @{1}";
-		public string fmtFieldEqPar {get{return _fmtFieldEqPar;}}
-		#endregion
+		const string allFields = S.Star;
 
+		///<summary>форматирование поле-значение</summary>
+		public static class FMT
+		{
+			const string fmtFieldEqValue = "{0} = {1}";
+			///<summary>{0} = {1}</summary>
+			public static string FieldEqValue(string fld, object val) { return fmtFieldEqValue.fmt(fld, val); }
+			
+			const string fmtFieldGtValue = "{0} > {1}";
+			///<summary>{0} gt {1}</summary>
+			public static string FieldGtValue(string fld, object val) { return fmtFieldGtValue.fmt(fld, val); }
+			
+			const string fmtFieldGeValue = "{0} >= {1}";
+			///<summary>{0} ge {1}</summary>
+			public static string FieldGeValue(string fld, object val) { return fmtFieldGeValue.fmt(fld, val); }
+			
+			const string fmtFieldLsValue = "{0} < {1}";
+			///<summary>{0} ls {1}</summary>
+			public static string FieldLsValue(string fld, object val) { return fmtFieldLsValue.fmt(fld, val); }
+			
+			const string fmtFieldLeValue = "{0} <= {1}";
+			///<summary>{0} le {1}</summary>
+			public static string FieldLeValue(string fld, object val) { return fmtFieldLeValue.fmt(fld, val); }
+
+			const string fmtFieldEqString = "{0} = '{1}'";
+			///<summary>{0} = '{1}'</summary>
+			public static string FieldEqString(string fld, object val) { return fmtFieldEqString.fmt(fld, val); }
+			
+			const string fmtFieldEqPar = "{0} = @{1}";
+			///<summary>{0} = @{1}. Если имя параметра не указано, то используется имя поля</summary>
+			public static string FieldEqPar(string fld, string par = null) 
+			{ return fmtFieldEqPar.fmt(fld, par?? fld); }
+			
+		}//class
+
+		///<summary>таблица</summary>
 		public string Table;
 		///<summary>SELECT {Field}, UPDATE {Field} = {Value}</summary>
 		public string Field;
@@ -36,16 +53,22 @@ namespace BDB
 		public string Where;
 		///<summary>UPDATE TABLE {Set} WHERE</summary>
 		public string Set;
+
+		///<summary>UPDATE {Field} = {Value}; INSERT ... VALUES ({Value})</summary>
 		public object Value;
-		//public long LongValue;
+
+		///<summary>SELECT {Top}</summary>
 		public int Top = 0;
 
+		///<summary>стереть все кроме таблицы (она часто не меняется)</summary>
 		public void ClearButTable()
 		{
 			Field = Where = Set = null;
 			Value = null;
 			Top = 0;
 		}
+
+		///<summary>стереть все</summary>
 		public void ClearAll()
 		{
 			Table = null;

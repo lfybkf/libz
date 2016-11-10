@@ -8,20 +8,30 @@ using System.Threading.Tasks;
 
 namespace BDB
 {
+	///<summary>интерфейс к БД (SQLce SQLexpress SQLserver)</summary>
 	public interface IStoreSQL
 	{
+		///<summary>используется для построения ConnectionString</summary>
 		string Name { set; }
+		///<summary>прямая работа с ConnectionString</summary>
 		string ConnectionString { set; get; }
+		///<summary>проверка соединения</summary>
 		bool TestConnection();
+		///<summary>выполнить</summary>
 		bool Execute(DbCommand cmd);
+		///<summary>соединитсья</summary>
 		void Connect(DbCommand cmd);
+		///<summary>получить команду нужного типа (SqlCommand, SqlCeCommand...)</summary>
 		DbCommand getCommand();
+		///<summary>получить паарметр нужного типа</summary>
 		DbParameter getParameter();
+		///<summary>открыть ридер</summary>
 		DbDataReader OpenReader(DbCommand cmd);
 		///<summary>ошибка при последнем выполнении</summary> 
 		Exception LastError { get; set; }
 	}//interface
 
+	///<summary>расширение для IStoreSQL</summary>
 	public static class Extension_IStoreSQL
 	{
 		///<summary>получить команду и заполнить CommandText = sql</summary> 
