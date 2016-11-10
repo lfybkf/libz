@@ -1,6 +1,7 @@
 ﻿using System;
 using BDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text;
 
 namespace UnitTest
 {
@@ -55,6 +56,8 @@ namespace UnitTest
 		[TestMethod]
 		public void TestScalar()
 		{
+			
+
 			var store = new SqlCE("Onto");
 			var cmd = store.getCommand (new SqlBuilder { Table = "Author" }.Count);
 			var count = store.Scalar(cmd);

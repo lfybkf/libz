@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BDB
 {
 	///<summary>константы CHAR</summary>
-	public static class C
+	public static class C1
 	{
 		///<summary>Правая пара к скобке (остальные символы возвращаются сами)</summary>
 		public static char Right(char left)
@@ -57,7 +57,7 @@ namespace BDB
 	}//class
 
 	///<summary>константы STRING</summary>
-	public static class S
+	public static class S1
 	{
 		///<summary>Правая пара к скобке (остальные символы возвращаются сами)</summary>
 		public static string Right(string left)

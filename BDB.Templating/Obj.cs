@@ -28,12 +28,12 @@ namespace BDB.Templating
 
 		internal override void Read(XElement src)
 		{
-			Name = Get(R.NAME);
-			_Table = Get(R.TABLE);
+			Name = Get(R.Name);
+			_Table = Get(R.Table);
 			_IDname = Get("IDname");
 			_IDtype = Get("IDtype");
 
-			FillListFromXlist<Field>(fields, src.Elements(R.FIELD));
+			FillListFromXlist<Field>(fields, src.Elements(R.Field));
 		}//function
 
 		public static string XmlDTD()

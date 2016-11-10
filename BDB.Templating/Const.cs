@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BDB.Templating
 {
-	public static class R
+	public static class R2
 	{
 		public static readonly string[] EmptyStrings = new string[0];
 
@@ -23,13 +23,12 @@ namespace BDB.Templating
 		public const string To = "To";
 		public const string Transition = "Transition";
 		public const string ID = "ID";
-		public const string Info = "Info";
+		//public const string Info = "Info";
 		public const string Machine = "Machine";
-		public const string Name = "Name";
 		public const string State = "State";
-		public const string Default = "Default";
+		//public const string Default = "Default";
 		public const string Def = "Def";
-		public const string Ref = "Ref";
+		//public const string Ref = "Ref";
 		public const string Key = "Key";
 		public const string Len = "Len";
 		public const string Length = "Length";
@@ -37,17 +36,17 @@ namespace BDB.Templating
 		public const string NotInsert = "NotInsert";
 		public const string NotUpdate = "NotUpdate";
 
-		public const string OBJECT = "Object";
-		public const string FIELD = "Field";
-		public const string NAME = "Name";
-		public const string TYPE = "Type";
-		public const string NULL = "Null";
-		public const string REF = "Ref";
-		public const string TABLE = "Table";
-		public const string AUTHOR = "Author";
-		public const string COMMENT = "Comment";
-		public const string INFO = "Info";
-		public const string DEFAULT = "Default";
+		public const string Object = "Object";
+		public const string Field = "Field";
+		public const string Name = "Name";
+		public const string Type = "Type";
+		public const string Null = "Null";
+		public const string Ref = "Ref";
+		public const string Table = "Table";
+		public const string Author = "Author";
+		public const string Comment = "Comment";
+		public const string Info = "Info";
+		public const string Default = "Default";
 
 	}//class
 }

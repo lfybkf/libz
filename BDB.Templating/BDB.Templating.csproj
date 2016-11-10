@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\BDB.Templating.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,12 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConstCharString.cs" />
+    <Compile Include="ConstR.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConstR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ConstStringChar.cs">
+      <DependentUpon>ConstStringChar.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Guard.cs" />
     <Compile Include="Attrz.cs" />
     <Compile Include="AttrzME.cs" />
     <Compile Include="Comment.cs" />
-    <Compile Include="Const.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Machine.cs" />
@@ -56,9 +65,23 @@
     <Compile Include="State.cs" />
     <Compile Include="Transition.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ConstR.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConstR.cs</LastGenOutput>
+    </Content>
+    <Content Include="ConstStringChar.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConstStringChar.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) c:\libs\</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetPath) c:\libs\
+copy $(TargetName).xml c:\libs\</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

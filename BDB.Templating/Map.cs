@@ -35,7 +35,7 @@ namespace BDB.Templating
 			foreach (var file in files)
 			{
 				xdoc = XDocument.Load(file);
-				Attrz.FillListFromXlist<Obj>(_objects, xdoc.Root.Elements(R.OBJECT));
+				Attrz.FillListFromXlist<Obj>(_objects, xdoc.Root.Elements(R.Object));
 				_objects.forEach(o => o.FileSource = Path.GetFileNameWithoutExtension(file));
 			}//for
 		}//function

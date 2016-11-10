@@ -13,7 +13,7 @@ namespace BDB.Templating
 
 		internal override void Read(System.Xml.Linq.XElement src)
 		{
-			Author = Get(R.AUTHOR);
+			Author = Get(R.Author);
 			Content = Get(string.Empty);
 		}//function
 	}//class

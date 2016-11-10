@@ -1,0 +1,126 @@
+﻿<#@ template debug="true" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+
+
+<#
+Symbol[] symbols = {
+	new Symbol {Name = "Ampersand", Value="&", Comment="амперсанд"},
+	new Symbol {Name = "BackSlash", Value="\\\\"},
+	new Symbol {Name = "Dog", Value="@", Comment="собака"},
+	new Symbol {Name = "Eq", Value="=", Comment="равно"},
+	new Symbol {Name = "Exclamation", Value="!", Comment="восклицательный знак"},
+	new Symbol {Name = "Comma", Value=",", Comment="запятая"},
+	new Symbol {Name = "Colon", Value=":", Comment="двоеточие)"},
+	new Symbol {Name = "Minus", Value="-", Comment="минус"},
+	new Symbol {Name = "Plus", Value="+", Comment="плюс"},
+	new Symbol {Name = "Power", Value="^"},
+	new Symbol {Name = "Point", Value=".", Comment="точка"},
+	new Symbol {Name = "Percent", Value="%", Comment="процент"},
+	new Symbol {Name = "Question", Value="?", Comment="вопрос"},
+	new Symbol {Name = "Quote", Value="\\\'", Comment="кавычка одиночная"},
+	new Symbol {Name = "QuoteDouble", Value="\\\"", Comment="кавычка двойная"},
+	new Symbol {Name = "Sharp", Value="#"},
+	new Symbol {Name = "Slash", Value="/"},
+	new Symbol {Name = "Semicolon", Value=";", Comment="точка с запятой"},
+	new Symbol {Name = "Space", Value=" ", Comment="пробел"},
+	new Symbol {Name = "Star", Value="*"},
+	new Symbol {Name = "Tab", Value="\t", Comment="символ табуляции"},
+	new Symbol {Name = "Under", Value="_", Comment="подчеркивание"},
+
+	new Symbol {Name = "LParenthesis", Value="("},
+	new Symbol {Name = "RParenthesis", Value=")"},
+	new Symbol {Name = "LSquare", Value="["},
+	new Symbol {Name = "RSquare", Value="]"},
+	new Symbol {Name = "LBrace", Value="{"},
+	new Symbol {Name = "RBrace", Value="}"},
+	new Symbol {Name = "Less", Value="<", Comment="знак меньше"},
+	new Symbol {Name = "Greater", Value=">", Comment="знак больше"},
+
+	
+};
+ #>
+
+//Generated <#=DateTime.Now.ToString() #>
+
+namespace BDB
+{
+	///<summary>константы CHAR</summary>
+	public static class C
+	{
+		<# foreach (var sym in symbols) { #>
+		<#= sym.printChar() #>
+		<# } #>
+
+		///<summary>Правая пара к скобке (остальные символы возвращаются сами)</summary>
+		public static char Right(char left)
+		{
+			if (left == LBrace) { return RBrace; }//if
+			else if (left == LParenthesis) { return RParenthesis; }//if
+			else if (left == LSquare) { return RSquare; }//if
+			else if (left == Less) { return Greater; }//if
+			else { return left; }//else
+		}//function
+	}//class
+
+	///<summary>константы STRING</summary>
+	public static class S
+	{
+		<# foreach (var sym in symbols) { #>
+		<#= sym.printString() #>
+		<# } #>
+
+		///<summary>Правая пара к скобке (остальные символы возвращаются сами)</summary>
+		public static string Right(string left)
+		{
+			if (left == LBrace) { return RBrace; }//if
+			else if (left == LParenthesis) { return RParenthesis; }//if
+			else if (left == LSquare) { return RSquare; }//if
+			else if (left == Less) { return Greater; }//if
+			else { return left; }//else
+		}//function
+	}//class
+}
+
+
+<#+
+class Symbol
+{
+	public string Name;
+	public string Value;
+	public string Comment;
+	public string Summary {get { 
+		if (Comment == null) {return Value; } 
+		else if (Value == ">") {return Comment; }
+		else if (Value == "<") {return Comment; }
+		else if (Value == "&") {return Comment; }
+		else if (Value == "\t") {return Comment; }
+		else 
+		{
+			return string.Format("{0} ({1})",Value, Comment);
+		} 
+	}}
+
+	public string printChar()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.AppendFormat("///<summary>{0}</summary>", Summary);
+		sb.AppendLine(string.Empty);
+		sb.AppendFormat("public const char {0} = \'{1}\';", Name, Value);
+		return sb.ToString();
+	}//function
+
+	public string printString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.AppendFormat("///<summary>{0}</summary>", Summary);
+		sb.AppendLine(string.Empty);
+		sb.AppendFormat("public const string {0} = \"{1}\";", Name, Value);
+		return sb.ToString();
+	}//function
+
+}
+#>

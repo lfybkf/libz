@@ -21,11 +21,11 @@ namespace BDB.Templating
 
 		internal override void Read(XElement src)
 		{
-			Name = Get(R.NAME);
-			Type = Get(R.TYPE);
-			Ref = Get(R.REF);
-			Default = Get(R.DEFAULT);
-			IsNullable = Get(R.NULL) != null;
+			Name = Get(R.Name);
+			Type = Get(R.Type);
+			Ref = Get(R.Ref);
+			Default = Get(R.Default);
+			IsNullable = Get(R.Null) != null;
 			NotInsert = Get(R.NotInsert) != null;
 			NotUpdate = Get(R.NotUpdate) != null;
 		}//function
