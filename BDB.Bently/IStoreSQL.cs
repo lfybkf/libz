@@ -42,6 +42,31 @@ namespace BDB
 			return cmd;
 		}
 
+
+		///<summary>установить значение параметра. Если его нет, то добавить</summary> 
+		public static void setParameter(this DbCommand cmd, string Name, object Value, bool IsNullable = false)
+		{
+			DbParameter parameter = null;
+			if (cmd.Parameters.Contains(Name))
+			{
+				parameter = cmd.Parameters[Name];
+			}//if
+			else
+			{
+				parameter = cmd.CreateParameter();
+				parameter.ParameterName = Name;
+				cmd.Parameters.Add(parameter);
+			}//else
+			parameter.Value = (IsNullable && Value == null) ? DBNull.Value : Value;
+		}//function
+
+
+		///<summary>установить значение параметра. Если его нет, то добавить</summary> 
+		public static void setParameter(this IStoreSQL store, DbCommand cmd, string Name, object Value, bool IsNullable = false)
+		{
+			cmd.setParameter(Name, Value, IsNullable);
+		}
+
 		///<summary>Получить заполненный параметр нужного типа. Если он может содержать NULL и Value==NULL, то значение параметра = DBNull.Value</summary> 
 		public static DbParameter getParameter(this IStoreSQL store, string Name, object Value, bool IsNullable = false)
 		{

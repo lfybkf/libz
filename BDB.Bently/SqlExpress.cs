@@ -10,6 +10,7 @@ using BDB;
 
 namespace BDB
 {
+	///<summary>qlExpress: IStoreSQL</summary> 
 	public class SqlExpress: IStoreSQL
 	{
 		public string Name

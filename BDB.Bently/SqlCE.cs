@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 
 namespace BDB
 {
+	///<summary>sql compact</summary> 
 	public class SqlCE: IStoreSQL
 	{
 		string _ConnectionString;
+		///<summary>установка строки соединения</summary> 
 		public string ConnectionString { set { _ConnectionString = value; } get { return _ConnectionString; } }
 		SqlCeConnection NewConnection { get { return new SqlCeConnection(_ConnectionString); } }
+		///<summary>или полный путь к файлу БД - или имя БД (без расширения) в текущем каталоге</summary> 
 		public string Name { 
 			set {
 				string file;
@@ -39,18 +42,22 @@ namespace BDB
 		}
 
 		static Exception exceptionLast = null;
+		///<summary>последняя ошибка</summary> 
 		public Exception LastError { get { return exceptionLast; } set { exceptionLast = value; } }
+		///<summary>SqlCeCommand</summary> 
 		public DbCommand getCommand() { return new SqlCeCommand(); }
+		///<summary>SqlCeParameter</summary> 
 		public DbParameter getParameter() { return new SqlCeParameter(); }
-
+		///<summary>проверка соединения</summary> 
 		public bool TestConnection() { try { var c = new SqlCeConnection(ConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
+		///<summary>соединиться</summary> 
 		public void Connect(DbCommand cmd) { cmd.Connection = NewConnection; }
-
+		///<summary>конструктор</summary> 
 		public SqlCE(string Name)
 		{
 			this.Name = Name;
 		}//constructor
-
+		///<summary>выполнить команду</summary> 
 		public bool Execute(DbCommand cmd)
 		{
 			bool Ret;
@@ -73,6 +80,7 @@ namespace BDB
 			return Ret;
 		}//function
 
+		///<summary>открыть читало</summary> 
 		public DbDataReader OpenReader(DbCommand cmd)
 		{
 			SqlCeDataReader Ret = null;
