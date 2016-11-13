@@ -11,40 +11,6 @@ namespace BDB
 	{
 		const string allFields = S.Star;
 
-		///<summary>форматирование поле-значение</summary>
-		public static class FMT
-		{
-			const string fmtFieldEqValue = "{0} = {1}";
-			///<summary>{0} = {1}</summary>
-			public static string FieldEqValue(string fld, object val) { return fmtFieldEqValue.fmt(fld, val); }
-			
-			const string fmtFieldGtValue = "{0} > {1}";
-			///<summary>{0} gt {1}</summary>
-			public static string FieldGtValue(string fld, object val) { return fmtFieldGtValue.fmt(fld, val); }
-			
-			const string fmtFieldGeValue = "{0} >= {1}";
-			///<summary>{0} ge {1}</summary>
-			public static string FieldGeValue(string fld, object val) { return fmtFieldGeValue.fmt(fld, val); }
-			
-			const string fmtFieldLsValue = "{0} < {1}";
-			///<summary>{0} ls {1}</summary>
-			public static string FieldLsValue(string fld, object val) { return fmtFieldLsValue.fmt(fld, val); }
-			
-			const string fmtFieldLeValue = "{0} <= {1}";
-			///<summary>{0} le {1}</summary>
-			public static string FieldLeValue(string fld, object val) { return fmtFieldLeValue.fmt(fld, val); }
-
-			const string fmtFieldEqString = "{0} = '{1}'";
-			///<summary>{0} = '{1}'</summary>
-			public static string FieldEqString(string fld, object val) { return fmtFieldEqString.fmt(fld, val); }
-			
-			const string fmtFieldEqPar = "{0} = @{1}";
-			///<summary>{0} = @{1}. Если имя параметра не указано, то используется имя поля</summary>
-			public static string FieldEqPar(string fld, string par = null) 
-			{ return fmtFieldEqPar.fmt(fld, par?? fld); }
-			
-		}//class
-
 		///<summary>таблица</summary>
 		public string Table;
 		///<summary>SELECT {Field}, UPDATE {Field} = {Value}</summary>

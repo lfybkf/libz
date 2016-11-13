@@ -51,6 +51,7 @@
     <Compile Include="Sqlbuilder.cs" />
     <Compile Include="SqlCE.cs" />
     <Compile Include="SqlExpress.cs" />
+    <Compile Include="SqlF.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BDB.Extensions\BDB.Extensions.csproj">
