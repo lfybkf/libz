@@ -23,14 +23,16 @@ namespace BDB
 
 		static Exception exceptionLast = null;
 		public Exception LastError { get { return exceptionLast; } set { exceptionLast = value; } }
-		public int rows = 0;
+		public int rows { get; private set; }
 
 		public DbCommand getCommand() { return new SqlCommand(); }
 		public DbParameter getParameter() { return new SqlParameter(); }
 
 		public bool TestConnection() { try { var c = new SqlConnection(ConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
+
 		public void Connect(DbCommand cmd) { cmd.Connection = NewConnection; }
 
+		///<summary>Execute</summary>
 		public bool Execute(DbCommand cmd)
 		{
 			bool Ret;
@@ -52,7 +54,7 @@ namespace BDB
 			}
 			return Ret;
 		}
-
+		///<summary>OpenReader</summary>
 		public DbDataReader OpenReader(DbCommand cmd)
 		{
 			SqlDataReader Ret = null;
