@@ -6,24 +6,13 @@ using System.Text;
 
 namespace BDB
 {
+	///<summary>расширение строк</summary> 
 	public static class StringExtension
 	{
-		/// <summary>
-		/// формат строки
-		/// usage: "Value1={0}, Value2={1}".fmt(Value1, Value2)
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="oo"></param>
-		/// <returns></returns>
+		/// <summary>формат строки. usage: "Value1={0}, Value2={1}".fmt(Value1, Value2) </summary>
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 
-		/// <summary>
-		/// from "asd{name}qwer{age}ty" get 3,"{name}" ;14,"{age}"
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="cL"></param>
-		/// <param name="cR"></param>
-		/// <returns></returns>
+		/// <summary>from "asd{name}qwer{age}ty" get 3,"{name}" ;14,"{age}"</summary>
 		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}')
 		{
 			if (s.IndexOf(cL) < 0) { return null; }//if
@@ -50,6 +39,7 @@ namespace BDB
 		}//func
 
 
+		///<summary>формат строки по объектам</summary> 
 		public static string fmto(this string s, params object[] oo)
 		{
 			//получаем список плейс-холдеров
@@ -119,48 +109,33 @@ namespace BDB
 
 		/// <summary>string not IsNullOrWhiteSpace</summary>
 		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
+		///<summary>IsNullOrWhiteSpace</summary> 
 		public static bool isEmpty(this string s) { return string.IsNullOrWhiteSpace(s); }
-		public static string whenEmpty(this string s, string def)
-		{
-			return string.IsNullOrWhiteSpace(s) ? def : s;
-		}
-
+		///<summary>по умолчанию, когда пусто</summary> 
+		public static string whenEmpty(this string s, string def)	{	return string.IsNullOrWhiteSpace(s) ? def : s; }
+		///<summary>окавычить, оскобить</summary> 
 		public static string quote(this string s, char ch)
 		{
 			return "{0}{1}{2}".fmt(ch, s, C.Right(ch));
 		}//function
 
 
-		/// <summary>
-		/// Contains IgnoreCase
-		/// </summary>
-		/// <returns></returns>
+		/// <summary>Contains IgnoreCase</summary>
 		public static bool containsCI(this string s, string what)
 		{
 			return s.IndexOf(what, StringComparison.OrdinalIgnoreCase) >= 0;
 		}
-
+		/// <summary>равно IgnoreCase</summary>
 		public static bool equalCI(this string s, string what)
 		{
 			return string.Compare(s, what, true) == 0;
 		}
 
-		/// <summary>
-		/// есть ли строка в массиве
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="ss">массив, в котором искать</param>
-		/// <returns></returns>
+		/// <summary>есть ли строка в массиве</summary>
 		public static bool inList(this string s, params string[] ss) { return ss.Contains(s); }//func
 
 		#region substring
-		/// <summary>
-		/// берет кусок строки после <paramref name="Prefix"/>
-		/// Пример: "Omnibus".after("b") = "us"
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="Prefix">искомая строка</param>
-		/// <returns></returns>
+		/// <summary>берет кусок строки после <paramref name="Prefix"/>. Пример: "Omnibus".after("b") = "us"</summary>
 		public static string after(this string s, string Prefix)
 		{
 			int i = s.IndexOf(Prefix);
@@ -193,10 +168,10 @@ namespace BDB
 				return string.Empty;
 		}//func
 
-
-		public static string translate(this string input, string source, string destination)
+		///<summary>замена символов. (smth, ms, MS) = SMth</summary> 
+		public static string translate(this string s, string source, string destination)
 		{
-			StringBuilder result = new StringBuilder(input);
+			StringBuilder result = new StringBuilder(s);
 			int minLength = Math.Min(source.Length, destination.Length);
 			for (int i = 0; i < minLength; i++)
 			{
@@ -205,6 +180,7 @@ namespace BDB
 			return result.ToString();
 		}//function
 		
+		///<summary>левые Х симоволов</summary> 
 		public static string left(this string value, int maxLength)
 		{
 			if (string.IsNullOrEmpty(value)) {return value;}
@@ -214,12 +190,7 @@ namespace BDB
 		#endregion
 
 		#region add
-		/// <summary>
-		/// формирует Path из массива строк
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="args"></param>
-		/// <returns></returns>
+		/// <summary>формирует Path из массива строк</summary>
 		public static string addToPath(this string s, params string[] args)
 		{
 			foreach (string path in args)
@@ -229,45 +200,41 @@ namespace BDB
 			return s;
 		}//func
 
-		/// <summary>
-		/// конкатенация массива к строке
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="args"></param>
-		/// <returns></returns>
+		/// <summary>конкатенация массива к строке</summary>
 		public static string add(this string s, params object[] args)
 		{
-			StringBuilder sb = new StringBuilder(s);
+			StringBuilder sb = (s == null) ? new StringBuilder() : new StringBuilder(s);
 			args.forEach(o => sb.Append(o));
-			return sb.ToString();
-		}//function
-
-		/// <summary>
-		/// конкатенация к строке текста с переносом строки из массива
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="args"></param>
-		/// <returns></returns>
-		public static string addLine(this string s, params object[] args)
-		{
-			StringBuilder sb = new StringBuilder(s);
-			args.forEach(o => sb.AppendFormat("{0}{1}", Environment.NewLine, o));
 			return sb.ToString();
 		}//function
 
 		/// <summary>конкатенация к строке массива с разделителем</summary>
 		public static string addDelim(this string s, string Delim, params object[] args)
 		{
-			StringBuilder sb = new StringBuilder(s);
-			args.forEach(o => sb.AppendFormat("{0}{1}", Delim, o));
+			if (!args.Any())
+			{
+				return s;
+			}//if
+
+			StringBuilder sb;
+			if (s.isEmpty())
+			{
+				sb = new StringBuilder(args.First().ToString());
+				args.Skip(1).forEach(o => sb.AppendFormat("{0}{1}", Delim, o));
+			}//if
+			else
+			{
+				sb = new StringBuilder(s);
+				args.forEach(o => sb.AppendFormat("{0}{1}", Delim, o));
+			}//else
 			return sb.ToString();
 		}//function
 		
 		/// <summary>конкатенация к строке массива с разделителем Space</summary>
-		public static string addSpace(this string s, params object[] args)
-		{
-			return s.addDelim(" ", args);
-		}//function
+		public static string addSpace(this string s, params object[] args){	return s.addDelim(S.Space, args);	}//function
+		/// <summary>конкатенация к строке текста с переносом строки из массива</summary>
+		public static string addLine(this string s, params object[] args) { return s.addDelim(Environment.NewLine, args); }//function
+
 
 		#endregion
 

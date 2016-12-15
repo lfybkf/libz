@@ -127,5 +127,14 @@ namespace UnitTest
 			}//for
 
 		}//function
+
+		[TestMethod]
+		public void TestAdd()
+		{
+			string s = null;
+			Assert.IsTrue(s.addSpace("mu", "MU") == "mu MU");
+
+			Assert.IsTrue("1".addSpace("mu", "MU") == "1 mu MU");
+		}//function
 	}//class
 }//ns
