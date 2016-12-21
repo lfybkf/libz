@@ -50,12 +50,17 @@ namespace UnitTest
 		[TestMethod]
 		public void Test_SqlF()
 		{
-			string s1 = SqlF.ANDed(new string[] {SqlF.InList("ID", new long[] { 1655, 1653 }), SqlF.EqValue("Name", "BUKA") });
-			string s2 = SqlF.ORed(new string[] { SqlF.InList("Name", new string[] { "Abc", "Que", "BRI" }, false), SqlF.EqValue("ID", 300) });
-			string s3 = SqlF.ANDed(new string[] { SqlF.InList("Item", new int[] { 34528, 31259 }), SqlF.LikeNotValue("Name", "BUKA") });
+			string s1 = SqlF.AND(new string[] {SqlF.InList("ID", new long[] { 1655, 1653 }), SqlF.EqValue("Name", "BUKA") });
+			string s2 = SqlF.OR(new string[] { SqlF.InList("Name", new string[] { "Abc", "Que", "BRI" }, false), SqlF.EqValue("ID", 300) });
+			string s3 = SqlF.AND(new string[] { SqlF.InList("Item", new int[] { 34528, 31259 }), SqlF.LikeNotValue("Name", "BUKA") });
 
 			var sqlb = new SqlBuilder { Table = "Img", Top = 15,
-				Where = SqlF.ANDed(new string[] { SqlF.InList("ID", new long[] { 1655, 1653 }), SqlF.LikeValue("Name", "%31%") })
+				Where = SqlF.AND(
+					//SqlF.InList("ID", new long[] { 1655, 1653 }),
+					SqlF.OR(SqlF.EqValue("ID", 1655), SqlF.EqValue("ID", 1653)),
+					SqlF.LikeValue("Name", "%31%"),
+					SqlF.Beetween("ID", 1000, 3000)
+				)
 			};
 			string sql = sqlb.Select;
 			Assert.IsTrue(true);

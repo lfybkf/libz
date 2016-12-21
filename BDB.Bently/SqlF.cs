@@ -1,51 +1,13 @@
 ﻿
-//Generated 21.12.2016 16:54:32
+//Generated 21.12.2016 20:02:36
 
 using System.Collections.Generic;
 using System.Linq;
 namespace BDB
 {
 ///<summary>набор статических функций для SQL</summary>
-public static class SqlF
+public static partial class SqlF
 {
-	///<summary>соединить условия из списка по И</summary>
-	public static string ANDed(IEnumerable<string> whereS) {return string.Join(" and ", whereS);}//function
-
-	///<summary>соединить условия из списка по ИЛИ</summary>
-	public static string ORed(IEnumerable<string> whereS) {	return string.Join(" or ", whereS);	}//function
-
-	///<summary>fld IS NULL</summary>
-	public static string IsNull(string fld) { return "{0} IS NULL".fmt(fld); }//function
-	///<summary>fld IS NOT NULL</summary>
-	public static string IsNotNull(string fld) { return "{0} IS NOT NULL".fmt(fld); }//function
-
-	///<summary>fld In list</summary>
-	public static string InList<T>(string fld, IEnumerable<T> list, bool IsIn = true)
-	{
-		string sList;
-		if (typeof(T) == typeof(string))
-		{
-			sList = string.Join(S.Comma, list.Select(s => s.ToString().quote(C.Quote)));
-		}//if
-		else
-		{
-			sList = string.Join(S.Comma, list.Select(s => s.ToString()));
-		}//else
-
-		if (IsIn)
-		{
-			return "{0} IN ({1})".fmt(fld, sList);
-		}//if
-		else
-		{
-			return "{0} NOT IN ({1})".fmt(fld, sList);
-		}//else
-	}//function
-
-
-
-
-
 		///<summary>fld Eq val</summary>
 	public static string EqValue(string fld, object val) { return "{0} = {1}".fmt(fld, (val is string) ? val.ToString().quote(C.Quote) : val); }
 		///<summary>fld Ge val</summary>
