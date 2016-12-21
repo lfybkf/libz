@@ -1,55 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+//Generated 21.12.2016 13:26:40
 
+using System.Collections.Generic;
 namespace BDB
 {
-	///<summary>набор статических функций для SQL</summary>
-	public static class SqlF
-	{
-		const string fmtFieldEqValue = "{0} = {1}";
-		///<summary>{0} = {1}</summary>
-		public static string FieldEqValue(string fld, object val) { return fmtFieldEqValue.fmt(fld, val); }
+///<summary>набор статических функций для SQL</summary>
+public static class SqlF
+{
+	///<summary>соединить условия из списка по И</summary>
+	public static string ANDed(IEnumerable<string> whereS) {return string.Join(" and ", whereS);}//function
 
-		const string fmtFieldGtValue = "{0} > {1}";
-		///<summary>{0} gt {1}</summary>
-		public static string FieldGtValue(string fld, object val) { return fmtFieldGtValue.fmt(fld, val); }
+	///<summary>соединить условия из списка по ИЛИ</summary>
+	public static string ORed(IEnumerable<string> whereS) {	return string.Join(" or ", whereS);	}//function
 
-		const string fmtFieldGeValue = "{0} >= {1}";
-		///<summary>{0} ge {1}</summary>
-		public static string FieldGeValue(string fld, object val) { return fmtFieldGeValue.fmt(fld, val); }
+	///<summary>fld IS NULL</summary>
+	public static string FieldIsNull(string fld) { return "{0} IS NULL".fmt(fld); }//function
+	///<summary>fld IS NOT NULL</summary>
+	public static string FieldIsNotNull(string fld) { return "{0} IS NOT NULL".fmt(fld); }//function
 
-		const string fmtFieldLsValue = "{0} < {1}";
-		///<summary>{0} ls {1}</summary>
-		public static string FieldLsValue(string fld, object val) { return fmtFieldLsValue.fmt(fld, val); }
 
-		const string fmtFieldLeValue = "{0} <= {1}";
-		///<summary>{0} le {1}</summary>
-		public static string FieldLeValue(string fld, object val) { return fmtFieldLeValue.fmt(fld, val); }
-
-		const string fmtFieldEqString = "{0} = '{1}'";
-		///<summary>{0} = '{1}'</summary>
-		public static string FieldEqString(string fld, object val) { return fmtFieldEqString.fmt(fld, val); }
-
-		const string fmtFieldEqPar = "{0} = @{1}";
-		///<summary>{0} = @{1}. Если имя параметра не указано, то используется имя поля</summary>
-		public static string FieldEqPar(string fld, string par = null)
-		{ return fmtFieldEqPar.fmt(fld, par ?? fld); }
-
-		const string and = " and ";
-		///<summary>соединить условия из списка по И</summary>
-		public static string ANDed(IEnumerable<string> whereS)
-		{
-			return string.Join(and, whereS);
-		}//function
-
-		const string or = " or ";
-		///<summary>соединить условия из списка по ИЛИ</summary>
-		public static string ORed(IEnumerable<string> whereS)
-		{
-			return string.Join(or, whereS);
-		}//function
+		///<summary>fld Eq val</summary>
+	public static string EqValue(string fld, object val) { return "{0} = {1}".fmt(fld, val); }
+		///<summary>fld Ge val</summary>
+	public static string GeValue(string fld, object val) { return "{0} >= {1}".fmt(fld, val); }
+		///<summary>fld Gt val</summary>
+	public static string GtValue(string fld, object val) { return "{0} > {1}".fmt(fld, val); }
+		///<summary>fld Le val</summary>
+	public static string LeValue(string fld, object val) { return "{0} <= {1}".fmt(fld, val); }
+		///<summary>fld Ls val</summary>
+	public static string LsValue(string fld, object val) { return "{0} < {1}".fmt(fld, val); }
+		///<summary>fld Like val</summary>
+	public static string LikeValue(string fld, object val) { return "{0} LIKE {1}".fmt(fld, val); }
+		///<summary>fld LikeNot val</summary>
+	public static string LikeNotValue(string fld, object val) { return "{0} NOT LIKE {1}".fmt(fld, val); }
+	
+		///<summary>fld Eq par</summary>
+	public static string EqPar(string fld, string par = null) { return "{0} = @{1}".fmt(fld, par ?? fld); }
+		///<summary>fld Ge par</summary>
+	public static string GePar(string fld, string par = null) { return "{0} >= @{1}".fmt(fld, par ?? fld); }
+		///<summary>fld Gt par</summary>
+	public static string GtPar(string fld, string par = null) { return "{0} > @{1}".fmt(fld, par ?? fld); }
+		///<summary>fld Le par</summary>
+	public static string LePar(string fld, string par = null) { return "{0} <= @{1}".fmt(fld, par ?? fld); }
+		///<summary>fld Ls par</summary>
+	public static string LsPar(string fld, string par = null) { return "{0} < @{1}".fmt(fld, par ?? fld); }
+		///<summary>fld Like par</summary>
+	public static string LikePar(string fld, string par = null) { return "{0} LIKE @{1}".fmt(fld, par ?? fld); }
+		///<summary>fld LikeNot par</summary>
+	public static string LikeNotPar(string fld, string par = null) { return "{0} NOT LIKE @{1}".fmt(fld, par ?? fld); }
 	}//class
-}//namespace
+}//ns

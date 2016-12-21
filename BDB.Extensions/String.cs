@@ -232,6 +232,8 @@ namespace BDB
 		
 		/// <summary>конкатенация к строке массива с разделителем Space</summary>
 		public static string addSpace(this string s, params object[] args){	return s.addDelim(S.Space, args);	}//function
+		/// <summary>конкатенация к строке массива с разделителем Запятая</summary>
+		public static string addComma(this string s, params object[] args) { return s.addDelim(S.Comma, args); }//function
 		/// <summary>конкатенация к строке текста с переносом строки из массива</summary>
 		public static string addLine(this string s, params object[] args) { return s.addDelim(Environment.NewLine, args); }//function
 

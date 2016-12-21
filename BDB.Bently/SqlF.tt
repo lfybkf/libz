@@ -1,0 +1,43 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+
+//Generated <#=DateTime.Now.ToString() #>
+
+<#
+Dictionary<string, string> ops = new Dictionary<string, string> {
+	{"Eq", "="}, {"Ge", ">="}, {"Gt", ">"}, {"Le", "<="}, {"Ls", "<"}, {"Like", "LIKE"}, {"LikeNot", "NOT LIKE"},
+};
+#>
+using System.Collections.Generic;
+namespace BDB
+{
+///<summary>набор статических функций для SQL</summary>
+public static class SqlF
+{
+	///<summary>соединить условия из списка по И</summary>
+	public static string ANDed(IEnumerable<string> whereS) {return string.Join(" and ", whereS);}//function
+
+	///<summary>соединить условия из списка по ИЛИ</summary>
+	public static string ORed(IEnumerable<string> whereS) {	return string.Join(" or ", whereS);	}//function
+
+	///<summary>fld IS NULL</summary>
+	public static string FieldIsNull(string fld) { return "{0} IS NULL".fmt(fld); }//function
+	///<summary>fld IS NOT NULL</summary>
+	public static string FieldIsNotNull(string fld) { return "{0} IS NOT NULL".fmt(fld); }//function
+
+
+	<# foreach (var op in ops.Keys) { #>
+	///<summary>fld <#=op#> val</summary>
+	public static string <#=op#>Value(string fld, object val) { return "{0} <#=ops[op]#> {1}".fmt(fld, val); }
+	<# }//for #>
+
+	<# foreach (var op in ops.Keys) { #>
+	///<summary>fld <#=op#> par</summary>
+	public static string <#=op#>Par(string fld, string par = null) { return "{0} <#=ops[op]#> @{1}".fmt(fld, par ?? fld); }
+	<# }//for #>
+}//class
+}//ns

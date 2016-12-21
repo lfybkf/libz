@@ -51,13 +51,26 @@
     <Compile Include="Sqlbuilder.cs" />
     <Compile Include="SqlCE.cs" />
     <Compile Include="SqlExpress.cs" />
-    <Compile Include="SqlF.cs" />
+    <Compile Include="SqlF.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SqlF.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BDB.Extensions\BDB.Extensions.csproj">
       <Project>{902e99c0-1294-4f7f-8624-70cac2c84872}</Project>
       <Name>BDB.Extensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SqlF.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SqlF.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
