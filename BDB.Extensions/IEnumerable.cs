@@ -129,5 +129,6 @@ namespace BDB
 
 			return string.Join(delimiter, source.Select(z => toString(z)));
 		}//function
+
 	}//class
 }//ns

@@ -133,7 +133,9 @@ namespace BDB
 
 		/// <summary>есть ли строка в массиве</summary>
 		public static bool inList(this string s, params string[] ss) { return ss.Contains(s); }//func
-
+		public static bool inList<T>(this T s, params T[] ss) { return ss.Contains(s); }//func
+		
+		
 		#region substring
 		/// <summary>берет кусок строки после <paramref name="Prefix"/>. Пример: "Omnibus".after("b") = "us"</summary>
 		public static string after(this string s, string Prefix)
