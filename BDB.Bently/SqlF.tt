@@ -9,7 +9,8 @@
 
 <#
 Dictionary<string, string> ops = new Dictionary<string, string> {
-	{"Eq", "="}, {"Ge", ">="}, {"Gt", ">"}, {"Le", "<="}, {"Ls", "<"}, {"Like", "LIKE"}, {"LikeNot", "NOT LIKE"},
+	{"Eq", "="}, {"No", "!="}, 
+	{"Ge", ">="}, {"Gt", ">"}, {"Le", "<="}, {"Ls", "<"}, 
 };
 
 string[] types = "int long float".Split(new char[] {' '});
@@ -23,7 +24,7 @@ public static partial class SqlF
 {
 	<# foreach (var op in ops.Keys) { #>
 	///<summary>fld <#=op#> val</summary>
-	public static string <#=op#>Value(string fld, object val) { return "{0} <#=ops[op]#> {1}".fmt(fld, (val is string) ? val.ToString().quote(C.Quote) : val); }
+	public static string <#=op#>(string fld, object val) { return "{0} <#=ops[op]#> {1}".fmt(fld, (val is string) ? val.ToString().quote(C.Quote) : val); }
 	<# }//for #>
 
 	<# foreach (var op in ops.Keys) { #>
