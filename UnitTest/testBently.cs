@@ -34,8 +34,6 @@ namespace UnitTest
 		[TestMethod]
 		public void TestScalar()
 		{
-			
-
 			var store = new SqlCE("Onto");
 			var cmd = store.getCommand (new SqlBuilder { Table = "Author" }.Count);
 			var count = store.Scalar(cmd);
@@ -66,5 +64,22 @@ namespace UnitTest
 			Assert.IsTrue(true);
 		}
 
+		[TestMethod]
+		public void Test_sqlBuilder()
+		{
+			string sql;
+			string fld = "DimID";
+			var sqlb = new SqlBuilder
+			{
+				Table = "ValRef",
+				Field = "DimID, count(*) AS Cnt"
+				,
+				Order = fld,
+				Group = fld,
+				Where = SqlF.Gt(fld, 10)
+			};
+			sql = sqlb.Select;
+			Assert.IsTrue(sql != null);
+		}
 	}
 }

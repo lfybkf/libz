@@ -19,45 +19,53 @@ namespace BDB
 		public string Where;
 		///<summary>UPDATE TABLE {Set} WHERE</summary>
 		public string Set;
-
 		///<summary>UPDATE {Field} = {Value}; INSERT ... VALUES ({Value})</summary>
 		public object Value;
-
 		///<summary>SELECT {Top}</summary>
 		public int Top = 0;
+		///<summary>SELECT ... ORDER BY {Order}</summary> 
+		public string Order;
+		///<summary>SELECT ... GROUP BY {Group}</summary> 
+		public string Group;
 
 		///<summary>стереть все кроме таблицы (она часто не меняется)</summary>
 		public void ClearButTable()
 		{
-			Field = Where = Set = null;
-			Value = null;
-			Top = 0;
-		}
+			string tmp = this.Table;
+			ClearAll();
+			this.Table = tmp;
+		}//function
 
 		///<summary>стереть все</summary>
 		public void ClearAll()
 		{
 			Table = null;
-			Field = Where = Set = null;
+			Field = Where = Set = Order = Group = null;
 			Value = null;
 			Top = 0;
-		}
-		
-		///<summary>SELECT TOP {Top} {Field} FROM {Table} WHERE {Where}</summary>
+		}//function
+
+		///<summary>SELECT TOP {Top} {Field} FROM {Table} WHERE {Where} ORDER BY {Order}</summary>
 		public string Select
 		{
 			get
 			{
 				string _select = Top > 0 ? "SELECT TOP " + Top : "SELECT";
 				string _field = Field.isEmpty() ? allFields : Field;
-				if (Where.isEmpty())
+				StringBuilder sb = new StringBuilder("{0} {1} FROM {2}".fmt(_select, _field, Table));
+				if (Where.notEmpty())
 				{
-					return "{0} {1} FROM {2}".fmt(_select, _field, Table);
+					sb.AppendFormat(" WHERE {0}", Where);
 				}//if
-				else
+				if (Group.notEmpty())
 				{
-					return "{0} {1} FROM {2} WHERE {3}".fmt(_select, _field, Table, Where);
-				}//else
+					sb.AppendFormat(" GROUP BY {0}", Order);
+				}//if
+				if (Order.notEmpty())
+				{
+					sb.AppendFormat(" ORDER BY {0}", Order);
+				}//if
+				return sb.ToString();
 			}
 		}//function
 
