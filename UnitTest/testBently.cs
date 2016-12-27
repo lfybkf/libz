@@ -68,15 +68,13 @@ namespace UnitTest
 		public void Test_sqlBuilder()
 		{
 			string sql;
-			string fld = "DimID";
+			string fld = "DimID, Val";
 			var sqlb = new SqlBuilder
 			{
 				Table = "ValRef",
-				Field = "DimID, count(*) AS Cnt"
-				,
-				Order = fld,
+				Field = "DimID, Val, COUNT(*)",
 				Group = fld,
-				Where = SqlF.Gt(fld, 10)
+				Having = SqlF.Eq("COUNT(*)", 3)
 			};
 			sql = sqlb.Select;
 			Assert.IsTrue(sql != null);

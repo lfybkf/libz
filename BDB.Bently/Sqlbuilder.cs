@@ -27,6 +27,8 @@ namespace BDB
 		public string Order;
 		///<summary>SELECT ... GROUP BY {Group}</summary> 
 		public string Group;
+		///<summary>SELECT ... HAVING {Having}</summary> 
+		public string Having;
 
 		///<summary>стереть все кроме таблицы (она часто не меняется)</summary>
 		public void ClearButTable()
@@ -59,7 +61,11 @@ namespace BDB
 				}//if
 				if (Group.notEmpty())
 				{
-					sb.AppendFormat(" GROUP BY {0}", Order);
+					sb.AppendFormat(" GROUP BY {0}", Group);
+				}//if
+				if (Having.notEmpty())
+				{
+					sb.AppendFormat(" HAVING {0}", Having);
 				}//if
 				if (Order.notEmpty())
 				{
