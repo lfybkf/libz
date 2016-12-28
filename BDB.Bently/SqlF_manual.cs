@@ -9,6 +9,8 @@ namespace BDB
 	public static partial class SqlF
 	{
 		private const string NOT = "NOT";
+		///<summary>COUNT(*)</summary> 
+		public const string COUNT = "COUNT(*)";
 
 		///<summary>соединить условия из списка по И</summary>
 		public static string AND(IEnumerable<string> whereS) { return string.Join(") and (", whereS).quote(C.LParenthesis); }//function

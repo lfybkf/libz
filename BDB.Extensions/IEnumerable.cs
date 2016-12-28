@@ -115,7 +115,7 @@ namespace BDB
 		}//function
 
 		/// <summary>
-		/// массив Т в строку с разделителем
+		/// массив Т в строку с разделителем. Если функция не указана, то используется ToString (для строк - тождество)
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="source"></param>
@@ -126,7 +126,17 @@ namespace BDB
 		{
 			if (source == null)
 				return string.Empty;
-
+			if (toString == null)
+			{
+				if (typeof(T) == typeof(string))
+				{
+					return string.Join(delimiter, source.Select(z => z));
+				}//if
+				else
+				{
+					return string.Join(delimiter, source.Select(z => z.ToString()));
+				}//else
+			}//if
 			return string.Join(delimiter, source.Select(z => toString(z)));
 		}//function
 

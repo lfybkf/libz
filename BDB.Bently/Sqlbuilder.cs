@@ -42,9 +42,36 @@ namespace BDB
 		public void ClearAll()
 		{
 			Table = null;
-			Field = Where = Set = Order = Group = null;
+			Field = Where = Set = Order = Group = Having = null;
 			Value = null;
 			Top = 0;
+		}//function
+
+		///<summary>тот же Set, но для массива строк</summary> 
+		public SqlBuilder fSet(params string[] sets)
+		{
+			if (!sets.Any()) { return this; }
+			Set = sets.print(null, S.Comma);
+			return this;
+		}//function
+
+
+		///<summary>тот же Order, но для массива строк</summary> 
+		public SqlBuilder fOrder(params string[] fields)
+		{
+			if (!fields.Any()) { return this; }
+			Order = fields.print(null, S.Comma);
+			return this;
+		}//function
+
+		static readonly string[] aggrs = {"MAX", "MIN", "COUNT", "AVG"};
+		///<summary>одновременное заполнение Group и Field, поля MAX, MIN, COUNT, AVG - включаются только в Field</summary> 
+		public SqlBuilder fGroup(params string[] fields)
+		{
+			if (!fields.Any()) { return this; }
+			Group = fields.Where(z => !aggrs.Any(a => z.StartsWith(a))).print(null, S.Comma);
+			Field = fields.print(null, S.Comma);
+			return this;
 		}//function
 
 		///<summary>SELECT TOP {Top} {Field} FROM {Table} WHERE {Where} ORDER BY {Order}</summary>
@@ -62,10 +89,10 @@ namespace BDB
 				if (Group.notEmpty())
 				{
 					sb.AppendFormat(" GROUP BY {0}", Group);
-				}//if
-				if (Having.notEmpty())
-				{
-					sb.AppendFormat(" HAVING {0}", Having);
+					if (Having.notEmpty())
+					{
+						sb.AppendFormat(" HAVING {0}", Having);
+					}//if
 				}//if
 				if (Order.notEmpty())
 				{
