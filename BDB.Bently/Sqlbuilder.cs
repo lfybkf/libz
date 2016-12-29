@@ -65,11 +65,12 @@ namespace BDB
 		}//function
 
 		static readonly string[] aggrs = {"MAX", "MIN", "COUNT", "AVG"};
-		///<summary>одновременное заполнение Group и Field, поля MAX, MIN, COUNT, AVG - включаются только в Field</summary> 
+		///<summary>одновременное заполнение Group и Field, поля MAX, MIN, COUNT, AVG, [ as ] - включаются только в Field</summary> 
 		public SqlBuilder fGroup(params string[] fields)
 		{
 			if (!fields.Any()) { return this; }
-			Group = fields.Where(z => !aggrs.Any(a => z.StartsWith(a))).print(null, S.Comma);
+			Func<string, bool> groupField = (s) => { return !s.containsCI(" as ") && !aggrs.Any(a => s.StartsWith(a)); };
+			Group = fields.Where(z => groupField(z)).print(null, S.Comma);
 			Field = fields.print(null, S.Comma);
 			return this;
 		}//function
