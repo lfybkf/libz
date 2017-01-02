@@ -106,6 +106,8 @@ namespace BDB
 			return sb.ToString();
 		}//function
 
+		#region checks
+
 
 		/// <summary>string not IsNullOrWhiteSpace</summary>
 		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
@@ -119,6 +121,16 @@ namespace BDB
 			return "{0}{1}{2}".fmt(ch, s, C.Right(ch));
 		}//function
 
+		///<summary>StartsWith (есть проверка на null)</summary>
+		public static bool startsWithCI(this string s, string what)
+		{
+			return s == null ? false : s.StartsWith(what, StringComparison.OrdinalIgnoreCase);
+		}//function
+		 ///<summary>EndsWith (есть проверка на null)</summary>
+		public static bool endsWithCI(this string s, string what)
+		{
+			return s == null ? false : s.EndsWith(what, StringComparison.OrdinalIgnoreCase);
+		}//function
 
 		/// <summary>Contains IgnoreCase</summary>
 		public static bool containsCI(this string s, string what)
@@ -132,10 +144,11 @@ namespace BDB
 		}
 
 		/// <summary>есть ли строка в массиве</summary>
-		public static bool inList(this string s, params string[] ss) { return ss.Contains(s); }//func
-		public static bool inList<T>(this T s, params T[] ss) { return ss.Contains(s); }//func
-		
-		
+		public static bool inList(this string s, params string[] ss) { return ss.Contains(s); }
+		/// <summary>есть ли строка в массиве</summary>
+		public static bool inList<T>(this T s, params T[] ss) { return ss.Contains(s); }
+		#endregion
+
 		#region substring
 		/// <summary>берет кусок строки после <paramref name="Prefix"/>. ѕример: "Omnibus".after("b") = "us"</summary>
 		public static string after(this string s, string Prefix)
@@ -147,6 +160,17 @@ namespace BDB
 				return string.Empty;
 		}//func
 
+		/// <summary>берет кусок строки после <paramref name="Prefix"/>. ѕример: "Omnibus".after("b") = "us"</summary>
+		public static string afterCI(this string s, string Prefix)
+		{
+			int i = s.IndexOf(Prefix, StringComparison.OrdinalIgnoreCase);
+			if (i >= 0)
+				return s.Substring(i + Prefix.Length);
+			else
+				return string.Empty;
+		}//func
+
+		/// <summary>берет кусок строки перед <paramref name="Suffix"/>. ѕример: "Omnibus".before("b") = "Omni"</summary>
 		public static string before(this string s, string Suffix)
 		{
 			int i = s.IndexOf(Suffix);
@@ -156,10 +180,36 @@ namespace BDB
 				return string.Empty;
 		}//func
 
+		/// <summary>берет кусок строки перед <paramref name="Suffix"/>. ѕример: "Omnibus".before("b") = "Omni"</summary>
+		public static string beforeCI(this string s, string Suffix)
+		{
+			int i = s.IndexOf(Suffix, StringComparison.OrdinalIgnoreCase);
+			if (i > 0)
+				return s.Substring(0, i);
+			else
+				return string.Empty;
+		}//func
+
+		/// <summary>берет кусок строки между <paramref name="Prefix"/> и <paramref name="Suffix"/>. ѕример: "Omnibus".midst("O","b") = "mni"</summary>
 		public static string midst(this string s, string Prefix, string Suffix)
 		{
 			int iPrefix = s.IndexOf(Prefix);
 			int iSuffix = s.IndexOf(Suffix);
+			if (iPrefix >= 0 && iSuffix > 0)
+				return s.Substring(iPrefix + Prefix.Length, iSuffix - iPrefix - Prefix.Length);
+			else if (iPrefix >= 0)
+				return s.Substring(iPrefix + Prefix.Length);
+			else if (iSuffix >= 0)
+				return s.Substring(0, iSuffix);
+			else
+				return string.Empty;
+		}//func
+
+		/// <summary>берет кусок строки между <paramref name="Prefix"/> и <paramref name="Suffix"/>. ѕример: "Omnibus".midst("O","b") = "mni"</summary>
+		public static string midstCI(this string s, string Prefix, string Suffix)
+		{
+			int iPrefix = s.IndexOf(Prefix, StringComparison.OrdinalIgnoreCase);
+			int iSuffix = s.IndexOf(Suffix, StringComparison.OrdinalIgnoreCase);
 			if (iPrefix >= 0 && iSuffix > 0)
 				return s.Substring(iPrefix + Prefix.Length, iSuffix - iPrefix - Prefix.Length);
 			else if (iPrefix >= 0)

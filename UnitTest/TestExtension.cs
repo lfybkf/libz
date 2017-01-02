@@ -96,6 +96,10 @@ namespace UnitTest
 			Assert.IsTrue("Omnibus".midst("Om", "zz") == "nibus");
 			Assert.IsTrue("func(FIND ME, !isHere)".midst("(", ", ") == "FIND ME");
 
+			Assert.IsTrue((s = "OMNIBUS".beforeCI("ib")) == "OMN");
+			Assert.IsTrue((s = "OMNIBUS".afterCI("iB")) == "US");
+			Assert.IsTrue((s = "OMNIBUS".midstCI("Om", "us")) == "NIB");
+
 			Assert.IsTrue("26.01.2015".parse(new DateTime(2001, 12,31)).Equals(new DateTime(2015,01,26)));
 			Assert.IsTrue("26,01,2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2015, 01, 26)));
 			Assert.IsTrue("26/01/2015".parse(new DateTime(2001, 12, 31)).Equals(new DateTime(2015, 01, 26)));
