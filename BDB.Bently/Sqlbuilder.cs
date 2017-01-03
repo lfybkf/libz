@@ -23,6 +23,8 @@ namespace BDB
 		public object Value;
 		///<summary>SELECT {Top}</summary>
 		public int Top = 0;
+		///<summary>SELECT {DISTINCT}</summary>
+		public bool Distinct = false;
 		///<summary>SELECT ... ORDER BY {Order}</summary> 
 		public string Order;
 		///<summary>SELECT ... GROUP BY {Group}</summary> 
@@ -80,25 +82,18 @@ namespace BDB
 		{
 			get
 			{
-				string _select = Top > 0 ? "SELECT TOP " + Top : "SELECT";
-				string _field = Field.isEmpty() ? allFields : Field;
-				StringBuilder sb = new StringBuilder("{0} {1} FROM {2}".fmt(_select, _field, Table));
-				if (Where.notEmpty())
-				{
-					sb.AppendFormat(" WHERE {0}", Where);
-				}//if
+				StringBuilder sb = new StringBuilder("SELECT ");
+				if (Distinct) { sb.Append("DISTINCT "); }
+				if (Top > 0) { sb.AppendFormat("TOP {0} ", Top); }
+				sb.Append(Field.isEmpty() ? allFields : Field);
+				sb.AppendFormat(" FROM {0} ", Table);
+				if (Where.notEmpty()) { sb.AppendFormat("WHERE {0}", Where); }
 				if (Group.notEmpty())
 				{
-					sb.AppendFormat(" GROUP BY {0}", Group);
-					if (Having.notEmpty())
-					{
-						sb.AppendFormat(" HAVING {0}", Having);
-					}//if
+					sb.AppendFormat("GROUP BY {0} ", Group);
+					if (Having.notEmpty()) { sb.AppendFormat("HAVING {0} ", Having); }
 				}//if
-				if (Order.notEmpty())
-				{
-					sb.AppendFormat(" ORDER BY {0}", Order);
-				}//if
+				if (Order.notEmpty()) { sb.AppendFormat("ORDER BY {0} ", Order); }
 				return sb.ToString();
 			}
 		}//function

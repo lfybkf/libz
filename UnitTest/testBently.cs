@@ -73,8 +73,12 @@ namespace UnitTest
 				Table = "ValRef",
 				Having = SqlF.Eq(SqlF.COUNT, 3)
 			};
-			sql = sqlb.fGroup("DimID", "Val", SqlF.COUNT, "-1 as ID, 0 as Item, -1 as ImgID").fOrder().Select;
+			sql = sqlb.fGroup("DimID", "Val", SqlF.COUNT, "-1 as ID, 0 as Item, -1 as ImgID").fOrder("DimID").Select;
 			Assert.IsTrue(sql != null);
-		}
+
+			sqlb = new SqlBuilder { Table = "Ref", Distinct=true, Top=4, Where=SqlF.Gt("ID", 0)};
+			sql = sqlb.Select;
+			Assert.IsTrue(sql != null);
+		}//function
 	}
 }
