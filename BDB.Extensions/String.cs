@@ -12,6 +12,8 @@ namespace BDB
 		/// <summary>формат строки. usage: "Value1={0}, Value2={1}".fmt(Value1, Value2) </summary>
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 
+		//если эти символы в плейсхолдере, то это не он и его игнорируем
+		private static char[] badCharsForPlaceholder = { C.Space, C.Tab, '\n' };
 		/// <summary>from "asd{name}qwer{age}ty" get 3,"{name}" ;14,"{age}"</summary>
 		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}')
 		{
@@ -20,6 +22,7 @@ namespace BDB
 			IDictionary<int, string> result = new Dictionary<int, string>();
 			char c;
 			int iL = -1;
+			string ph;
 			// "asd{ph}qwerty"
 			for (int i = 0; i < s.Length; i++)
 			{
@@ -30,7 +33,9 @@ namespace BDB
 				}//if
 				else if (c == cR && iL >= 0) //i=6
 				{
-					result.Add(iL, s.Substring(iL, i - iL + 1));
+					ph = s.Substring(iL, i - iL + 1);
+					if (badCharsForPlaceholder.Any(z => ph.Contains(z)) == false)
+					{ result.Add(iL, ph); }
 					iL = -1;
 				}//if
 			}//for
