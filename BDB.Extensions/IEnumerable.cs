@@ -116,6 +116,12 @@ namespace BDB
 			return string.Join(delimiter, source.Select(z => toString(z)));
 		}//function
 
+		///<summary>is empty</summary> 
+		public static bool isEmpty<T>(this IEnumerable<T> list) => list == null || list.Any() == false;
+		///<summary>not empty</summary> 
+		public static bool notEmpty<T>(this IEnumerable<T> list) => list != null && list.Any();
+
+
 		/// <summary>вертает Value или default(TValue)</summary>
 		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key) => dict.ContainsKey(key) ? dict[key] : default(TValue);
 		/// <summary>вертает Value или defaultValue</summary>
