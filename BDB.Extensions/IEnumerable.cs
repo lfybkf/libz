@@ -6,40 +6,16 @@ using System.Threading.Tasks;
 
 namespace BDB
 {
+	///<summary>IEnumerable IDictionary</summary> 
 	public static class IEnumerableExtension
 	{
+		///<summary>for each</summary> 
 		public static IEnumerable<T> forEach<T>(this IEnumerable<T> source, Action<T> action)
 		{
-			if (source == null)
-				return null;
-
-			if (action == null)
-				return source;
-
-			foreach (var item in source)
-				action(item);
-
+			if (source == null) { return null; }
+			if (action == null) { return source; }
+			foreach (var item in source) { action(item); }
 			return source;
-		}//function
-
-		/// <summary>
-		/// вертает Value или default(TValue)
-		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
-		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
-		{
-			return dict.ContainsKey(key) ? dict[key] : default(TValue);
-		}//function
-
-		/// <summary>
-		/// вертает Value или defaultValue
-		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
-		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultValue)
-		{
-			return dict.ContainsKey(key) ? dict[key] : defaultValue;
 		}//function
 
 		/// <summary>
@@ -140,5 +116,13 @@ namespace BDB
 			return string.Join(delimiter, source.Select(z => toString(z)));
 		}//function
 
+		/// <summary>вертает Value или default(TValue)</summary>
+		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key) => dict.ContainsKey(key) ? dict[key] : default(TValue);
+		/// <summary>вертает Value или defaultValue</summary>
+		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue def) => dict.ContainsKey(key) ? dict[key] : def;
+		///<summary>Dictionary is empty</summary> 
+		public static bool isEmpty<T, V>(this IDictionary<T, V> dict) => dict == null || dict.Any() == false;
+		///<summary>Dictionary not empty</summary> 
+		public static bool notEmpty<T, V>(this IDictionary<T, V> dict) => dict != null && dict.Any();
 	}//class
 }//ns

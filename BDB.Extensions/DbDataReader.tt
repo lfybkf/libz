@@ -24,14 +24,17 @@ using System.Data.Common;
 
 namespace BDB
 {
+	///<summary>see name</summary>
 	public static class DbDataReaderExtension
 	{
+		///<summary>GetString</summary>
 		public static string GetString(this DbDataReader reader, string Col)
 		{
 			int i = reader.GetOrdinal(Col);
 			return reader.GetString(i);
 		}//func
 
+		///<summary>GetStringNullable</summary>
 		public static string GetStringNullable(this DbDataReader reader, string Col)
 		{
 			int i = reader.GetOrdinal(Col);
@@ -41,6 +44,7 @@ namespace BDB
 				return reader.GetString(i);
 		}//func
 
+		///<summary>Get</summary>
 		public static string Get(this DbDataReader reader, string Col, string Def)
 		{
 			int i = reader.GetOrdinal(Col);
@@ -56,6 +60,7 @@ namespace BDB
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию</param>
+/// <param name="reader">reader</param>
 public static <#= type #>? Get(this DbDataReader reader, string Col, <#= type #>? Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -70,6 +75,7 @@ public static <#= type #>? Get(this DbDataReader reader, string Col, <#= type #>
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию (используется для overload)</param>
+/// <param name="reader">reader</param>
 public static <#= type #> Get(this DbDataReader reader, string Col, <#= type #> Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -80,6 +86,7 @@ public static <#= type #> Get(this DbDataReader reader, string Col, <#= type #> 
 /// Считать значение из колонки. Если IsDBNull, то возвращается null
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static <#= type #>? Get<#=cs2reader[type] #>Nullable(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -93,6 +100,7 @@ public static <#= type #>? Get<#=cs2reader[type] #>Nullable(this DbDataReader re
 /// Считать значение из колонки. Без проверки IsDBNull
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static <#= type #> Get<#=cs2reader[type] #>(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);

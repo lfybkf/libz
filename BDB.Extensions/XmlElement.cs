@@ -6,13 +6,15 @@ using System.Xml;
 
 namespace BDB
 {
+	///<summary>see name</summary>
 	public static class XmlElementExtensions
 	{
+		///<summary>see name</summary>
 		public static IEnumerable<string> GetChildElementTags(this XmlElement el)
 		{
 			return el.ChildNodes.OfType<XmlElement>().Select(n => n.LocalName).Distinct();
 		}//func
-
+		 ///<summary>see name</summary>
 		public static IEnumerable<XmlElement> GetChildElements(this XmlElement el, string tag)
 		{
 			if (string.IsNullOrWhiteSpace(tag))
@@ -24,7 +26,8 @@ namespace BDB
 				return el.ChildNodes.OfType<XmlElement>().Where(n => n.LocalName == tag);
 			}
 		}//func
-
+		
+		///<summary>see name</summary>
 		public static List<KeyValuePair<XmlElement, XmlElement>> GetChildElementsAll(this XmlElement el)
 		{
 			List<KeyValuePair<XmlElement, XmlElement>> Ret = new List<KeyValuePair<XmlElement, XmlElement>>();

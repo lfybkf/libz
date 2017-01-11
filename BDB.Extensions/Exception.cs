@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace BDB
 {
+	///<summary>ExceptionExtension</summary> 
 	public static class ExceptionExtension
 	{
 		/// <summary>
@@ -15,13 +16,19 @@ namespace BDB
 		/// </summary>
 		public enum Win32EC
 		{
+			///<summary>see name of enum</summary>
 			ERROR_INVALID_FUNCTION = 1,
+			///<summary>see name of enum</summary>
 			ERROR_FILE_NOT_FOUND = 2,
+			///<summary>see name of enum</summary>
 			ERROR_PATH_NOT_FOUND = 3,
+			///<summary>see name of enum</summary>
 			ERROR_TOO_MANY_OPEN_FILES = 4,
+			///<summary>see name of enum</summary>
 			ERROR_ACCESS_DENIED = 5
 		}//enum
-
+		
+		///<summary>see name</summary>
 		public static List<string> OtherMessages(this Exception E)
 		{
 			List<string> Ret = new List<string>();

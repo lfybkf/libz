@@ -1,20 +1,23 @@
 ﻿
 
-//Generated 26.01.2016 16:18:35
+//Generated 11.01.2017 12:15:31
 
 using System;
 using System.Data.Common;
 
 namespace BDB
 {
+	///<summary>see name</summary>
 	public static class DbDataReaderExtension
 	{
+		///<summary>GetString</summary>
 		public static string GetString(this DbDataReader reader, string Col)
 		{
 			int i = reader.GetOrdinal(Col);
 			return reader.GetString(i);
 		}//func
 
+		///<summary>GetStringNullable</summary>
 		public static string GetStringNullable(this DbDataReader reader, string Col)
 		{
 			int i = reader.GetOrdinal(Col);
@@ -24,6 +27,7 @@ namespace BDB
 				return reader.GetString(i);
 		}//func
 
+		///<summary>Get</summary>
 		public static string Get(this DbDataReader reader, string Col, string Def)
 		{
 			int i = reader.GetOrdinal(Col);
@@ -38,6 +42,7 @@ namespace BDB
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию</param>
+/// <param name="reader">reader</param>
 public static int? Get(this DbDataReader reader, string Col, int? Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -52,6 +57,7 @@ public static int? Get(this DbDataReader reader, string Col, int? Def)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию (используется для overload)</param>
+/// <param name="reader">reader</param>
 public static int Get(this DbDataReader reader, string Col, int Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -62,6 +68,7 @@ public static int Get(this DbDataReader reader, string Col, int Def)
 /// Считать значение из колонки. Если IsDBNull, то возвращается null
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static int? GetInt32Nullable(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -75,6 +82,7 @@ public static int? GetInt32Nullable(this DbDataReader reader, string Col)
 /// Считать значение из колонки. Без проверки IsDBNull
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static int GetInt32(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -86,6 +94,7 @@ public static int GetInt32(this DbDataReader reader, string Col)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию</param>
+/// <param name="reader">reader</param>
 public static long? Get(this DbDataReader reader, string Col, long? Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -100,6 +109,7 @@ public static long? Get(this DbDataReader reader, string Col, long? Def)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию (используется для overload)</param>
+/// <param name="reader">reader</param>
 public static long Get(this DbDataReader reader, string Col, long Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -110,6 +120,7 @@ public static long Get(this DbDataReader reader, string Col, long Def)
 /// Считать значение из колонки. Если IsDBNull, то возвращается null
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static long? GetInt64Nullable(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -123,6 +134,7 @@ public static long? GetInt64Nullable(this DbDataReader reader, string Col)
 /// Считать значение из колонки. Без проверки IsDBNull
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static long GetInt64(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -134,6 +146,7 @@ public static long GetInt64(this DbDataReader reader, string Col)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию</param>
+/// <param name="reader">reader</param>
 public static decimal? Get(this DbDataReader reader, string Col, decimal? Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -148,6 +161,7 @@ public static decimal? Get(this DbDataReader reader, string Col, decimal? Def)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию (используется для overload)</param>
+/// <param name="reader">reader</param>
 public static decimal Get(this DbDataReader reader, string Col, decimal Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -158,6 +172,7 @@ public static decimal Get(this DbDataReader reader, string Col, decimal Def)
 /// Считать значение из колонки. Если IsDBNull, то возвращается null
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static decimal? GetDecimalNullable(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -171,6 +186,7 @@ public static decimal? GetDecimalNullable(this DbDataReader reader, string Col)
 /// Считать значение из колонки. Без проверки IsDBNull
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static decimal GetDecimal(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -182,6 +198,7 @@ public static decimal GetDecimal(this DbDataReader reader, string Col)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию</param>
+/// <param name="reader">reader</param>
 public static float? Get(this DbDataReader reader, string Col, float? Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -196,6 +213,7 @@ public static float? Get(this DbDataReader reader, string Col, float? Def)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию (используется для overload)</param>
+/// <param name="reader">reader</param>
 public static float Get(this DbDataReader reader, string Col, float Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -206,6 +224,7 @@ public static float Get(this DbDataReader reader, string Col, float Def)
 /// Считать значение из колонки. Если IsDBNull, то возвращается null
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static float? GetFloatNullable(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -219,6 +238,7 @@ public static float? GetFloatNullable(this DbDataReader reader, string Col)
 /// Считать значение из колонки. Без проверки IsDBNull
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static float GetFloat(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -230,6 +250,7 @@ public static float GetFloat(this DbDataReader reader, string Col)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию</param>
+/// <param name="reader">reader</param>
 public static double? Get(this DbDataReader reader, string Col, double? Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -244,6 +265,7 @@ public static double? Get(this DbDataReader reader, string Col, double? Def)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию (используется для overload)</param>
+/// <param name="reader">reader</param>
 public static double Get(this DbDataReader reader, string Col, double Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -254,6 +276,7 @@ public static double Get(this DbDataReader reader, string Col, double Def)
 /// Считать значение из колонки. Если IsDBNull, то возвращается null
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static double? GetDoubleNullable(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -267,6 +290,7 @@ public static double? GetDoubleNullable(this DbDataReader reader, string Col)
 /// Считать значение из колонки. Без проверки IsDBNull
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static double GetDouble(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -278,6 +302,7 @@ public static double GetDouble(this DbDataReader reader, string Col)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию</param>
+/// <param name="reader">reader</param>
 public static bool? Get(this DbDataReader reader, string Col, bool? Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -292,6 +317,7 @@ public static bool? Get(this DbDataReader reader, string Col, bool? Def)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию (используется для overload)</param>
+/// <param name="reader">reader</param>
 public static bool Get(this DbDataReader reader, string Col, bool Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -302,6 +328,7 @@ public static bool Get(this DbDataReader reader, string Col, bool Def)
 /// Считать значение из колонки. Если IsDBNull, то возвращается null
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static bool? GetBooleanNullable(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -315,6 +342,7 @@ public static bool? GetBooleanNullable(this DbDataReader reader, string Col)
 /// Считать значение из колонки. Без проверки IsDBNull
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static bool GetBoolean(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -326,6 +354,7 @@ public static bool GetBoolean(this DbDataReader reader, string Col)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию</param>
+/// <param name="reader">reader</param>
 public static DateTime? Get(this DbDataReader reader, string Col, DateTime? Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -340,6 +369,7 @@ public static DateTime? Get(this DbDataReader reader, string Col, DateTime? Def)
 /// </summary>
 /// <param name="Col">Имя колонки</param>
 /// <param name="Def">Значение по умолчанию (используется для overload)</param>
+/// <param name="reader">reader</param>
 public static DateTime Get(this DbDataReader reader, string Col, DateTime Def)
 {
 	int i = reader.GetOrdinal(Col);
@@ -350,6 +380,7 @@ public static DateTime Get(this DbDataReader reader, string Col, DateTime Def)
 /// Считать значение из колонки. Если IsDBNull, то возвращается null
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static DateTime? GetDateTimeNullable(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);
@@ -363,6 +394,7 @@ public static DateTime? GetDateTimeNullable(this DbDataReader reader, string Col
 /// Считать значение из колонки. Без проверки IsDBNull
 /// </summary>
 /// <param name="Col">Имя колонки</param>
+/// <param name="reader">reader</param>
 public static DateTime GetDateTime(this DbDataReader reader, string Col)
 {
 	int i = reader.GetOrdinal(Col);

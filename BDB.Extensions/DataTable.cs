@@ -6,8 +6,10 @@ using System.Text;
 
 namespace BDB
 {
+	///<summary>DataTableExtensions</summary> 
 	public static class DataTableExtensions
 	{
+		///<summary>set pk</summary> 
 		public static void SetPK(this DataTable dt, string Name)
 		{
 			DataColumn dc = dt.Columns[Name];
@@ -17,6 +19,7 @@ namespace BDB
 			dt.PrimaryKey = new DataColumn[] { dc};
 		}//func
 
+		///<summary>set pk</summary> 
 		public static void SetPK(this DataTable dt, string Name1, string Name2)
 		{
 			DataColumn dc1 = dt.Columns[Name1];
@@ -27,6 +30,7 @@ namespace BDB
 			dt.PrimaryKey = new DataColumn[] { dc1, dc2 };
 		}//func
 
+		///<summary>SetAutoincrement</summary>
 		public static void SetAutoincrement(this DataTable dt, string Name, int Seed, int Step)
 		{
 			DataColumn dc = dt.Columns[Name];

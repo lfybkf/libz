@@ -298,6 +298,7 @@ namespace BDB
 		#endregion
 
 		#region parse
+		///<summary>see name</summary>
 		public static DateTime parse(this string s, DateTime def, IFormatProvider formatProvider = null)
 		{
 			DateTime z;
@@ -313,6 +314,7 @@ namespace BDB
 		}//function
 
 		private static readonly char[] ccPointAndComma = { C.Point, C.Comma };
+		///<summary>see name</summary>
 		public static decimal parseMoney(this string s)
 		{
 			int iPoint = s.IndexOfAny(ccPointAndComma);
@@ -327,7 +329,7 @@ namespace BDB
 			}//if
 			return 0M;
 		}//function
-		
+		 ///<summary>see name</summary>
 		public static Decimal parseDecimal(this string s)
 		{
 			Func<IEnumerable<char>, IEnumerable<char>> digits = (cc) => (cc.Where(ch => char.IsDigit(ch)));
@@ -376,7 +378,8 @@ namespace BDB
 
 			return result;
 		}//function
-
+		 
+		///<summary>see name</summary>
 		public static Decimal parse(this string s, Decimal def, IFormatProvider formatProvider = null)
 		{
 			Decimal z;
@@ -400,7 +403,9 @@ namespace BDB
 			}//else
 		}//function
 
+		///<summary>see name</summary>
 		public static int parse(this string s, int def) { int z; return int.TryParse(s, out z) ? z : def; }//function
+		///<summary>see name</summary>
 		public static string parse(this string s, string def) { return s ?? def; }//function
 		#endregion
 

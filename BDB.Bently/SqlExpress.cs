@@ -10,26 +10,31 @@ using BDB;
 
 namespace BDB
 {
-	///<summary>qlExpress: IStoreSQL</summary> 
+	///<summary>SqlExpress: IStoreSQL</summary> 
 	public class SqlExpress: IStoreSQL
 	{
+		///<summary>see name</summary>
 		public string Name
 		{
 			set { ConnectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog={0};Integrated Security=True".fmt(value) ; }
 		}
 		string _ConnectionString;
+		///<summary>see name</summary>
 		public string ConnectionString { set { _ConnectionString = value; } get { return _ConnectionString; } }
 		SqlConnection NewConnection { get { return new SqlConnection(_ConnectionString); } }
 
 		static Exception exceptionLast = null;
+		///<summary>see name</summary>
 		public Exception LastError { get { return exceptionLast; } set { exceptionLast = value; } }
+		///<summary>see name</summary>
 		public int rows { get; private set; }
-
+		///<summary>see name</summary>
 		public DbCommand getCommand() { return new SqlCommand(); }
+		///<summary>see name</summary>
 		public DbParameter getParameter() { return new SqlParameter(); }
-
+		///<summary>see name</summary>
 		public bool TestConnection() { try { var c = new SqlConnection(ConnectionString); c.Open(); c.Close(); return true; } catch { return false; } }
-
+		///<summary>see name</summary>
 		public void Connect(DbCommand cmd) { cmd.Connection = NewConnection; }
 
 		///<summary>Execute</summary>

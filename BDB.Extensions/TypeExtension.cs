@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BDB
 {
+	///<summary>see name</summary>
 	public static class TypeExtension
 	{
 		static Dictionary<Type, DbType> typeMap = new Dictionary<Type, DbType>() 
@@ -47,11 +48,14 @@ namespace BDB
 			{typeof(DateTime?), DbType.DateTime}, 
 			{typeof(DateTimeOffset?), DbType.DateTimeOffset}, 
 		};
-
+		///<summary>see name</summary>
 		public static DbType getDbType(this Type t)		{			return typeMap.get(t);		}//function
+		///<summary>see name</summary>
 		public static bool isNullable(this Type t)		{			return (t.IsGenericType) ? (t.GetGenericTypeDefinition() == typeof(Nullable<>)) : false;}//function
+		///<summary>see name</summary>
 		public static Type getTypeUnderNullable(this Type t)	{	return t.isNullable() ? Nullable.GetUnderlyingType(t) : t;}//function
 
+		///<summary>see name</summary>
 		public static string getPropertyValue(this object o, string name) 
 		{
 			if (o == null) { return null; }
@@ -69,7 +73,7 @@ namespace BDB
 
 			return fi.GetValue(o).ToString();
 		}//function
-
+		///<summary>see name</summary>
 		public static string getMethodValue(this object o, string name, params object[] parameters)
 		{
 			if (o == null) { return null; }
