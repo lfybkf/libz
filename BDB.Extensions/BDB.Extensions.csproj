@@ -57,6 +57,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DbDataReader.tt</DependentUpon>
     </Compile>
+    <Compile Include="Dir.cs" />
     <Compile Include="Exception.cs" />
     <Compile Include="IEnumerable.cs" />
     <Compile Include="MaybeExtension.cs" />
