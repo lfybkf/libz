@@ -24,8 +24,8 @@ namespace BDB
 
 		///<summary>fld IS NULL</summary>
 		public static string IsNull(string fld, bool IsPositive = true) {
-			return "{0} IS {1} NULL".fmt(fld
-				, IsPositive ? string.Empty : NOT);
+			string sNot = IsPositive ? string.Empty : NOT;
+			return $"{fld} IS {sNot} NULL";
 		}//function
 
 		///<summary>fld In list</summary>
@@ -38,29 +38,29 @@ namespace BDB
 			else {
 				sList = string.Join(S.Comma, list.Select(s => s.ToString()));
 			}//else
-			return "{0} {2} IN ({1})".fmt(fld, sList
-				, IsPositive ? string.Empty : NOT);
+			string sNot = IsPositive ? string.Empty : NOT;
+			return $"{fld} {sNot} IN ({sList})";
 		}//function
 
 		///<summary>fld In select</summary>
 		public static string In(string fld, string select, bool IsPositive = true)
 		{
-			return "{0} {2} IN ({1})".fmt(fld, select
-				, IsPositive ? string.Empty : NOT);
+			string sNot = IsPositive ? string.Empty : NOT;
+			return $"{fld} {sNot} IN ({select})";
 		}//function
 
 		///<summary>fld LIKE pattern</summary>
 		public static string Like(string fld, string pattern, bool IsPositive = true)
 		{
-			return "{0} {2} LIKE '{1}'".fmt(fld, pattern
-				, IsPositive ? string.Empty : NOT);
+			string sNot = IsPositive ? string.Empty : NOT;
+			return $"{fld} {sNot} LIKE '{pattern}'";
 		}//function
 
 		///<summary>fld LIKE par</summary>
 		public static string LikePar(string fld, string par, bool IsPositive = true)
 		{
-			return "{0} {2} LIKE @{1}".fmt(fld, par
-				, IsPositive ? string.Empty : NOT);
+			string sNot = IsPositive ? string.Empty : NOT;
+			return $"{fld} {sNot} LIKE @{par}";
 		}//function
 		 ///<summary>fld LIKE par</summary>
 		public static string LikePar(string fld) { return LikePar(fld, fld, true); }
@@ -68,8 +68,8 @@ namespace BDB
 		///<summary>fld between</summary>
 		public static string Between<T>(string fld, T valFrom, T valTo, bool IsPositive = true) where T: struct
 		{
-			return "{0} {3} BETWEEN {1} AND {2}".fmt(fld, valFrom, valTo
-				, IsPositive ? string.Empty : NOT);
+			string sNot = IsPositive ? string.Empty : NOT;
+			return $"{fld} {sNot} BETWEEN {valFrom} AND {valTo}";
 		}//function
 	}//class
 }
