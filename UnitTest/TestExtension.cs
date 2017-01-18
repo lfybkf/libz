@@ -140,5 +140,19 @@ namespace UnitTest
 
 			Assert.IsTrue("1".addSpace("mu", "MU") == "1 mu MU");
 		}//function
+
+		[TestMethod]
+		public void textTakeLast()
+		{
+			string s = Environment.CurrentDirectory;
+			string sP;
+			var chars = s.AsEnumerable().Take(s.Length - 1);
+			sP = chars.toString();
+			sP = chars.TakeUntil(ch => ch == '\\').toString();
+			sP = chars.TakeUntilLast(ch => ch == '\\').toString();
+
+			Assert.IsTrue("1".addSpace("mu", "MU") == "1 mu MU");
+		}//function
+
 	}//class
 }//ns

@@ -12,6 +12,9 @@ namespace BDB
 		/// <summary>формат строки. usage: "Value1={0}, Value2={1}".fmt(Value1, Value2) </summary>
 		public static string fmt(this string s, params object[] oo) { return string.Format(s, oo); }//func
 
+		///<summary>to string</summary> 
+		public static string toString(this IEnumerable<char> chars) => new string(chars.ToArray());
+
 		//если эти символы в плейсхолдере, то это не он и его игнорируем
 		private static char[] badCharsForPlaceholder = { C.Space, C.Tab, '\n' };
 		/// <summary>from "asd{name}qwer{age}ty" get 3,"{name}" ;14,"{age}"</summary>

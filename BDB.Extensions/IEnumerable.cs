@@ -38,9 +38,9 @@ namespace BDB
 			{
 				yield return source.ElementAt(index);
 
-				if (index == max - 1)			{	direction = -1;}
-				else if (index == 0)				{ direction = 1; }
-			index += direction;
+				if (index == max - 1) { direction = -1; }
+				else if (index == 0) { direction = 1; }
+				index += direction;
 			}//for
 		}//function
 
@@ -130,5 +130,32 @@ namespace BDB
 		public static bool isEmpty<T, V>(this IDictionary<T, V> dict) => dict == null || dict.Any() == false;
 		///<summary>Dictionary not empty</summary> 
 		public static bool notEmpty<T, V>(this IDictionary<T, V> dict) => dict != null && dict.Any();
+		///<summary>брать, пока не выполнено</summary>
+		public static IEnumerable<T> TakeUntil<T>(this IEnumerable<T> list, Func<T, bool> predicate) => list.TakeWhile(z => !predicate(z));
+
+		///<summary>Берет пока условие невыполнено последний раз. Если ни разу, то возвращает все.
+		///{1,2,3,4,3,4,5}.TakeUntilLast(4) = {1,2,3,4,3}</summary>
+		public static IEnumerable<T> TakeUntilLast<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+		{
+			if (list.isEmpty()) { return list; }
+			int index = -1;
+			int count = list.Count();
+
+			for (int i = count-1; i >= 0; i--)
+			{
+				if (predicate(list.ElementAt(i))) { index = i; break; }
+			}//for
+
+			if (index >= 0)
+			{
+				return list.Take(index);
+			}//if
+			else
+			{
+				return list;
+			}//else
+		}//function
+
+
 	}//class
 }//ns

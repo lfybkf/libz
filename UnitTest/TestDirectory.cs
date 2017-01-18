@@ -13,9 +13,17 @@ namespace UnitTest
 		public void testDir()
 		{
 			string path = @"C:\temp";
-			var di = new System.IO.DirectoryInfo(path);
-			string dir1 = di.add("first", "second");
-			string sub = di.subPath(dir1);
+			var fld = Folder.New(path);
+			var fld2 = Folder.New(fld.Add("first", "second"));
+			var par = fld2.Parent;
+			var root = fld.Root;
+			string sub = fld.SubPath(fld2);
+			sub = fld - fld2;
+			sub = fld2 - fld.Path;
+			var files = fld.Files.Where(z => z.endsWithCI(".mine"));
+			var dirs = fld.Directories;
+			fld.ReRoot(@"D:\fu\fu");
+			fld.Create();
 			return;
 		}
 	}//class
