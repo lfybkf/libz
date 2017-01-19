@@ -154,5 +154,16 @@ namespace UnitTest
 			Assert.IsTrue("1".addSpace("mu", "MU") == "1 mu MU");
 		}//function
 
+		[TestMethod]
+		public void textShaffle()
+		{
+			var ii = Enumerable.Range(1, 20).ToArray();
+			var iio = ii.orderByRandom().forEach(i => Console.Write($"{i} "));
+			Console.WriteLine();
+			ii.shuffle();
+			ii.orderByRandom().forEach(i => Console.Write($"{i} "));
+			Console.WriteLine();
+			Assert.IsTrue(true);
+		}//function
 	}//class
 }//ns

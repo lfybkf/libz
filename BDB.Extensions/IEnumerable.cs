@@ -156,6 +156,25 @@ namespace BDB
 			}//else
 		}//function
 
+		///<summary>shuffle</summary>
+		public static void shuffle<T>(this T[] array)
+		{
+			Random rnd = new Random();
+			int n = array.Length;
+			while (n > 1)
+			{
+				int k = rnd.Next(n--);
+				T temp = array[n];
+				array[n] = array[k];
+				array[k] = temp;
+			}
+		}//function
 
+		///<summary>shuffle</summary>
+		public static IEnumerable<T> orderByRandom<T>(this IEnumerable<T> list)
+		{
+			Random rnd = new Random();
+			return list.OrderBy(z => rnd.Next());
+		}//function
 	}//class
 }//ns
