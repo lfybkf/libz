@@ -157,13 +157,18 @@ namespace UnitTest
 		[TestMethod]
 		public void textShaffle()
 		{
-			var ii = Enumerable.Range(1, 20).ToArray();
-			var iio = ii.orderByRandom().forEach(i => Console.Write($"{i} "));
-			Console.WriteLine();
+			int R = 14;
+			var ii = Enumerable.Range(1, R).ToArray();
+			string sR, sS;
+			string[] ss = new string[R-1];
+			for (int i = 0; i < ss.Length; i++)
+			{
+				ss[i] = ii.sequenceSkip(i+1).print(null, " ");
+			}
+			sR = ii.orderByRandom().print(null, " ");
 			ii.shuffle();
-			ii.orderByRandom().forEach(i => Console.Write($"{i} "));
-			Console.WriteLine();
-			Assert.IsTrue(true);
+			sS = ii.print(null, " ");
+			Assert.IsTrue(ss.All(z => z.Length == sR.Length));
 		}//function
 	}//class
 }//ns

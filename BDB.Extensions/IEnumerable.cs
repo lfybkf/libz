@@ -90,30 +90,35 @@ namespace BDB
 			}//for
 		}//function
 
-		/// <summary>
-		/// массив Т в строку с разделителем. Если функция не указана, то используется ToString (для строк - тождество)
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="source"></param>
-		/// <param name="toString">функция, превращающая Т в строку</param>
-		/// <param name="delimiter">разделитель</param>
-		/// <returns></returns>
-		public static string print<T>(this IEnumerable<T> source, Func<T, string> toString, string delimiter)
+		///<summary>проход всей последовательности через N со сдвигом</summary>
+		public static IEnumerable<T> sequenceSkip<T>(this IEnumerable<T> source, int N)
 		{
-			if (source == null)
-				return string.Empty;
-			if (toString == null)
+			if (source == null) { yield break; }
+			if (N == 0) { yield break; }
+			int count = source.Count();
+			if (count == 1) { yield break; }
+			int frags = (count / N) + 1;
+			int index;
+			for (int i = 0; i < N; i++)
 			{
-				if (typeof(T) == typeof(string))
+				for (int fi = 0; fi < frags; fi++)
 				{
-					return string.Join(delimiter, source.Select(z => z));
-				}//if
-				else
-				{
-					return string.Join(delimiter, source.Select(z => z.ToString()));
-				}//else
+					index = fi * N + i;
+					if (index < count) { yield return source.ElementAt(index); }
+				}//for
+			}//for
+		}//function
+
+		/// <summary>массив Т в строку с разделителем. Если функция не указана, то используется ToString (для строк - тождество)</summary>
+		public static string print<T>(this IEnumerable<T> source, Func<T, string> toStr, string delimiter)
+		{
+			if (source == null) { return string.Empty; }
+			if (toStr == null)
+			{
+				if (typeof(T) == typeof(string)) { return string.Join(delimiter, source.Select(z => z));	}//if
+				else { return string.Join(delimiter, source.Select(z => z.ToString())); }//else
 			}//if
-			return string.Join(delimiter, source.Select(z => toString(z)));
+			return string.Join(delimiter, source.Select(z => toStr(z)));
 		}//function
 
 		///<summary>is empty</summary> 
