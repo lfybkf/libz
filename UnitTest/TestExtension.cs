@@ -69,17 +69,18 @@ namespace UnitTest
 		}//function
 
 		[TestMethod]
-		public void TestEnumerator()
+		public void TestSequance()
 		{
-			Action<string> write = SimpleLogger.Instance.Info;
-			int n = 0;
-			string[] array = { "kaba", " muba", "  taba", "   ourt", "    ifqa", "      zaba" };
-			//int[] array = Enumerable.Range(-2, 6).ToArray();
-			array.sequenceSwing(n).forEach(o => write(o.ToString()));
-			write("======================");
-			array.sequenceCircle(n).forEach(o => write(o.ToString()));
-			write("======================");
-			array.sequenceRandom(n*3).forEach(o => write(o.ToString()));
+			string sS, sC, sR, s1, s2;
+			string[] array = { "1a", "2d", "3c", "4e", "5g", "6h" };
+			int n = array.Length + 4;
+			
+			sS = array.sequenceSwing(n).print(null, " ");
+			sC = array.sequenceCircle(n).print(null, " ");
+			sR = array.sequenceRandom(n).print(null, " ");
+			s1 = "AAA".sequence(array).print(null, " ");
+			s2 = array.sequence("AAA", "CCC").print(null, " ");
+			return;
 		}//function
 
 		[TestMethod]

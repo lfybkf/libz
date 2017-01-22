@@ -259,6 +259,16 @@ namespace BDB
 			}//for
 			return s;
 		}//func
+		
+		/// <summary>формирует Path из массива строк</summary>
+		public static string addToPath(this string s, IEnumerable<string> args)
+		{
+			foreach (string path in args)
+			{
+				s = System.IO.Path.Combine(s, path);
+			}//for
+			return s;
+		}//func
 
 		/// <summary>конкатенация массива к строке</summary>
 		public static string add(this string s, params object[] args)
