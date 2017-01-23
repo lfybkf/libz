@@ -10,46 +10,49 @@ namespace BDB
 	///<summary>ini-file</summary>
 	public class Ini
 	{
-		private Ini(string name)
+		private Ini(string path)
 		{
-			this.Name = name;
+			this.path = path;
+			dict = new Dictionary<string, string>();
 		}//constructor
 
-		string Name { get; set; }
+		string path { get; set; }
 		Dictionary<string, string> dict;
 
 		///<summary>is empty</summary> 
 		public bool IsEmpty => dict.isEmpty();
-		private string fileName => $"{Name}.ini";
 
 		///<summary>стереть содержимое</summary>
 		public void Clear() => dict.Clear();
 
 		///<summary>load</summary>
-		public static Ini Load(string name, bool toCreate = false)
+		public void Fill(IEnumerable<string> lines)
 		{
-			if (name.isEmpty()) { return null; }
-			Ini result = new Ini(name);
-			IEnumerable<string> lines;
-			if (io.File.Exists(result.fileName))
+			if (lines.isEmpty()) { return; }
+			foreach (var line in lines.Where(z => z.Contains(S.Eq)))
 			{
-				lines = io.File.ReadAllLines(result.fileName);
-				result.dict = new Dictionary<string, string>();
-				foreach (var line in lines.Where(z => z.Contains(S.Eq)))
-				{
-					result.dict[line.before(S.Eq)] = line.after(S.Eq);
-				}//for
+				dict[line.before(S.Eq)] = line.after(S.Eq);
+			}//for
+		}//function
+
+		///<summary>load</summary>
+		public static Ini Load(string path, bool toCreate = false)
+		{
+			if (path.isEmpty()) { return null; }
+			Ini result = null;
+			if (io.File.Exists(path))
+			{
+				result = new Ini(path);
+				var lines = io.File.ReadAllLines(path);
+				result.Fill(lines);
 			}//if
 			else
 			{
 				if (toCreate)
 				{
-					result.dict = new Dictionary<string, string>();
+					result = new Ini(path);
+					result.Fill(null);
 				}//if
-				else
-				{
-					return null;
-				}//else
 			}//else
 			return result;
 		}//function
@@ -58,7 +61,7 @@ namespace BDB
 		public void Save()
 		{
 			var lines = dict.Keys.Select(k => $"{k}={dict[k]}");
-			io.File.WriteAllLines(fileName, lines);
+			io.File.WriteAllLines(path, lines);
 		}//function
 
 		///<summary>dictionary access</summary>

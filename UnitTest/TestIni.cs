@@ -12,16 +12,16 @@ namespace UnitTest
 		[TestMethod]
 		public void tiniGet()
 		{
-			var name = "test";
-			var ini = Ini.Load(name, true);
-			ini.set("intValue", 5);
-			ini.set("strValue", "Pumba");
-			ini.set("arrValue", new string[] {"1a", "2b", "3c" });
+			var path = "test.ini";
+			var ini = Ini.Load(path, true);
+			ini.set("intValue", 7);
+			ini.set("strValue", "Cumba");
+			ini.set("arrValue", new string[] {"1a", "2b", "3c", "4d" });
 			ini.Save();
 
 			ini.Clear();
 
-			ini = Ini.Load(name, true);
+			ini = Ini.Load(path, false);
 			var i = ini.getInt("intValue");
 			var s = ini.getString("strValue");
 			var arr = ini.getArray("arrValue");
