@@ -171,5 +171,25 @@ namespace UnitTest
 			sS = ii.print(null, " ");
 			Assert.IsTrue(ss.All(z => z.Length == sR.Length));
 		}//function
+
+		[TestMethod]
+		public void textComparer()
+		{
+			string[] ss = { "as1cwr", "acdf", "bbbr", "rq3w", "Ar4e", "Ar4e", "aa", "BB" };
+
+			IEnumerable<string> ssd = ss.Distinct().ToArray();
+			ssd = ss.DistinctBy(s => s.Length).ToArray();
+			ssd = ss.DistinctBy(s => s.IndexOf('r')).ToArray();
+
+			var cb = ss.CountBy(s => s.Length);
+
+			string str;
+			str = ss.MaxBy(s => s.Length);
+			str = ss.MinBy(s => s.Length);
+			Assert.IsTrue(str == "aa");
+
+			
+		}//function
+
 	}//class
 }//ns

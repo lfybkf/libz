@@ -185,5 +185,107 @@ namespace BDB
 			Random rnd = new Random();
 			return list.OrderBy(z => rnd.Next());
 		}//function
+
+		///<summary>distinct on function</summary>
+		public static IEnumerable<T> DistinctBy<T>(this IEnumerable<T> source, Func<T, T, bool> funcEquals, Func<T, int> funcHash = null)
+		{
+			if (source == null) throw new ArgumentNullException(nameof(source));
+			var comparer = new FuncComparer<T>(funcEquals, funcHash);
+			return source.Distinct(comparer);
+		}//function
+
+		///<summary>distinct on property</summary>
+		public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+		{
+			if (source == null) throw new ArgumentNullException(nameof(source));
+			if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+
+			var knownKeys = new HashSet<TKey>();
+			foreach (var element in source)
+			{
+				if (knownKeys.Add(keySelector(element)))
+				{
+					yield return element;
+				}//if
+			}//for
+		}//function
+
+
+		///<summary>подсчет количества элементов по значениям keySelector. Пример: {"aaaaa", "b", "bb", "CC", "d", "e"}.CountBy(s => s.Length) = {5,1}{2,2}{1,3}</summary>
+		public static IDictionary<TKey, int> CountBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector)
+		{
+			Dictionary<TKey, int> result = new Dictionary<TKey, int>();
+			if (source == null) return result;
+
+			TKey key;
+			foreach (var item in source)
+			{
+				key = keySelector(item);
+				if (result.ContainsKey(key))
+				{
+					result[key] = result[key] + 1;
+				}//if
+				else
+				{
+					result[key] = 1;
+				}//else
+			}//for
+			return result;
+		}//function
+
+		///<summary>max by property</summary>
+		public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+		{
+			if (source == null) throw new ArgumentNullException(nameof(source));
+			if (source.Any() == false) throw new InvalidOperationException(nameof(source));
+			if (selector == null) throw new ArgumentNullException(nameof(selector));
+			IComparer<TKey> comparer = Comparer<TKey>.Default;
+
+			using (var sourceIterator = source.GetEnumerator())
+			{
+				sourceIterator.MoveNext();
+				var max = sourceIterator.Current;
+				var maxValue = selector(max);
+				while (sourceIterator.MoveNext())
+				{
+					var current = sourceIterator.Current;
+					var currentValue = selector(current);
+					if (comparer.Compare(currentValue, maxValue) > 0)
+					{
+						max = current;
+						maxValue = currentValue;
+					}//if
+				}//while
+				return max;
+			}//using
+		}//function
+
+		///<summary>min by property</summary>
+		public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+		{
+			if (source == null) throw new ArgumentNullException(nameof(source));
+			if (source.Any() == false) throw new InvalidOperationException(nameof(source));
+			if (selector == null) throw new ArgumentNullException(nameof(selector));
+			IComparer<TKey> comparer = Comparer<TKey>.Default;
+
+			using (var sourceIterator = source.GetEnumerator())
+			{
+				sourceIterator.MoveNext();
+				var min = sourceIterator.Current;
+				var minValue = selector(min);
+				while (sourceIterator.MoveNext())
+				{
+					var current = sourceIterator.Current;
+					var currentValue = selector(current);
+					if (comparer.Compare(currentValue, minValue) < 0)
+					{
+						min = current;
+						minValue = currentValue;
+					}//if
+				}//while
+				return min;
+			}//using
+		}//function
+
 	}//class
 }//ns
