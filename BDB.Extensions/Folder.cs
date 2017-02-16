@@ -19,7 +19,7 @@ namespace BDB
 		///<summary>exists?</summary> 
 		public bool Exists => io.Directory.Exists(path);
 		///<summary>Parent</summary> 
-		public string Parent => (Root == Path) ? null : path.AsEnumerable().Take(path.Length-1).TakeUntilLast(ch => ch == cSlash).toString();
+		public string Parent => (Root == Path) ? null : path.AsEnumerable().Take(path.Length-1).takeUntilLast(ch => ch == cSlash).toString();
 		///<summary>Root</summary> 
 		public string Root => io.Directory.GetDirectoryRoot(path);
 		///<summary>Folder[C:\Temp].Subpath(C:\Temp\dir1\dir2) = dir1\dir2</summary>

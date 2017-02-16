@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BDB.Templating
 {
+	///<summary></summary> 
 	public abstract class AttrzME: Attrz //MachineElement
 	{
 		public virtual string Name {get; set;}
@@ -41,3 +44,5 @@ namespace BDB.Templating
 		
 	}//class
 }//ns
+
+#pragma warning restore 1591

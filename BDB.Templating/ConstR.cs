@@ -1,6 +1,7 @@
 ﻿
 
-//Generated 10.11.2016 15:08:05
+#pragma warning disable 1591
+//Generated 16.02.2017 22:28:40
 
 namespace BDB.Templating
 {
@@ -43,5 +44,5 @@ public const string Type = "Type";
 
 
 	}//class
-
 }
+#pragma warning restore 1591

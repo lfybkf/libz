@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,3 +77,5 @@ namespace BDB.Templating
 		public string TypeCS			{ get {	return getTypeCS(Type, IsNullable); }	}
 	}//class
 }//ns
+
+#pragma warning restore 1591

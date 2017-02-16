@@ -18,6 +18,8 @@ namespace BDB
 			return source;
 		}//function
 
+		///<summary>сортированные строки</summary>
+		public static IEnumerable<string> ordered(this IEnumerable<string> list, bool forward = true) => forward ? list.OrderBy(s => s) : list.OrderByDescending(s=>s);
 
 		///<summary>1.sequence(2,3,4) = {1,2,3,4}</summary>
 		public static IEnumerable<T> sequence<T>(this T one, params T[] args) => Enumerable.Repeat(one, 1).Concat(args);
@@ -140,11 +142,11 @@ namespace BDB
 		///<summary>Dictionary not empty</summary> 
 		public static bool notEmpty<T, V>(this IDictionary<T, V> dict) => dict != null && dict.Any();
 		///<summary>брать, пока не выполнено</summary>
-		public static IEnumerable<T> TakeUntil<T>(this IEnumerable<T> list, Func<T, bool> predicate) => list.TakeWhile(z => !predicate(z));
+		public static IEnumerable<T> takeUntil<T>(this IEnumerable<T> list, Func<T, bool> predicate) => list.TakeWhile(z => !predicate(z));
 
 		///<summary>Берет пока условие невыполнено последний раз. Если ни разу, то возвращает все.
 		///{1,2,3,4,3,4,5}.TakeUntilLast(4) = {1,2,3,4,3}</summary>
-		public static IEnumerable<T> TakeUntilLast<T>(this IEnumerable<T> list, Func<T, bool> predicate)
+		public static IEnumerable<T> takeUntilLast<T>(this IEnumerable<T> list, Func<T, bool> predicate)
 		{
 			if (list.isEmpty()) { return list; }
 			int index = -1;
@@ -187,7 +189,7 @@ namespace BDB
 		}//function
 
 		///<summary>distinct on function</summary>
-		public static IEnumerable<T> DistinctBy<T>(this IEnumerable<T> source, Func<T, T, bool> funcEquals, Func<T, int> funcHash = null)
+		public static IEnumerable<T> distinctBy<T>(this IEnumerable<T> source, Func<T, T, bool> funcEquals, Func<T, int> funcHash = null)
 		{
 			if (source == null) throw new ArgumentNullException(nameof(source));
 			var comparer = new FuncComparer<T>(funcEquals, funcHash);
@@ -195,7 +197,7 @@ namespace BDB
 		}//function
 
 		///<summary>distinct on property</summary>
-		public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+		public static IEnumerable<TSource> distinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
 		{
 			if (source == null) throw new ArgumentNullException(nameof(source));
 			if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
@@ -212,7 +214,7 @@ namespace BDB
 
 
 		///<summary>подсчет количества элементов по значениям keySelector. Пример: {"aaaaa", "b", "bb", "CC", "d", "e"}.CountBy(s => s.Length) = {5,1}{2,2}{1,3}</summary>
-		public static IDictionary<TKey, int> CountBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector)
+		public static IDictionary<TKey, int> countBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector)
 		{
 			Dictionary<TKey, int> result = new Dictionary<TKey, int>();
 			if (source == null) return result;

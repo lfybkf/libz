@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,3 +40,5 @@ namespace BDB.Templating
 		public bool IsGuardUsed(string name) { return enterGuards.Contains(name) || exitGuards.Contains(name); }
 	}//class
 }//ns
+
+#pragma warning restore 1591

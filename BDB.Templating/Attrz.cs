@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,3 +50,5 @@ namespace BDB.Templating
 
 	}//class
 }//ns
+
+#pragma warning restore 1591

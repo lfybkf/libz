@@ -26,6 +26,7 @@ string[] words = {
 };
 #>
 
+#pragma warning disable 1591
 //Generated <#=DateTime.Now.ToString() #>
 
 namespace BDB.Templating
@@ -43,5 +44,5 @@ public const string <#= word #> = "<#= word #>";
 
 
 	}//class
-
 }
+#pragma warning restore 1591

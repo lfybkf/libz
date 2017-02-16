@@ -5,8 +5,10 @@ using System.Text;
 
 namespace BDB.Templating
 {
+	///<summary>guard</summary> 
 	public class Guard:AttrzME
 	{
+		///<summary>validate</summary> 
 		public override bool Validate()
 		{
 			bool UsedInStates = machine.States.Any(z => z.IsGuardUsed(Name));

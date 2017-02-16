@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -30,16 +32,18 @@ namespace BDB.Templating
 			return string.Join(delimiter, source.Select(z => toString(z)));
 		}//function
 
+		///<summary>print newline</summary> 
 		public static string printNewLine<T>(this IEnumerable<T> source, Func<T, string> toString)
 		{
 			return source.print(toString, Environment.NewLine);
 		}//function
-
+		 ///<summary>print comma and space</summary> 
 		public static string printComma<T>(this IEnumerable<T> source, Func<T, string> toString)
 		{
 			return source.print(toString, ", ");
 		}//function
 
+		///<summary>оскобить</summary>
 		public static string quote(this string s, char ch)
 		{
 			return "{0}{1}{2}".fmt(ch, s, C.Right(ch));
@@ -74,8 +78,6 @@ namespace BDB.Templating
 		/// <summary>
 		/// вертает Value или default(TValue)
 		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
 		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key)
 		{
 			return dict.ContainsKey(key) ? dict[key] : default(TValue);
@@ -84,8 +86,6 @@ namespace BDB.Templating
 		/// <summary>
 		/// вертает Value или defaultValue
 		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
 		public static TValue get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultValue)
 		{
 			return dict.ContainsKey(key) ? dict[key] : defaultValue;
@@ -266,3 +266,5 @@ namespace BDB.Templating
 		#endregion
 	}//class
 }//ns
+
+#pragma warning restore 1591

@@ -149,8 +149,8 @@ namespace UnitTest
 			string sP;
 			var chars = s.AsEnumerable().Take(s.Length - 1);
 			sP = chars.toString();
-			sP = chars.TakeUntil(ch => ch == '\\').toString();
-			sP = chars.TakeUntilLast(ch => ch == '\\').toString();
+			sP = chars.takeUntil(ch => ch == '\\').toString();
+			sP = chars.takeUntilLast(ch => ch == '\\').toString();
 
 			Assert.IsTrue("1".addSpace("mu", "MU") == "1 mu MU");
 		}//function
@@ -178,10 +178,11 @@ namespace UnitTest
 			string[] ss = { "as1cwr", "acdf", "bbbr", "rq3w", "Ar4e", "Ar4e", "aa", "BB" };
 
 			IEnumerable<string> ssd = ss.Distinct().ToArray();
-			ssd = ss.DistinctBy(s => s.Length).ToArray();
-			ssd = ss.DistinctBy(s => s.IndexOf('r')).ToArray();
+			ssd = ss.distinctBy(s => s.Length).ToArray();
+			ssd = ss.distinctBy(s => s.IndexOf('r')).ToArray();
+			ssd = ss.ordered(false).ToArray();
 
-			var cb = ss.CountBy(s => s.Length);
+			var cb = ss.countBy(s => s.Length);
 
 			string str;
 			str = ss.MaxBy(s => s.Length);
