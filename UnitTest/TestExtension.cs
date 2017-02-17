@@ -182,11 +182,17 @@ namespace UnitTest
 			ssd = ss.distinctBy(s => s.IndexOf('r')).ToArray();
 			ssd = ss.ordered(false).ToArray();
 
+			var a1 = new string[] { "1", "3", "5" };
+			var a2 = new string[] { "1", "3", "5" };
+			Assert.IsTrue(Enumerable.SequenceEqual(a1, a2));
+			Assert.IsFalse(a1.Equals(a2));
+
 			var cb = ss.countBy(s => s.Length);
+			var sb = ss.sumBy(s => s.left(1), s => s.Length);
 
 			string str;
-			str = ss.MaxBy(s => s.Length);
-			str = ss.MinBy(s => s.Length);
+			str = ss.maxBy(s => s.Length);
+			str = ss.minBy(s => s.Length);
 			Assert.IsTrue(str == "aa");
 
 			

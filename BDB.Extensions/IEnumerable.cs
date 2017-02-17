@@ -236,7 +236,7 @@ namespace BDB
 		}//function
 
 		///<summary>max by property</summary>
-		public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+		public static TSource maxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
 		{
 			if (source == null) throw new ArgumentNullException(nameof(source));
 			if (source.Any() == false) throw new InvalidOperationException(nameof(source));
@@ -263,7 +263,7 @@ namespace BDB
 		}//function
 
 		///<summary>min by property</summary>
-		public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+		public static TSource minBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
 		{
 			if (source == null) throw new ArgumentNullException(nameof(source));
 			if (source.Any() == false) throw new InvalidOperationException(nameof(source));
@@ -289,5 +289,41 @@ namespace BDB
 			}//using
 		}//function
 
+		///<summary>sumBy</summary>
+		///<example>
+		///<code>
+		///{"aa", "abb", "ccc"}.sumBy(s => s.StartsWith("a"), s => s.Length)
+		///</code>
+		///</example>
+		public static Dictionary<TKey, int> sumBy<T, TKey>(this IEnumerable<T> list, Func<T, TKey> funcKey, Func<T, int> funcValue)
+		{
+			var result = new Dictionary<TKey, int>();
+			if (list == null || list.Any() == false) { return result; }
+
+			TKey key;
+			foreach (var item in list)
+			{
+				key = funcKey(item);
+				result[key] = result.ContainsKey(key) ? result[key] + funcValue(item) : funcValue(item);
+			}//for
+
+			return result;
+		}//function
+
+		///<summary>sumBy</summary> 
+		public static Dictionary<TKey, double> sumBy<T, TKey>(this IEnumerable<T> list, Func<T, TKey> funcKey, Func<T, double> funcValue)
+		{
+			var result = new Dictionary<TKey, double>();
+			if (list == null || list.Any() == false) { return result; }
+
+			TKey key;
+			foreach (var item in list)
+			{
+				key = funcKey(item);
+				result[key] = result.ContainsKey(key) ? result[key] + funcValue(item) : funcValue(item);
+			}//for
+
+			return result;
+		}//function
 	}//class
 }//ns
