@@ -60,7 +60,7 @@ namespace BDB
 		///<summary>save</summary>
 		public void Save()
 		{
-			var lines = dict.Keys.Select(k => $"{k}={dict[k]}");
+			var lines = dict.Keys.ordered().Select(k => $"{k}={dict[k]}");
 			io.File.WriteAllLines(path, lines);
 		}//function
 
