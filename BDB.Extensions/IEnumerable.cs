@@ -182,6 +182,21 @@ namespace BDB
 		}//function
 
 		///<summary>shuffle</summary>
+		public static void shuffle<T>(this IList<T> list)
+		{
+			Random rnd = new Random();
+			int n = list.Count;
+			while (n > 1)
+			{
+				int k = rnd.Next(n--);
+				T temp = list[n];
+				list[n] = list[k];
+				list[k] = temp;
+			}
+		}//function
+
+
+		///<summary>shuffle</summary>
 		public static IEnumerable<T> orderByRandom<T>(this IEnumerable<T> list)
 		{
 			Random rnd = new Random();
