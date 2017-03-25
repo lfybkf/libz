@@ -16,6 +16,17 @@ namespace BDB
 
 		///<summary>Path</summary> 
 		public string Path => path;
+		///<summary>short name</summary>
+		public string Name
+		{
+			get
+			{
+				var cc = path.AsEnumerable();
+				int iBeg = cc.Take(path.Length - 1).takeUntilLast(ch => ch == cSlash).Count();
+				string res = new string( cc.Skip(iBeg+1).Take(path.Length - iBeg-2).ToArray() );
+				return res;
+			}
+		}
 		///<summary>exists?</summary> 
 		public bool Exists => io.Directory.Exists(path);
 		///<summary>Parent</summary> 
