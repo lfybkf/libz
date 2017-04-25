@@ -27,5 +27,35 @@ namespace UnitTest
 			var arr = ini.getArray("arrValue");
 			Assert.IsTrue(arr.Any());
 		}//function
+
+
+		class Value {
+			public int intValue { get; set; }
+			public string strValue { get; set; }
+			public string[] arrValue { get; set; }
+		}
+		class Bu
+		{
+			public int intBu { get; set; }
+			public string strBu { get; set; }
+			public string[] arrBu { get; set; }
+		}
+
+		[TestMethod]
+		public void tiniSerialize()
+		{
+			var path = "test.ini";
+			var ini = Ini.Load(path, true);
+
+			Value val = ini.DeSerialize<Value>();
+			Bu bu = ini.DeSerialize<Bu>();
+			Assert.IsTrue(val.intValue == 7);
+
+			bu.arrBu = new string[] {"bu3", "bu166" };
+			bu.intBu += 11;
+			bu.strBu += "B";
+			ini.Serialize(bu);
+			ini.Save();
+		}//function
 	}//class
 }//namespace

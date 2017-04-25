@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using io = System.IO;
@@ -84,5 +85,56 @@ namespace BDB
 		public string getString(string key) => get(key, default(string));
 		///<summary>get int</summary> 
 		public string[] getArray(string key) => get(key, default(string[]));
+
+		///<summary>deserialize</summary> 
+		public T DeSerialize<T>()
+		{
+			T res = Activator.CreateInstance<T>();
+			Type t = typeof(T);
+			PropertyInfo[] props = t.GetProperties();
+			foreach (var prop in props)
+			{
+				string name = prop.Name;
+				Type type = prop.PropertyType;
+				if (type == typeof(int))
+				{
+					prop.SetValue(res, get(name, default(int)));
+				}//if
+				else if (type == typeof(string))
+				{
+					prop.SetValue(res, get(name, default(string)));
+				}//else
+				else if (type == typeof(string[]))
+				{
+					prop.SetValue(res, get(name, default(string[])));
+				}//else
+			}//for
+			return res;
+		}//function
+
+		///<summary>serialize</summary> 
+		public void Serialize(object obj)
+		{
+			Type t = obj.GetType();
+			PropertyInfo[] props = t.GetProperties();
+
+			foreach (var prop in props)
+			{
+				string name = prop.Name;
+				Type type = prop.PropertyType;
+				if (type == typeof(int))
+				{
+					set(name, (int)prop.GetValue(obj));
+				}//if
+				else if (type == typeof(string))
+				{
+					set(name, (string)prop.GetValue(obj));
+				}//else
+				else if (type == typeof(string[]))
+				{
+					set(name, (string[])prop.GetValue(obj));
+				}//else
+			}//for
+		}//function
 	}//class
 }
