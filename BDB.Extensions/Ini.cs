@@ -11,6 +11,18 @@ namespace BDB
 	///<summary>ini-file</summary>
 	public class Ini
 	{
+		#region IDict
+		///<summary>для записей не связанных со свойствами</summary> 
+		public interface IDict {
+			///<summary>get</summary> 
+			string get(string key);
+			///<summary>set</summary> 
+			void set(string key, string val);
+			///<summary>ключи несвойств</summary>
+			IEnumerable<string> keys { get; }
+		}
+		#endregion
+
 		private Ini(string path)
 		{
 			this.path = path;
@@ -25,6 +37,12 @@ namespace BDB
 
 		///<summary>стереть содержимое</summary>
 		public void Clear() => dict.Clear();
+
+		///<summary>есть ли ключ</summary>
+		public bool Has(string key) => dict.ContainsKey(key);
+
+		///<summary>ключи</summary>
+		public IEnumerable<string> Keys => dict.Keys.AsEnumerable();
 
 		///<summary>load</summary>
 		public void Fill(IEnumerable<string> lines)
@@ -95,20 +113,31 @@ namespace BDB
 			foreach (var prop in props)
 			{
 				string name = prop.Name;
+				if (!Has(name)) { continue; }
+
 				Type type = prop.PropertyType;
 				if (type == typeof(int))
 				{
-					prop.SetValue(res, get(name, default(int)));
+					prop.SetValue(res, getInt(name));
 				}//if
 				else if (type == typeof(string))
 				{
-					prop.SetValue(res, get(name, default(string)));
+					prop.SetValue(res, getString(name));
 				}//else
 				else if (type == typeof(string[]))
 				{
-					prop.SetValue(res, get(name, default(string[])));
+					prop.SetValue(res, getArray(name));
 				}//else
 			}//for
+
+			if (res is IDict)
+			{
+				IDict d = res as IDict;
+				foreach (var key in Keys.Except(props.Select(p => p.Name)))
+				{
+					d.set(key, getString(key));
+				}//for
+			}//if
 			return res;
 		}//function
 

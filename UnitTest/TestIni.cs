@@ -34,11 +34,16 @@ namespace UnitTest
 			public string strValue { get; set; }
 			public string[] arrValue { get; set; }
 		}
-		class Bu
+		class Bu: Ini.IDict
 		{
-			public int intBu { get; set; }
+			public int intBu { get; set; } = 9900;
 			public string strBu { get; set; }
 			public string[] arrBu { get; set; }
+
+			Dictionary<string, string> dict = new Dictionary<string, string>();
+			public IEnumerable<string> keys => dict.Keys.AsEnumerable();
+			public void set(string key, string val) => dict[key] = val;
+			public string get(string key) => dict.get(key, string.Empty);
 		}
 
 		[TestMethod]
