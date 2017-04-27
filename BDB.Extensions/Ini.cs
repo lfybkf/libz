@@ -27,16 +27,21 @@ namespace BDB
 		{
 			this.path = path;
 			dict = new Dictionary<string, string>();
+			list = new List<string>();
 		}//constructor
 
 		string path { get; set; }
 		Dictionary<string, string> dict;
+		List<string> list;
+
+		///<summary>все строки, которые не являются свойствами</summary>
+		public IEnumerable<string> Lines => list;
 
 		///<summary>is empty</summary> 
 		public bool IsEmpty => dict.isEmpty();
 
 		///<summary>стереть содержимое</summary>
-		public void Clear() => dict.Clear();
+		public void Clear() {dict.Clear(); list.Clear(); }
 
 		///<summary>есть ли ключ</summary>
 		public bool Has(string key) => dict.ContainsKey(key);
@@ -48,9 +53,19 @@ namespace BDB
 		public void Fill(IEnumerable<string> lines)
 		{
 			if (lines.isEmpty()) { return; }
-			foreach (var line in lines.Where(z => z.Contains(S.Eq)))
+			foreach (var line in lines)
 			{
-				dict[line.before(S.Eq)] = line.after(S.Eq);
+				if (line.isEmpty()) { continue; }
+				if (line.All(ch => ch == C.Space)) { continue; }
+
+				if (line.Contains(C.Eq))
+				{
+					dict[line.before(S.Eq)] = line.after(S.Eq);
+				}//if
+				else
+				{
+					list.Add(line);
+				}//else				
 			}//for
 		}//function
 
