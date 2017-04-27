@@ -93,15 +93,21 @@ namespace BDB
 		public string get(string key, string def) => dict.get(key).with(z => z, def);
 		///<summary>set</summary>
 		public void set(string key, string val) => dict[key] = val;
+		///<summary>get</summary>
+		public bool get(string key, bool def) => dict.get(key).with(z => !z.equalCI("false"), def);
+		///<summary>set</summary>
+		public void set(string key, bool val) => dict[key] = val.ToString();
 		///<summary>get через ;</summary>
 		public string[] get(string key, string[] def) => dict.get(key).with(z => z.splitSemicolon(), def);
 		///<summary>set через ;</summary>
 		public void set(string key, string[] val) => dict[key] = string.Join(S.Semicolon, val);
-		///<summary>get int</summary> 
+		///<summary>get int</summary>
 		public int getInt(string key) => get(key, default(int));
-		///<summary>get str</summary> 
+		///<summary>get str</summary>
 		public string getString(string key) => get(key, default(string));
-		///<summary>get int</summary> 
+		///<summary>get bool</summary>
+		public bool getBool(string key) => get(key, false);
+		///<summary>get int</summary>
 		public string[] getArray(string key) => get(key, default(string[]));
 
 		///<summary>deserialize</summary> 
@@ -114,12 +120,16 @@ namespace BDB
 			{
 				string name = prop.Name;
 				if (!Has(name)) { continue; }
-
 				Type type = prop.PropertyType;
+
 				if (type == typeof(int))
 				{
 					prop.SetValue(res, getInt(name));
 				}//if
+				else if (type == typeof(bool)) //По умолчанию свойство должно быть false.
+				{
+					prop.SetValue(res, getBool(name));
+				}//else
 				else if (type == typeof(string))
 				{
 					prop.SetValue(res, getString(name));
@@ -158,6 +168,10 @@ namespace BDB
 				else if (type == typeof(string))
 				{
 					set(name, (string)prop.GetValue(obj));
+				}//else
+				else if (type == typeof(bool))
+				{
+					set(name, (bool)prop.GetValue(obj));
 				}//else
 				else if (type == typeof(string[]))
 				{

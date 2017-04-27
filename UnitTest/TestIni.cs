@@ -33,6 +33,7 @@ namespace UnitTest
 			public int intValue { get; set; }
 			public string strValue { get; set; }
 			public string[] arrValue { get; set; }
+			public bool hasValue { get; set; } = false;
 		}
 		class Bu: Ini.IDict
 		{
@@ -60,6 +61,7 @@ namespace UnitTest
 			bu.intBu += 11;
 			bu.strBu += "B";
 			ini.Serialize(bu);
+			ini.Serialize(val);
 			ini.Save();
 		}//function
 	}//class
