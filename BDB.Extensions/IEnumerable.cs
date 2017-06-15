@@ -401,6 +401,12 @@ namespace BDB
 				}//else
 			}//while
 
+			//остались еще символы в маске, а строка уже закончилась
+			if (you != null && you.MoveNext())
+			{
+				res = false;
+			}//if
+
 			return res;
 		}//fun
 

@@ -202,11 +202,15 @@ namespace UnitTest
 		[TestMethod]
 		public void textMask()
 		{
+			string s = "I'll have a good idea";
+			string mask = "*addic7ed*";
+			//Assert.IsTrue(s.isMasked(mask));
+
 			Assert.IsTrue("abc".isMasked("abc"));
 			Assert.IsTrue("abcQWE".isMasked("abc*"));
 			Assert.IsTrue("QWEabc".isMasked("*abc"));
 
-			Assert.IsFalse("QWabQWabcE".isMasked("*abc*"));
+			Assert.IsFalse("QWabQWabE".isMasked("*abc*"));
 			Assert.IsTrue("QWabQWabcE".isMasked("*abc*"));
 			Assert.IsTrue("QWEabcQWE".isMasked("*abc*"));
 			Assert.IsTrue("(abc)".isMasked("(*)"));
