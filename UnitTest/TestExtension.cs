@@ -198,5 +198,19 @@ namespace UnitTest
 			
 		}//function
 
+
+		[TestMethod]
+		public void textMask()
+		{
+			Assert.IsTrue("abc".isMasked("abc"));
+			Assert.IsTrue("abcQWE".isMasked("abc*"));
+			Assert.IsTrue("QWEabc".isMasked("*abc"));
+
+			Assert.IsFalse("QWabQWabcE".isMasked("*abc*"));
+			Assert.IsTrue("QWabQWabcE".isMasked("*abc*"));
+			Assert.IsTrue("QWEabcQWE".isMasked("*abc*"));
+			Assert.IsTrue("(abc)".isMasked("(*)"));
+			Assert.IsTrue(true);
+		}//function
 	}//class
 }//ns

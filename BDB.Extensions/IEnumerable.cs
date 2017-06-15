@@ -340,5 +340,69 @@ namespace BDB
 
 			return result;
 		}//function
+
+		///<summary>Сравнить без учета длины. "abcd" coincide "abc".</summary>
+		public static bool isCoincide<T>(this IEnumerable<T> list, IEnumerable<T> others, Func<T, T, bool> equals = null)
+		{
+			if (equals == null) { equals = EqualityComparer<T>.Default.Equals; }
+			IEnumerator<T> me = list.GetEnumerator();
+			IEnumerator<T> you = others.GetEnumerator();
+			
+			bool res = true;
+			while (me.MoveNext() && you.MoveNext())
+			{
+				if (equals(me.Current, you.Current) == false)
+				{
+					res = false;
+					break;
+				}//if
+			}//while
+			return res;
+		}//function
+
+		///<summary>содержит массив</summary>
+		public static bool contains<T>(this IEnumerable<T> list, IEnumerable<T> what, Func<T, T, bool> equals = null)
+		{
+			if (list.isEmpty()) { return false; }
+			if (what.isEmpty()) { return false; }
+			if (equals == null) { equals = EqualityComparer<T>.Default.Equals; }
+			IEnumerator<T> me = list.GetEnumerator();
+			IEnumerator<T> you = null;
+
+			bool res = false;
+			bool isMatching = false;
+
+			while (me.MoveNext())
+			{
+				if (isMatching == false)
+				{
+					if (equals(me.Current, what.First()))
+					{
+						you = what.GetEnumerator();
+						you.MoveNext();
+						isMatching = true;
+						res = true;
+					}//if
+					continue;
+				}//if
+
+				if (you.MoveNext())
+				{
+					if (equals(me.Current, you.Current) == false)
+					{
+						isMatching = false;
+						res = false;
+					}//if
+				}//if
+				else
+				{
+					//есть одно вхождение - дальше не ищем
+					if (res == true) { break; }//if
+				}//else
+			}//while
+
+			return res;
+		}//fun
+
 	}//class
 }//ns

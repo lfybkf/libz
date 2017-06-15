@@ -115,46 +115,40 @@ namespace BDB
 		}//function
 
 		#region checks
-
-
 		/// <summary>string not IsNullOrWhiteSpace</summary>
-		public static bool notEmpty(this string s) { return !string.IsNullOrWhiteSpace(s); }
+		public static bool notEmpty(this string s) => !string.IsNullOrWhiteSpace(s);
 		///<summary>IsNullOrWhiteSpace</summary> 
-		public static bool isEmpty(this string s) { return string.IsNullOrWhiteSpace(s); }
+		public static bool isEmpty(this string s) => string.IsNullOrWhiteSpace(s);
 		///<summary>по умолчанию, когда пусто</summary> 
-		public static string whenEmpty(this string s, string def)	{	return string.IsNullOrWhiteSpace(s) ? def : s; }
+		public static string whenEmpty(this string s, string def)	=> string.IsNullOrWhiteSpace(s) ? def : s;
 		///<summary>окавычить, оскобить</summary> 
-		public static string quote(this string s, char ch)
-		{
-			return "{0}{1}{2}".fmt(ch, s, C.Right(ch));
-		}//function
+		public static string quote(this string s, char ch) => $"{ch}{s}{C.Right(ch)}";
 
 		///<summary>StartsWith (есть проверка на null)</summary>
-		public static bool startsWithCI(this string s, string what)
-		{
-			return s == null ? false : s.StartsWith(what, StringComparison.OrdinalIgnoreCase);
-		}//function
-		 ///<summary>EndsWith (есть проверка на null)</summary>
-		public static bool endsWithCI(this string s, string what)
-		{
-			return s == null ? false : s.EndsWith(what, StringComparison.OrdinalIgnoreCase);
-		}//function
+		public static bool startsWithCI(this string s, string what) => s == null ? false : s.StartsWith(what, StringComparison.OrdinalIgnoreCase);
+		///<summary>EndsWith (есть проверка на null)</summary>
+		public static bool endsWithCI(this string s, string what) => s == null ? false : s.EndsWith(what, StringComparison.OrdinalIgnoreCase);
+		///<summary>StartsWith chars (есть проверка на null)</summary>
+		public static bool startsChars(this string s, IEnumerable<char> cc, Func<char, char, bool> comparer = null) => s == null ? false : s.isCoincide(cc, comparer);
+		///<summary>EndsWith chars (есть проверка на null)</summary>
+		public static bool endsChars(this string s, IEnumerable<char> cc, Func<char, char, bool> comparer = null) => s == null ? false : s.Reverse().isCoincide(cc.Reverse(), comparer);
+		///<summary>StartsWith chars (есть проверка на null)</summary>
+		public static bool startsCharsCI(this string s, IEnumerable<char> cc) => s.startsChars(cc, (cA, cB) => char.ToLower(cA) == char.ToLower(cB));
+		///<summary>EndsWith chars (есть проверка на null)</summary>
+		public static bool endsCharsCI(this string s, IEnumerable<char> cc) => s.endsChars(cc, (cA, cB) => char.ToLower(cA) == char.ToLower(cB));
 
 		/// <summary>Contains IgnoreCase</summary>
-		public static bool containsCI(this string s, string what)
-		{
-			return s.IndexOf(what, StringComparison.OrdinalIgnoreCase) >= 0;
-		}
+		public static bool containsCI(this string s, string what) => s.IndexOf(what, StringComparison.OrdinalIgnoreCase) >= 0;
+		///<summary>"QWEabcQWE" contains ['a','b','c']</summary>
+		public static bool containsChars(this string s, IEnumerable<char> cc) => s.contains(cc);
+
 		/// <summary>равно IgnoreCase</summary>
-		public static bool equalCI(this string s, string what)
-		{
-			return string.Compare(s, what, true) == 0;
-		}
+		public static bool equalCI(this string s, string what) => string.Compare(s, what, true) == 0;
 
 		/// <summary>есть ли строка в массиве</summary>
-		public static bool inList(this string s, params string[] ss) { return ss.Contains(s); }
+		public static bool inList(this string s, params string[] ss) => ss.Contains(s);
 		/// <summary>есть ли строка в массиве</summary>
-		public static bool inList<T>(this T s, params T[] ss) { return ss.Contains(s); }
+		public static bool inList<T>(this T s, params T[] ss) => ss.Contains(s);
 		#endregion
 
 		#region substring
@@ -455,6 +449,31 @@ namespace BDB
 		/// split /
 		/// </summary>
 		public static string[] splitSlash(this string s) { return s.Split(C.Slash); }//function
+		#endregion
+
+		#region mask
+
+		///<summary>соответствие маске - s, *, *s, s*, s*s, *s*</summary>
+		public static bool isMasked(this string s, string mask, char chAny = C.Star)
+		{
+			if (mask.isEmpty()) { return false; }
+			if (!mask.Contains(chAny)) { return s == mask; } //s
+			if (mask.All(c => c == chAny)) { return true; } //*
+			if (mask.First() == chAny && mask.Last() != chAny) { return s.endsChars(mask.SkipWhile(c => c == chAny)); } //*s
+			if (mask.First() != chAny && mask.Last() == chAny) { return s.startsChars(mask.TakeWhile(c => c != chAny)); } //s*
+			if (mask.First() != chAny && mask.Last() != chAny) // ((*))
+			{
+				IEnumerable<char> ccA = mask.TakeWhile(c => c != chAny);
+				IEnumerable<char> ccB = mask.Skip(mask.IndexOf(chAny) + 1);
+				return s.startsChars(ccA) && s.endsChars(ccB);
+			}//if
+			if (mask.First() == chAny && mask.Last() == chAny) // *s*
+			{
+				IEnumerable<char> cc = mask.SkipWhile(c => c == chAny).TakeWhile(c => c != chAny);
+				return s.containsChars(cc);
+			}//if
+			return false;
+		}//function
 		#endregion
 	}//class
 }//ns
