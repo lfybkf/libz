@@ -23,6 +23,8 @@ namespace BDB
 
 		///<summary>1.sequence(2,3,4) = {1,2,3,4}</summary>
 		public static IEnumerable<T> sequence<T>(this T one, params T[] args) => Enumerable.Repeat(one, 1).Concat(args);
+		///<summary>1.sequence(2,3,4) = {1,2,3,4}</summary>
+		public static IEnumerable<T> sequence<T>(this T one, IEnumerable<T> args) => Enumerable.Repeat(one, 1).Concat(args);
 		///<summary>{1,2}.sequence(3,4) = {1,2,3,4}</summary>
 		public static IEnumerable<T> sequence<T>(this IEnumerable<T> list, params T[] args) => list.Concat(args);
 
