@@ -244,6 +244,9 @@ namespace BDB
 		#endregion
 
 		#region add
+		/// <summary>конкатенация массива. " - ".join(str1, str2, str3) = "str1 - str2 - str3"</summary>
+		public static string join(this string delim, params object[] args) => string.Join(delim, args);
+
 		/// <summary>формирует Path из массива строк</summary>
 		public static string addToPath(this string s, params string[] args)
 		{
