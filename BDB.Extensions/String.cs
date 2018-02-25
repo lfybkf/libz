@@ -15,105 +15,6 @@ namespace BDB
 		///<summary>to string</summary> 
 		public static string toString(this IEnumerable<char> chars) => new string(chars.ToArray());
 
-		//если эти символы в плейсхолдере, то это не он и его игнорируем
-		private static char[] badCharsForPlaceholder = { C.Space, C.Tab, '\n' };
-		/// <summary>from "asd{name}qwer{age}ty" get 3,"{name}" ;14,"{age}"</summary>
-		internal static IDictionary<int, string> getPlaceholders(this string s, char cL = '{', char cR = '}')
-		{
-			if (s.IndexOf(cL) < 0) { return null; }//if
-
-			IDictionary<int, string> result = new Dictionary<int, string>();
-			char c;
-			int iL = -1;
-			string ph;
-			// "asd{ph}qwerty"
-			for (int i = 0; i < s.Length; i++)
-			{
-				c = s[i];
-				if (c == cL)
-				{
-					iL = i;//i=3
-				}//if
-				else if (c == cR && iL >= 0) //i=6
-				{
-					ph = s.Substring(iL, i - iL + 1);
-					if (badCharsForPlaceholder.Any(z => ph.Contains(z)) == false)
-					{ result.Add(iL, ph); }
-					iL = -1;
-				}//if
-			}//for
-
-			return result;
-		}//func
-
-
-		///<summary>формат строки по объектам</summary> 
-		public static string fmto(this string s, params object[] oo)
-		{
-			//получаем список плейс-холдеров
-			var phS = s.getPlaceholders();
-			if (phS == null) { return s; }
-
-			#region заполняем значения плейс-холдеров
-			IDictionary<string, string> values = new Dictionary<string, string>();
-			string ph;
-			string method;
-			string[] args;
-			string value;
-			int iL, iR; //номер скобок
-			foreach (var item in phS.Values.Distinct())
-			{
-				ph = item.Substring(1, item.Length - 2);//2="{}".Length
-				method = null;
-				args = null;
-				iL = ph.IndexOf('(');
-				if (iL >= 0)
-				{
-					iR = ph.IndexOf(')');
-					method = ph.Substring(0, iL);
-					args = (iR > iL + 1) ? ph.Substring(iL + 1, iR - iL - 1).Split(',') : null;
-				}//if
-
-				//обходим каждый объект из входящего списка
-				//вдруг у кого-то есть нужное свойство или метод
-				foreach (object o in oo)
-				{
-					if (method != null)
-					{
-						value = o.getMethodValue(method, args);
-					}//if
-					else
-					{
-						value = o.getPropertyValue(ph);
-					}//else
-
-					//нашлось - записываем и дальше не смотрим
-					if (value != null)
-					{
-						values.Add(item, value);
-						break;
-					}//if
-				}//for
-			}//for
-			#endregion
-
-			#region формируем строку-результат
-			string sPh;
-			StringBuilder sb = new StringBuilder();
-			int iPast = 0;//end of previous placeholder
-			foreach (int iPh in phS.Keys)
-			{
-				sb.Append(s.Substring(iPast, iPh - iPast)); //before Ph
-				sPh = phS[iPh]; //"{name}"
-				sb.Append(values.ContainsKey(sPh) ? values[sPh] : string.Empty);
-				iPast = iPh + sPh.Length;
-			}//for
-			sb.Append(s.Substring(iPast));
-			#endregion
-
-			return sb.ToString();
-		}//function
-
 		#region checks
 		/// <summary>string not IsNullOrWhiteSpace</summary>
 		public static bool notEmpty(this string s) => !string.IsNullOrWhiteSpace(s);
@@ -147,8 +48,6 @@ namespace BDB
 
 		/// <summary>есть ли строка в массиве</summary>
 		public static bool inList(this string s, params string[] ss) => ss.Contains(s);
-		/// <summary>есть ли строка в массиве</summary>
-		public static bool inList<T>(this T s, params T[] ss) => ss.Contains(s);
 		#endregion
 
 		#region substring

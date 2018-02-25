@@ -36,6 +36,9 @@ namespace UnitTest
 			string sfmto = s.fmto(o);
 			Assert.AreEqual("My name is Барсук and my age is 38, so call me Барсук!", sfmto);
 
+			sfmto = s.fmts(o);
+			Assert.AreEqual("My name is Барсук and my age is 38, so call me Барсук!{bo}", sfmto);
+
 			var goo = new Goo2 { Age = 44, Name = "Пятнадцатов" };
 			s = "name={{Name}{Age}}. {Tim(A,F)} Fre {ToString()}. Tim={Tim(БАКЛЯ,букля)}";
 			sfmto = s.fmto(goo);
@@ -46,6 +49,24 @@ namespace UnitTest
 			sfmto=s.fmto(dict, goo);
 			Assert.IsTrue(sfmto != string.Empty);
 		}//function
+
+		[TestMethod]
+		public void TestFmtoParams()
+		{
+			string s = "My name is [name] and my age is [age], so call me [name]![bo]da";
+			var o = new { name = "Барсук", age = 38 };
+			string sfmto;
+
+			sfmto = s.fmtoe(new FmtoParams {brace = '[' }, o);
+			Assert.AreEqual("My name is Барсук and my age is 38, so call me Барсук!da", sfmto);
+
+			sfmto = s.fmtoe(new FmtoParams { brace = '[' }.withOO(o, new Dictionary<string, string> { ["bo"] = "BOOO"}));
+			Assert.AreEqual("My name is Барсук and my age is 38, so call me Барсук!BOOOda", sfmto);
+
+			sfmto = s.fmtoe(new FmtoParams { brace = '[', mode= FmtoParams.ModeAbsent.SAME }, o);
+			Assert.AreEqual("My name is Барсук and my age is 38, so call me Барсук![bo]da", sfmto);
+		}//function
+
 
 		[TestMethod]
 		public void TestTranslate()

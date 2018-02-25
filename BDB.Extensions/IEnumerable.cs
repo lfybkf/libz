@@ -27,6 +27,12 @@ namespace BDB
 		public static IEnumerable<T> sequence<T>(this T one, IEnumerable<T> args) => Enumerable.Repeat(one, 1).Concat(args);
 		///<summary>{1,2}.sequence(3,4) = {1,2,3,4}</summary>
 		public static IEnumerable<T> sequence<T>(this IEnumerable<T> list, params T[] args) => list.Concat(args);
+		/// <summary>есть ли элемент в массиве</summary>
+		public static bool inList<T>(this T s, params T[] ss) => ss.Contains(s);
+		/// <summary>есть ли элемент в массиве</summary>
+		public static bool inList<T>(this T s, IEnumerable<T> ss) => ss.notEmpty() ? ss.Contains(s) : false;
+		///<summary>notNull</summary> 
+		public static IEnumerable<T> notNull<T>(this IEnumerable<T> list) => list.Where(z => z != null);
 
 		/// <summary>
 		/// качельное перебирание последовательности
